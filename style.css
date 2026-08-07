@@ -136,6 +136,8 @@ html, body {
 .overlay-box { background: linear-gradient(160deg, #2c2140, #1a1428); border: 2px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 26px 30px; text-align: center; width: 78%; max-width: 320px; }
 .overlay-box h2 { margin: 0 0 8px; color: #ffe08a; }
 .overlay-rewards { display: flex; gap: 8px; justify-content: center; margin: 14px 0; flex-wrap: wrap; }
+.reward-item-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 12px; font-size: 0.68rem; width: 76px; border: 2px solid rgba(255,255,255,0.15); }
+.reward-item-badge span { line-height: 1.2; }
 .overlay-btns { display: flex; gap: 10px; margin-top: 12px; }
 .overlay-btns button, .overlay-retry, .overlay-lobby { flex: 1; padding: 12px 0; border: none; border-radius: 12px; font-weight: 700; }
 #overlay-retry { background: linear-gradient(180deg, #ff9ecb, #ff5c9e); color: #fff; }
@@ -229,6 +231,23 @@ html, body {
 .merchant-visual.type-kid .npc .body { position:absolute; top:36%; left:8%; width:84%; height:56%; background:#e0705a; border-radius:14px; }
 .merchant-visual.type-kid .cart { position:absolute; bottom:4%; left:50%; transform:translateX(-50%); width:58%; height:12%; background:#7a5230; border-radius:6px; }
 .merchant-visual.type-kid .cart::after { content:''; position:absolute; bottom:-30%; left:12%; width:14%; height:60%; border-radius:50%; background:#3a2a18; box-shadow: 130% 0 0 #3a2a18; }
+
+/* 상인5: 떠돌이 기사 */
+.merchant-visual.type-knight { background: linear-gradient(180deg, #3a3a42 0%, #3a3a42 55%, #4a4a54 55%, #4a4a54 100%); }
+.merchant-visual.type-knight .npc { position:absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 48%; height: 60%; }
+.merchant-visual.type-knight .npc .helmet { position:absolute; top:0; left:26%; width:48%; height:30%; border-radius:50% 50% 40% 40%; background:#c8ccd4; }
+.merchant-visual.type-knight .npc .plume { position:absolute; top:-14%; left:44%; width:12%; height:22%; background:#c94a4a; border-radius:6px; }
+.merchant-visual.type-knight .npc .body { position:absolute; top:26%; left:10%; width:80%; height:64%; background:#8a8f9a; border-radius:10px; }
+.merchant-visual.type-knight .npc .body::after { content:''; position:absolute; top:14%; left:38%; width:24%; height:60%; background:#c94a4a; }
+.merchant-visual.type-knight .shield { position:absolute; bottom:6%; right:10%; width:22%; height:34%; background:#5a5f6a; border-radius:6px 6px 40% 40%; border:2px solid #c8ccd4; }
+
+/* 상인6: 가면 상인 */
+.merchant-visual.type-masked { background: radial-gradient(circle at 50% 65%, rgba(255,180,90,0.12), transparent 55%), linear-gradient(180deg, #1c1420, #100a14); }
+.merchant-visual.type-masked .npc { position:absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 46%; height: 66%; }
+.merchant-visual.type-masked .npc .cloak { position:absolute; bottom:0; left:0; width:100%; height:78%; background:#241a2e; clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%); }
+.merchant-visual.type-masked .npc .mask { position:absolute; top:0; left:18%; width:64%; height:34%; border-radius:50% 50% 40% 40%; background:#e8ded0; }
+.merchant-visual.type-masked .npc .mask::after { content:''; position:absolute; top:40%; left:20%; width:60%; height:14%; background:#241a2e; border-radius:3px; }
+.merchant-visual.type-masked .lantern { position:absolute; bottom:20%; right:8%; width:14%; height:18%; background:#ffcf7a; border-radius:3px; box-shadow: 0 0 14px 4px rgba(255,200,110,0.6); }
 
 .gacha-machine { height: min(56vh, 420px); aspect-ratio: 3 / 4; border-radius: 20px 20px 40px 40px; position: relative; box-shadow: 0 10px 22px rgba(0,0,0,0.45); }
 .gacha-machine .dome { position:absolute; top:8%; left:50%; transform:translateX(-50%); width:78%; height:44%; border-radius:50% 50% 40% 40%; background: rgba(255,255,255,0.25); border:3px solid rgba(255,255,255,0.4); }

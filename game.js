@@ -37,6 +37,18 @@ const ITEMS = [
   { id: 'wp_cannon', name: '폭열 캐논', cat: 'weapon', rarity: 'epic', baseDmg: 30, baseRange: 300, shape: 'gun-cannon', aimStyle: 'block', desc: '한 발 한 발이 작은 폭발을 일으킨다.' },
   { id: 'wp_laser', name: '별빛 레이저포', cat: 'weapon', rarity: 'legendary', baseDmg: 50, baseRange: 340, shape: 'gun-laser', aimStyle: 'trident', desc: '별의 힘을 압축해 발사하는 병기.' },
   { id: 'wp_star', name: '종말의 별포', cat: 'weapon', rarity: 'mythic', baseDmg: 85, baseRange: 380, shape: 'gun-star', aimStyle: 'trident', desc: '전설 속에서만 전해지던 궁극의 무기.' },
+
+  // 상인 전용 추가 장비
+  { id: 'ar_royal', name: '왕실 근위대 갑주', cat: 'armor', rarity: 'epic', def: 27, shape: 'armor-royal', desc: '왕성을 지키는 근위대의 격식 있는 갑주.' },
+  { id: 'wp_frost', name: '서리한 석궁', cat: 'weapon', rarity: 'rare', baseDmg: 21, baseRange: 270, shape: 'gun-frost', aimStyle: 'dotted', desc: '맞은 자리에 서리가 맺히는 냉기 석궁.' },
+
+  // 보스 전용 보상 장비 (상점/가챠에서는 얻을 수 없음)
+  { id: 'ar_boss_skull', name: '해골 군주의 늑골 갑주', cat: 'armor', rarity: 'mythic', def: 66, shape: 'armor-bone', bossExclusive: true, desc: '해골 군주의 갈비뼈로 엮어낸 불길한 갑주.' },
+  { id: 'wp_boss_wraith', name: '원한의 사슬낫', cat: 'weapon', rarity: 'mythic', baseDmg: 78, baseRange: 320, shape: 'gun-wraith', aimStyle: 'trident', bossExclusive: true, desc: '망령 백작의 원한이 서린 사슬낫.' },
+  { id: 'ar_boss_magma', name: '용암핵 갑주', cat: 'armor', rarity: 'mythic', def: 80, shape: 'armor-magma', bossExclusive: true, desc: '용암 골렘의 심장을 녹여 만든 갑주.' },
+  { id: 'wp_boss_dragon', name: '칠흑룡의 숨결포', cat: 'weapon', rarity: 'mythic', baseDmg: 95, baseRange: 360, shape: 'gun-dragon', aimStyle: 'block', bossExclusive: true, desc: '칠흑룡의 숨결을 압축한 궁극의 포.' },
+  { id: 'wp_boss_genesis', name: '태초의 별빛창', cat: 'weapon', rarity: 'mythic', baseDmg: 120, baseRange: 400, shape: 'gun-genesis', aimStyle: 'trident', bossExclusive: true, desc: '세상이 태어나던 순간의 빛을 담은 창.' },
+  { id: 'ar_boss_genesis', name: '태초의 화신 갑주', cat: 'armor', rarity: 'mythic', def: 100, shape: 'armor-genesis', bossExclusive: true, desc: '태초의 화신이 두르고 있던 광휘의 갑주.' },
 ];
 
 const DUNGEON_THEMES = [
@@ -64,11 +76,36 @@ const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
 }));
 
 const BOSSES = [
-  { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime', reward: { gold: 300, gem: 8 } },
-  { id: 2, name: '해골 군주', hp: 750, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull', reward: { gold: 420, gem: 10 } },
-  { id: 3, name: '망령 백작', hp: 950, color1: '#b38aff', color2: '#4a2a8a', shape: 'ghost', reward: { gold: 560, gem: 13 } },
-  { id: 4, name: '용암 골렘', hp: 1300, color1: '#ff8a4a', color2: '#8a2a0a', shape: 'golem', reward: { gold: 720, gem: 16 } },
-  { id: 5, name: '칠흑룡 벨카누스', hp: 1800, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon', reward: { gold: 1000, gem: 22 } },
+  { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime',
+    pattern: 'single', patternLabel: '단발 조준탄', atkInterval: 1.7,
+    reward: { gold: 300, gem: 8 } },
+  { id: 2, name: '해골 군주', hp: 780, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull',
+    pattern: 'spread', patternLabel: '3방향 부채꼴 사격', atkInterval: 2.0,
+    reward: { gold: 420, gem: 10 }, rewardItem: 'ar_boss_skull' },
+  { id: 3, name: '망령 백작', hp: 1000, color1: '#b38aff', color2: '#4a2a8a', shape: 'ghost',
+    pattern: 'teleport', patternLabel: '순간이동 기습', atkInterval: 1.6,
+    reward: { gold: 560, gem: 13 }, rewardItem: 'wp_boss_wraith' },
+  { id: 4, name: '용암 골렘', hp: 1350, color1: '#ff8a4a', color2: '#8a2a0a', shape: 'golem',
+    pattern: 'slam', patternLabel: '광역 강타 (느리지만 넓음)', atkInterval: 2.3,
+    reward: { gold: 720, gem: 16 }, rewardItem: 'ar_boss_magma' },
+  { id: 5, name: '독전 마녀 로자린', hp: 1550, color1: '#8aff9e', color2: '#1f5a2f', shape: 'witch',
+    pattern: 'poison', patternLabel: '맹독 웅덩이 (지속 피해)', atkInterval: 2.1,
+    reward: { gold: 860, gem: 18 } },
+  { id: 6, name: '빙결 여제 시렌', hp: 1750, color1: '#bdeeff', color2: '#2a6a8a', shape: 'ice',
+    pattern: 'slow', patternLabel: '냉기탄 (피격 시 이동속도 저하)', atkInterval: 2.0,
+    reward: { gold: 950, gem: 20 } },
+  { id: 7, name: '뇌전 폭군 자칸', hp: 1950, color1: '#fff26a', color2: '#8a7a10', shape: 'thunder',
+    pattern: 'double', patternLabel: '연속 2연발', atkInterval: 1.3,
+    reward: { gold: 1050, gem: 22 } },
+  { id: 8, name: '칠흑룡 벨카누스', hp: 2200, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon',
+    pattern: 'sweep', patternLabel: '전방위 브레스 (안전지대 찾기)', atkInterval: 2.6,
+    reward: { gold: 1300, gem: 26 }, rewardItem: 'wp_boss_dragon' },
+  { id: 9, name: '심연의 사냥꾼 크로바', hp: 2450, color1: '#ff6a8a', color2: '#4a0a1a', shape: 'hunter',
+    pattern: 'dash', patternLabel: '고속 돌진 저격', atkInterval: 1.5,
+    reward: { gold: 1500, gem: 30 } },
+  { id: 10, name: '태초의 화신', hp: 3200, color1: '#ffe9a8', color2: '#5a3a10', shape: 'genesis',
+    pattern: 'combo', patternLabel: '모든 패턴 복합 사용', atkInterval: 1.6,
+    reward: { gold: 2200, gem: 45 }, rewardItem: 'wp_boss_genesis', rewardItem2: 'ar_boss_genesis' },
 ];
 
 const CHALLENGE_NAMES = ['수습 시험', '전사의 길', '베테랑의 시련', '악몽의 미로', '심판의 방', '지옥문', '진 지옥'];
@@ -95,6 +132,12 @@ const MERCHANTS = [
   { id: 'kid', name: '꼬마 상인 삐삐', type: 'kid', discount: '새총 반값 세일~!',
     items: [ { itemId: 'wp_sling', price: 130, discount: true }, { itemId: 'sw_curve', price: 620, discount: false },
              { itemId: 'ar_cloth', price: 90, discount: false } ] },
+  { id: 'knight', name: '떠돌이 기사 레온', type: 'knight', discount: '근위대 갑주 한정 판매!',
+    items: [ { itemId: 'ar_royal', price: 2100, discount: true }, { itemId: 'sw_holy', price: 3400, discount: false },
+             { itemId: 'wp_frost', price: 780, discount: false } ] },
+  { id: 'masked', name: '가면 상인', type: 'masked', discount: '서리한 석궁 오늘만 할인',
+    items: [ { itemId: 'wp_frost', price: 560, discount: true }, { itemId: 'ar_dragon', price: 5200, discount: false },
+             { itemId: 'wp_laser', price: 4800, discount: false } ] },
 ];
 
 /* ---------------- 상태 관리 ---------------- */
@@ -202,6 +245,14 @@ function itemThumbSVG(item) {
     'gun-cannon': `<rect x="14" y="20" width="32" height="16" rx="6" fill="${col2}"/><circle cx="46" cy="28" r="9" fill="${col}"/>`,
     'gun-laser': `<rect x="12" y="24" width="36" height="10" rx="5" fill="${col2}"/><circle cx="46" cy="29" r="6" fill="#fff"/><rect x="16" y="18" width="8" height="22" fill="${col}"/>`,
     'gun-star': `<path d="M30 6 L34 24 L52 24 L38 34 L44 52 L30 41 L16 52 L22 34 L8 24 L26 24 Z" fill="${col2}"/>`,
+    'armor-royal': `<path d="M16 12 L30 4 L44 12 L44 32 Q44 48 30 54 Q16 48 16 32 Z" fill="${col2}" stroke="#e8d9a0" stroke-width="2"/><path d="M30 14 L34 24 L24 24 Z" fill="${col}"/>`,
+    'gun-frost': `<rect x="10" y="24" width="40" height="5" fill="${col2}"/><rect x="27" y="10" width="6" height="34" fill="#dff3ff"/><path d="M14 26 Q30 16 46 26" stroke="#dff3ff" stroke-width="2" fill="none"/><circle cx="30" cy="26" r="4" fill="#fff"/>`,
+    'armor-bone': `<rect x="14" y="10" width="32" height="40" rx="6" fill="#161018" stroke="${col}" stroke-width="2"/><path d="M20 18 H40 M20 26 H40 M20 34 H40 M20 42 H40" stroke="#e8e2d8" stroke-width="3"/><circle cx="30" cy="14" r="4" fill="#e8e2d8"/>`,
+    'gun-wraith': `<path d="M46 8 Q54 20 44 30 Q40 22 32 22 Z" fill="${col2}"/><path d="M32 22 L14 50" stroke="#2a2430" stroke-width="4" stroke-linecap="round"/><circle cx="46" cy="14" r="3" fill="${col}"/>`,
+    'armor-magma': `<path d="M14 16 L30 4 L46 16 L42 50 Q30 56 18 50 Z" fill="#241414" stroke="${col2}" stroke-width="2"/><path d="M24 22 L30 34 L26 34 L34 48" stroke="${col}" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    'gun-dragon': `<path d="M10 30 Q10 18 26 16 L48 22 Q56 26 48 32 L26 30 Q16 34 10 30Z" fill="${col2}"/><circle cx="46" cy="25" r="3" fill="#fff"/><path d="M26 16 L22 8 M30 16 L30 8" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`,
+    'gun-genesis': `<path d="M30 4 L36 22 L54 22 L40 32 L46 50 L30 40 L14 50 L20 32 L6 22 L24 22 Z" fill="${col2}"/><circle cx="30" cy="28" r="5" fill="#fff"/>`,
+    'armor-genesis': `<path d="M12 18 L30 4 L48 18 L44 34 Q44 52 30 58 Q16 52 16 34 Z" fill="${col2}" stroke="#fff2c9" stroke-width="2"/><path d="M4 24 L16 30 L4 40 Z" fill="${col}"/><path d="M56 24 L44 30 L56 40 Z" fill="${col}"/>`,
   };
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="100%" height="100%">${shapes[item.shape] || ''}</svg>`;
 }
@@ -276,11 +327,12 @@ function buildBossList() {
     card.style.setProperty('--c1', `radial-gradient(circle,${lighten(b.color1)},${b.color2})`);
     card.style.setProperty('--bg1', b.color2 + '55');
     card.style.setProperty('--bg2', '#1a1424');
+    const rewardNote = (b.rewardItem || b.rewardItem2) ? ' · <span style="color:#ffd97a;">보상 장비</span>' : '';
     card.innerHTML = `
       <div class="card-icon" style="background:radial-gradient(circle at 35% 30%,${lighten(b.color1)},${b.color2});border-radius:50% 50% 40% 40%;"></div>
       <div class="card-text">
         <p class="card-title">${b.name}</p>
-        <p class="card-sub">체력 ${b.hp}</p>
+        <p class="card-sub">체력 ${b.hp} · ${b.patternLabel}${rewardNote}</p>
       </div>
       ${locked ? `<div class="lock-icon"><div class="shackle"></div><div class="body"></div></div>` : `<span class="card-tag">${i < state.bossCleared ? '처치완료' : '도전 가능'}</span>`}
     `;
@@ -651,6 +703,8 @@ function merchantVisualInner(type) {
   if (type === 'smith') return `<div class="npc"><div class="head"></div><div class="body"></div><div class="apron"></div></div><div class="anvil"></div>`;
   if (type === 'witch') return `<div class="shadow"></div><div class="eyes"><span></span><span></span></div>`;
   if (type === 'kid') return `<div class="npc"><div class="head"></div><div class="body"></div></div><div class="cart"></div>`;
+  if (type === 'knight') return `<div class="npc"><div class="plume"></div><div class="helmet"></div><div class="body"></div></div><div class="shield"></div>`;
+  if (type === 'masked') return `<div class="npc"><div class="cloak"></div><div class="mask"></div></div><div class="lantern"></div>`;
   return '';
 }
 
@@ -725,7 +779,7 @@ function doGacha(tier) {
   state.pity[tier.id]++;
 
   const minRarityIdx = RARITY_ORDER.indexOf(tier.id);
-  let pool = ITEMS.filter(it => RARITY_ORDER.indexOf(it.rarity) >= minRarityIdx);
+  let pool = ITEMS.filter(it => RARITY_ORDER.indexOf(it.rarity) >= minRarityIdx && !it.bossExclusive);
   let result;
   if (state.pity[tier.id] >= tier.pityMax) {
     const topPool = pool.filter(it => it.rarity === RARITY_ORDER[RARITY_ORDER.length - 1] || it.rarity === 'legendary');
@@ -820,6 +874,7 @@ function startRun(cfg) {
     enemies: [],
     projectiles: [],
     bossProjectiles: [],
+    hazards: [],
     boss: null,
     ammo: 8, ammoMax: 8, ammoRegenTimer: 0,
     special: { cooldown: 0, max: 5 },
@@ -828,6 +883,7 @@ function startRun(cfg) {
     running: true,
     baseBounce: 0,
     hitFlash: 0,
+    slowTimer: 0,
     lastTime: performance.now(),
   };
 
@@ -872,9 +928,43 @@ function spawnEnemy() {
 }
 
 function spawnBoss(b) {
-  game.boss = { def: b, x: CW / 2, y: 90, vx: 1.4, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null };
+  game.boss = { def: b, x: CW / 2, y: 90, vx: 1.4, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null };
   document.getElementById('boss-name').textContent = b.name;
-  document.getElementById('wave-label').textContent = '보스전';
+  document.getElementById('wave-label').textContent = '보스전 · ' + b.patternLabel;
+}
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function startBossTelegraph(b) {
+  const pattern = b.def.pattern === 'combo' ? pickRandom(['single', 'spread', 'slow', 'double', 'poison']) : b.def.pattern;
+  const px = game.player.x;
+  let xs = [];
+  let t = 0.75;
+  if (pattern === 'spread') { xs = [px - 70, px, px + 70]; }
+  else if (pattern === 'double') { xs = [px - 40, px + 40]; t = 0.6; }
+  else if (pattern === 'sweep') {
+    const segCount = 5; const segW = CW / segCount; const safe = Math.floor(Math.random() * segCount);
+    for (let i = 0; i < segCount; i++) if (i !== safe) xs.push((i + 0.5) * segW);
+    t = 1.0;
+  } else if (pattern === 'teleport') {
+    b.x = Math.max(60, Math.min(CW - 60, Math.random() * CW));
+    xs = [px]; t = 0.55;
+  } else if (pattern === 'slam') { xs = [px]; t = 1.0; }
+  else if (pattern === 'dash') { xs = [px]; t = 0.4; b.dashTarget = px; }
+  else { xs = [px + (Math.random() - 0.5) * 100]; }
+  xs = xs.map((x) => Math.max(30, Math.min(CW - 30, x)));
+  b.telegraph = { xs, t, pattern };
+}
+
+function resolveBossTelegraph(b) {
+  const pattern = b.telegraph.pattern;
+  b.telegraph.xs.forEach((x) => {
+    if (pattern === 'poison') game.bossProjectiles.push({ x, y: b.y + 30, speed: 3.4, resolved: false, type: 'poison', dmg: 6 });
+    else if (pattern === 'slow') game.bossProjectiles.push({ x, y: b.y + 30, speed: 3.8, resolved: false, type: 'slow', dmg: 10 });
+    else if (pattern === 'slam') game.bossProjectiles.push({ x, y: b.y + 30, speed: 4.4, resolved: false, type: 'wide', dmg: 20 });
+    else game.bossProjectiles.push({ x, y: b.y + 30, speed: 5.2, resolved: false, type: 'normal', dmg: 14 });
+  });
+  b.dashTarget = null;
 }
 
 function updateAmmoBar() {
@@ -1014,9 +1104,11 @@ function update(dt) {
   if (keys['a'] || keys['arrowleft']) mvx -= 1;
   if (keys['d'] || keys['arrowright']) mvx += 1;
   const mlen = Math.hypot(mvx, mvy);
+  if (game.slowTimer > 0) game.slowTimer = Math.max(0, game.slowTimer - dt);
+  const effSpeed = game.speed * (game.slowTimer > 0 ? 0.5 : 1);
   if (mlen > 0.01) {
     const nx = mvx / Math.max(1, mlen), ny = mvy / Math.max(1, mlen);
-    const clamped = clampToZone(game.player.x + nx * game.speed * dt, game.player.y + ny * game.speed * dt);
+    const clamped = clampToZone(game.player.x + nx * effSpeed * dt, game.player.y + ny * effSpeed * dt);
     game.player.x = clamped.x; game.player.y = clamped.y;
   }
 
@@ -1086,22 +1178,25 @@ function update(dt) {
     flashMsg(`WAVE ${game.wave} 시작!`);
   }
 
-  // 보스 로직
+  // 보스 로직 (보스마다 다른 공격 패턴)
   if (game.boss) {
     const b = game.boss;
-    b.x += b.vx * dt * 60;
-    if (b.x < 60 || b.x > CW - 60) b.vx *= -1;
+    if (b.telegraph && b.telegraph.pattern === 'dash' && b.dashTarget !== null) {
+      b.x += (b.dashTarget - b.x) * Math.min(1, dt * 8);
+    } else {
+      b.x += b.vx * dt * 60;
+      if (b.x < 60 || b.x > CW - 60) b.vx *= -1;
+    }
     b.atkTimer -= dt;
     if (b.telegraph) {
       b.telegraph.t -= dt;
       if (b.telegraph.t <= 0) {
-        game.bossProjectiles.push({ x: b.telegraph.x, y: b.y + 30, speed: 5.2, resolved: false });
+        resolveBossTelegraph(b);
         b.telegraph = null;
       }
     } else if (b.atkTimer <= 0) {
-      b.atkTimer = 1.7;
-      const tx = Math.max(40, Math.min(CW - 40, game.player.x + (Math.random() - 0.5) * 140));
-      b.telegraph = { x: tx, t: 0.75 };
+      b.atkTimer = b.def.atkInterval || 1.7;
+      startBossTelegraph(b);
     }
   }
   for (let i = game.bossProjectiles.length - 1; i >= 0; i--) {
@@ -1110,14 +1205,32 @@ function update(dt) {
     if (!bp.resolved && bp.y >= playerRow) {
       bp.resolved = true;
       const dist = Math.hypot(bp.x - game.player.x, bp.y - game.player.y);
-      if (dist < PLAYER_R + 16) {
-        game.baseHp -= 14; game.baseBounce = 1; game.hitFlash = 1; updateBaseHp();
-        game.bossProjectiles.splice(i, 1);
+      const hitRadius = PLAYER_R + (bp.type === 'wide' ? 32 : 16);
+      const hit = dist < hitRadius;
+      if (hit) {
+        game.baseHp -= bp.dmg; game.baseBounce = 1; game.hitFlash = 1; updateBaseHp();
+        if (bp.type === 'slow') game.slowTimer = 2.2;
         if (game.baseHp <= 0) { gameOver(false); return; }
-        continue;
       }
+      if (bp.type === 'poison') {
+        game.hazards.push({ x: bp.x, y: bp.y, r: 34, timer: 3.0, dps: 7 });
+      }
+      game.bossProjectiles.splice(i, 1);
+      continue;
     }
     if (bp.y > CH + 40) game.bossProjectiles.splice(i, 1);
+  }
+
+  // 지속 피해 웅덩이 (독전 마녀)
+  for (let i = game.hazards.length - 1; i >= 0; i--) {
+    const hz = game.hazards[i];
+    hz.timer -= dt;
+    if (hz.timer <= 0) { game.hazards.splice(i, 1); continue; }
+    if (Math.hypot(hz.x - game.player.x, hz.y - game.player.y) < hz.r) {
+      game.baseHp -= hz.dps * dt;
+      updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
   }
 }
 
@@ -1136,19 +1249,36 @@ function gameOver(win) {
   const rewardsEl = document.getElementById('overlay-rewards');
   overlay.style.display = 'flex';
   let reward = { gold: 0, gem: 0 };
+  let wonItems = [];
   if (win) {
     title.textContent = game.mode === 'boss' ? '보스 처치!' : '던전 클리어!';
     desc.textContent = '수고하셨습니다!';
     reward = game.data.reward;
     state.gold += reward.gold; state.gem += reward.gem;
     if (game.mode === 'dungeon') state.dungeonCleared = Math.max(state.dungeonCleared, DUNGEONS.indexOf(game.data) + 1);
-    if (game.mode === 'boss') state.bossCleared = Math.max(state.bossCleared, BOSSES.indexOf(game.data) + 1);
+    if (game.mode === 'boss') {
+      state.bossCleared = Math.max(state.bossCleared, BOSSES.indexOf(game.data) + 1);
+      ['rewardItem', 'rewardItem2'].forEach((key) => {
+        const itemId = game.data[key];
+        if (!itemId) return;
+        const inv = state.inventory[itemId];
+        if (inv && !inv.owned) {
+          inv.owned = true; inv.level = 1;
+          wonItems.push(getItem(itemId));
+        }
+      });
+    }
     save();
   } else {
     title.textContent = '기지가 파괴되었습니다...';
     desc.textContent = '다시 도전해보세요!';
   }
-  rewardsEl.innerHTML = win ? `<div class="cur-pill gold"><span class="cur-icon"></span>${reward.gold}</div><div class="cur-pill gem"><span class="cur-icon"></span>${reward.gem}</div>` : '';
+  const itemBadges = wonItems.map((it) => `
+    <div class="reward-item-badge ${RARITIES[it.rarity].cls}">
+      <div class="item-thumb" style="width:36px;height:36px;background:${svgToBg(itemThumbSVG(it))} center/70% no-repeat;"></div>
+      <span>${it.name}</span>
+    </div>`).join('');
+  rewardsEl.innerHTML = win ? `<div class="cur-pill gold"><span class="cur-icon"></span>${reward.gold}</div><div class="cur-pill gem"><span class="cur-icon"></span>${reward.gem}</div>${itemBadges}` : '';
 }
 
 /* ---------- 렌더링 ---------- */
@@ -1171,14 +1301,28 @@ function render() {
 
   // 보스
   if (game.boss) drawBoss(game.boss);
+  // 지속 피해 웅덩이
+  game.hazards.forEach(hz => {
+    const a = 0.25 + 0.15 * Math.sin(performance.now() / 150 + hz.x);
+    ctxG.beginPath(); ctxG.arc(hz.x, hz.y, hz.r, 0, Math.PI * 2);
+    ctxG.fillStyle = `rgba(90,220,110,${a})`; ctxG.fill();
+    ctxG.strokeStyle = 'rgba(140,255,160,0.5)'; ctxG.lineWidth = 2; ctxG.stroke();
+  });
+
+  const bpColors = { normal: '#ff4a4a', wide: '#ff9a3a', slow: '#7fd8ff', poison: '#8aff9e' };
   game.bossProjectiles.forEach(bp => {
-    ctxG.beginPath(); ctxG.arc(bp.x, bp.y, 10, 0, Math.PI * 2);
-    ctxG.fillStyle = '#ff4a4a'; ctxG.shadowColor = '#ff4a4a'; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
+    const r = bp.type === 'wide' ? 18 : (bp.type === 'slow' || bp.type === 'poison' ? 13 : 10);
+    const col = bpColors[bp.type] || '#ff4a4a';
+    ctxG.beginPath(); ctxG.arc(bp.x, bp.y, r, 0, Math.PI * 2);
+    ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
   });
   if (game.boss && game.boss.telegraph) {
-    const x = game.boss.telegraph.x;
-    ctxG.fillStyle = `rgba(255,60,60,${0.18 + 0.15 * Math.sin(performance.now() / 60)})`;
-    ctxG.beginPath(); ctxG.moveTo(x - 40, 0); ctxG.lineTo(x + 40, 0); ctxG.lineTo(x + 16, zone.cy - zone.h / 2); ctxG.lineTo(x - 16, zone.cy - zone.h / 2); ctxG.closePath(); ctxG.fill();
+    const bottom = zone.cy - zone.h / 2;
+    game.boss.telegraph.xs.forEach(x => {
+      const halfW = game.boss.telegraph.pattern === 'slam' ? 60 : 40;
+      ctxG.fillStyle = `rgba(255,60,60,${0.18 + 0.15 * Math.sin(performance.now() / 60)})`;
+      ctxG.beginPath(); ctxG.moveTo(x - halfW, 0); ctxG.lineTo(x + halfW, 0); ctxG.lineTo(x + halfW * 0.4, bottom); ctxG.lineTo(x - halfW * 0.4, bottom); ctxG.closePath(); ctxG.fill();
+    });
   }
 
   // 투사체
@@ -1266,14 +1410,23 @@ function drawBoss(b) {
   ctxG.save();
   ctxG.translate(b.x, b.y);
   const pulse = Math.sin(performance.now() / 300) * 4;
+  const shape = b.def.shape;
   ctxG.beginPath(); ctxG.ellipse(0, 60, 50, 12, 0, 0, Math.PI * 2); ctxG.fillStyle = 'rgba(0,0,0,0.35)'; ctxG.fill();
   ctxG.beginPath();
-  if (b.def.shape === 'slime') { ctxG.ellipse(0, 10 + pulse * 0.3, 46, 40 + pulse, 0, 0, Math.PI * 2); }
-  else if (b.def.shape === 'ghost') { ctxG.arc(0, 0, 44, Math.PI, 0); ctxG.lineTo(30, 40 + pulse); ctxG.lineTo(10, 26); ctxG.lineTo(-10, 40); ctxG.lineTo(-30, 26 + pulse); ctxG.closePath(); }
+  if (shape === 'slime') { ctxG.ellipse(0, 10 + pulse * 0.3, 46, 40 + pulse, 0, 0, Math.PI * 2); }
+  else if (shape === 'ghost') { ctxG.arc(0, 0, 44, Math.PI, 0); ctxG.lineTo(30, 40 + pulse); ctxG.lineTo(10, 26); ctxG.lineTo(-10, 40); ctxG.lineTo(-30, 26 + pulse); ctxG.closePath(); }
+  else if (shape === 'skull') { ctxG.arc(0, -6, 40, Math.PI, 0); ctxG.lineTo(30, 30); ctxG.lineTo(18, 44); ctxG.lineTo(6, 30); ctxG.lineTo(-6, 44); ctxG.lineTo(-18, 30); ctxG.lineTo(-30, 30); ctxG.closePath(); }
+  else if (shape === 'golem') { ctxG.roundRect(-46, -40 + pulse * 0.2, 92, 84, 14); }
+  else if (shape === 'witch') { ctxG.moveTo(0, -56); ctxG.lineTo(30, 10); ctxG.arc(0, 10, 30, 0, Math.PI, false); ctxG.closePath(); }
+  else if (shape === 'ice') { ctxG.moveTo(0, -48 - pulse * 0.3); ctxG.lineTo(34, 0); ctxG.lineTo(0, 48); ctxG.lineTo(-34, 0); ctxG.closePath(); }
+  else if (shape === 'thunder') { ctxG.moveTo(10, -48); ctxG.lineTo(-24, 4); ctxG.lineTo(0, 4); ctxG.lineTo(-10, 48); ctxG.lineTo(30, -8); ctxG.lineTo(6, -8); ctxG.closePath(); }
+  else if (shape === 'hunter') { ctxG.moveTo(0, -44); ctxG.lineTo(38, 4); ctxG.lineTo(22, 44); ctxG.lineTo(-22, 44); ctxG.lineTo(-38, 4); ctxG.closePath(); }
+  else if (shape === 'genesis') { ctxG.moveTo(0, -50 - pulse * 0.3); for (let k = 1; k < 10; k++) { const a = (Math.PI * 2 * k) / 10 - Math.PI / 2; const r = k % 2 === 0 ? 46 : 20; ctxG.lineTo(Math.cos(a) * r, Math.sin(a) * r); } ctxG.closePath(); }
   else { ctxG.arc(0, 0, 46 + pulse * 0.2, 0, Math.PI * 2); }
   const g = ctxG.createRadialGradient(-10, -10, 6, 0, 0, 50);
   g.addColorStop(0, lighten(b.def.color1)); g.addColorStop(1, b.def.color2);
   ctxG.fillStyle = g; ctxG.fill();
+  ctxG.strokeStyle = 'rgba(0,0,0,0.4)'; ctxG.lineWidth = 2; ctxG.stroke();
   ctxG.fillStyle = '#1a0f0f';
   ctxG.beginPath(); ctxG.arc(-14, -6, 5, 0, Math.PI * 2); ctxG.fill();
   ctxG.beginPath(); ctxG.arc(14, -6, 5, 0, Math.PI * 2); ctxG.fill();
