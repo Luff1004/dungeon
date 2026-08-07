@@ -20,35 +20,35 @@ const CATEGORIES = [
 ];
 
 const ITEMS = [
-  { id: 'sw_short', name: '녹슨 단검', cat: 'sword', rarity: 'common', baseDmg: 8, baseRange: 60, shape: 'blade-straight', desc: '오래되어 녹이 슬었지만 여전히 날카롭다.' },
-  { id: 'sw_curve', name: '초승달 검', cat: 'sword', rarity: 'rare', baseDmg: 14, baseRange: 70, shape: 'blade-curve', desc: '달빛 아래에서만 진가를 발휘하는 곡검.' },
-  { id: 'sw_fire', name: '화염의 대검', cat: 'sword', rarity: 'epic', baseDmg: 24, baseRange: 80, shape: 'blade-flame', desc: '베인 상처에서 불꽃이 피어오른다.' },
-  { id: 'sw_holy', name: '천상의 성검', cat: 'sword', rarity: 'legendary', baseDmg: 40, baseRange: 90, shape: 'blade-holy', desc: '빛의 신이 내려준 성스러운 검.' },
-  { id: 'sw_void', name: '공허의 칼날', cat: 'sword', rarity: 'mythic', baseDmg: 70, baseRange: 100, shape: 'blade-void', desc: '차원의 틈에서 건져올린 금단의 검.' },
+  { id: 'sw_short', name: '녹슨 단검', cat: 'sword', rarity: 'common', baseDmg: 8, baseRange: 60, shape: 'blade-straight', desc: '녹슨 게 아니라 빈티지 감성입니다. 절대 안 부러져요... 아마도.' },
+  { id: 'sw_curve', name: '초승달 검', cat: 'sword', rarity: 'rare', baseDmg: 14, baseRange: 70, shape: 'blade-curve', desc: '낮에 쓰면 그냥 좀 휜 칼, 밤에 쓰면 있어 보이는 칼.' },
+  { id: 'sw_fire', name: '화염의 대검', cat: 'sword', rarity: 'epic', baseDmg: 24, baseRange: 80, shape: 'blade-flame', desc: '상대도 뜨겁고 손잡이도 뜨겁습니다. 장갑은 필수 구매.' },
+  { id: 'sw_holy', name: '천상의 성검', cat: 'sword', rarity: 'legendary', baseDmg: 40, baseRange: 90, shape: 'blade-holy', desc: '신이 내려주셨는데 택배비는 제가 냈습니다.' },
+  { id: 'sw_void', name: '공허의 칼날', cat: 'sword', rarity: 'mythic', baseDmg: 70, baseRange: 100, shape: 'blade-void', desc: '어디서 났는지는 묻지 마세요. 저도 몰라요.' },
 
-  { id: 'ar_cloth', name: '수련생의 로브', cat: 'armor', rarity: 'common', baseDmg: 0, baseRange: 0, def: 6, shape: 'armor-cloth', desc: '얇지만 발이 가벼워진다.' },
-  { id: 'ar_leather', name: '가죽 갑주', cat: 'armor', rarity: 'rare', def: 12, shape: 'armor-leather', desc: '사냥꾼들이 즐겨 입는 튼튼한 가죽 갑옷.' },
-  { id: 'ar_plate', name: '기사단의 판금', cat: 'armor', rarity: 'epic', def: 22, shape: 'armor-plate', desc: '왕국 근위 기사단의 정식 갑옷.' },
-  { id: 'ar_dragon', name: '용린 갑주', cat: 'armor', rarity: 'legendary', def: 38, shape: 'armor-dragon', desc: '고대 용의 비늘로 두들겨 만들었다.' },
-  { id: 'ar_abyss', name: '심연의 갑주', cat: 'armor', rarity: 'mythic', def: 60, shape: 'armor-abyss', desc: '어둠 그 자체를 두른 듯한 갑옷.' },
+  { id: 'ar_cloth', name: '수련생의 로브', cat: 'armor', rarity: 'common', baseDmg: 0, baseRange: 0, def: 6, shape: 'armor-cloth', desc: '방어력은 거의 없지만 도망만큼은 국가대표급.' },
+  { id: 'ar_leather', name: '가죽 갑주', cat: 'armor', rarity: 'rare', def: 12, shape: 'armor-leather', desc: '가죽 냄새가 좀 나지만 몬스터는 코가 없어서 상관없음.' },
+  { id: 'ar_plate', name: '기사단의 판금', cat: 'armor', rarity: 'epic', def: 22, shape: 'armor-plate', desc: '무겁고 뜨겁고 계단 오르기 힘들지만 폼 하나는 살아있음.' },
+  { id: 'ar_dragon', name: '용린 갑주', cat: 'armor', rarity: 'legendary', def: 38, shape: 'armor-dragon', desc: '이거 만든 거 원조 용이 알면 화낼 것 같습니다.' },
+  { id: 'ar_abyss', name: '심연의 갑주', cat: 'armor', rarity: 'mythic', def: 60, shape: 'armor-abyss', desc: '세탁기 돌리지 마세요. 어둠은 표백이 안 됩니다.' },
 
-  { id: 'wp_sling', name: '낡은 새총', cat: 'weapon', rarity: 'common', baseDmg: 10, baseRange: 220, shape: 'gun-sling', aimStyle: 'dotted', desc: '아이들 장난감처럼 보이지만 꽤 아프다.' },
-  { id: 'wp_cross', name: '사냥꾼의 석궁', cat: 'weapon', rarity: 'rare', baseDmg: 18, baseRange: 260, shape: 'gun-cross', aimStyle: 'dotted', desc: '먼 거리의 몬스터도 정확히 꿰뚫는다.' },
-  { id: 'wp_cannon', name: '폭열 캐논', cat: 'weapon', rarity: 'epic', baseDmg: 30, baseRange: 300, shape: 'gun-cannon', aimStyle: 'block', desc: '한 발 한 발이 작은 폭발을 일으킨다.' },
-  { id: 'wp_laser', name: '별빛 레이저포', cat: 'weapon', rarity: 'legendary', baseDmg: 50, baseRange: 340, shape: 'gun-laser', aimStyle: 'trident', desc: '별의 힘을 압축해 발사하는 병기.' },
-  { id: 'wp_star', name: '종말의 별포', cat: 'weapon', rarity: 'mythic', baseDmg: 85, baseRange: 380, shape: 'gun-star', aimStyle: 'trident', desc: '전설 속에서만 전해지던 궁극의 무기.' },
+  { id: 'wp_sling', name: '낡은 새총', cat: 'weapon', rarity: 'common', baseDmg: 10, baseRange: 220, shape: 'gun-sling', aimStyle: 'dotted', desc: '동네 형이 쓰던 그 새총. 근데 은근히 셉니다.' },
+  { id: 'wp_cross', name: '사냥꾼의 석궁', cat: 'weapon', rarity: 'rare', baseDmg: 18, baseRange: 260, shape: 'gun-cross', aimStyle: 'dotted', desc: '조준 안 해도 알아서 맞는다는 소문이 있는데 거짓말입니다.' },
+  { id: 'wp_cannon', name: '폭열 캐논', cat: 'weapon', rarity: 'epic', baseDmg: 30, baseRange: 300, shape: 'gun-cannon', aimStyle: 'block', desc: '귀마개는 본인이 알아서 준비하세요. 저흰 안 챙겨드려요.' },
+  { id: 'wp_laser', name: '별빛 레이저포', cat: 'weapon', rarity: 'legendary', baseDmg: 50, baseRange: 340, shape: 'gun-laser', aimStyle: 'trident', desc: '멋있는데 다음 달 전기세가 걱정되는 그 무기.' },
+  { id: 'wp_star', name: '종말의 별포', cat: 'weapon', rarity: 'mythic', baseDmg: 85, baseRange: 380, shape: 'gun-star', aimStyle: 'trident', desc: '쏘고 나면 주변이 조용해집니다. 이유는 묻지 마세요.' },
 
   // 상인 전용 추가 장비
-  { id: 'ar_royal', name: '왕실 근위대 갑주', cat: 'armor', rarity: 'epic', def: 27, shape: 'armor-royal', desc: '왕성을 지키는 근위대의 격식 있는 갑주.' },
-  { id: 'wp_frost', name: '서리한 석궁', cat: 'weapon', rarity: 'rare', baseDmg: 21, baseRange: 270, shape: 'gun-frost', aimStyle: 'dotted', desc: '맞은 자리에 서리가 맺히는 냉기 석궁.' },
+  { id: 'ar_royal', name: '왕실 근위대 갑주', cat: 'armor', rarity: 'epic', def: 27, shape: 'armor-royal', desc: '근위병 국룰: 표정 관리 필수, 절대 웃으면 안 됨.' },
+  { id: 'wp_frost', name: '서리한 석궁', cat: 'weapon', rarity: 'rare', baseDmg: 21, baseRange: 270, shape: 'gun-frost', aimStyle: 'dotted', desc: '몬스터도 춥고 쏘는 제 손도 시립니다.' },
 
   // 보스 전용 보상 장비 (상점/가챠에서는 얻을 수 없음)
-  { id: 'ar_boss_skull', name: '해골 군주의 늑골 갑주', cat: 'armor', rarity: 'mythic', def: 66, shape: 'armor-bone', bossExclusive: true, desc: '해골 군주의 갈비뼈로 엮어낸 불길한 갑주.' },
-  { id: 'wp_boss_wraith', name: '원한의 사슬낫', cat: 'weapon', rarity: 'mythic', baseDmg: 78, baseRange: 320, shape: 'gun-wraith', aimStyle: 'trident', bossExclusive: true, desc: '망령 백작의 원한이 서린 사슬낫.' },
-  { id: 'ar_boss_magma', name: '용암핵 갑주', cat: 'armor', rarity: 'mythic', def: 80, shape: 'armor-magma', bossExclusive: true, desc: '용암 골렘의 심장을 녹여 만든 갑주.' },
-  { id: 'wp_boss_dragon', name: '칠흑룡의 숨결포', cat: 'weapon', rarity: 'mythic', baseDmg: 95, baseRange: 360, shape: 'gun-dragon', aimStyle: 'block', bossExclusive: true, desc: '칠흑룡의 숨결을 압축한 궁극의 포.' },
-  { id: 'wp_boss_genesis', name: '태초의 별빛창', cat: 'weapon', rarity: 'mythic', baseDmg: 120, baseRange: 400, shape: 'gun-genesis', aimStyle: 'trident', bossExclusive: true, desc: '세상이 태어나던 순간의 빛을 담은 창.' },
-  { id: 'ar_boss_genesis', name: '태초의 화신 갑주', cat: 'armor', rarity: 'mythic', def: 100, shape: 'armor-genesis', bossExclusive: true, desc: '태초의 화신이 두르고 있던 광휘의 갑주.' },
+  { id: 'ar_boss_skull', name: '해골 군주의 늑골 갑주', cat: 'armor', rarity: 'mythic', def: 66, shape: 'armor-bone', bossExclusive: true, desc: '통풍 하나는 진짜 잘 됩니다. 뼈 사이로 다 뚫려있어서.' },
+  { id: 'wp_boss_wraith', name: '원한의 사슬낫', cat: 'weapon', rarity: 'mythic', baseDmg: 78, baseRange: 320, shape: 'gun-wraith', aimStyle: 'trident', bossExclusive: true, desc: '휘두를 때마다 어디선가 원망 섞인 한숨소리가 들립니다.' },
+  { id: 'ar_boss_magma', name: '용암핵 갑주', cat: 'armor', rarity: 'mythic', def: 80, shape: 'armor-magma', bossExclusive: true, desc: '여름에 입으면 좀 많이 그렇습니다. 각오하세요.' },
+  { id: 'wp_boss_dragon', name: '칠흑룡의 숨결포', cat: 'weapon', rarity: 'mythic', baseDmg: 95, baseRange: 360, shape: 'gun-dragon', aimStyle: 'block', bossExclusive: true, desc: '원조 용도 이 위력을 보면 살짝 부끄러워할 겁니다.' },
+  { id: 'wp_boss_genesis', name: '태초의 별빛창', cat: 'weapon', rarity: 'mythic', baseDmg: 120, baseRange: 400, shape: 'gun-genesis', aimStyle: 'trident', bossExclusive: true, desc: '우주 탄생 로열티는 안 받습니다. 무료 나눔이에요.' },
+  { id: 'ar_boss_genesis', name: '태초의 화신 갑주', cat: 'armor', rarity: 'mythic', def: 100, shape: 'armor-genesis', bossExclusive: true, desc: '입기만 해도 후광 효과 발동. 인생샷 각입니다.' },
 ];
 
 const DUNGEON_THEMES = [
@@ -651,17 +651,19 @@ function drawHeldWeapon(ctx, item, x, y, flip) {
 }
 
 function drawItemIcon(ctx, item, cx, cy, size) {
-  ctx.save();
-  ctx.translate(cx - size / 2, cy - size / 2);
-  ctx.scale(size / 60, size / 60);
   const div = document.createElement('div');
   div.innerHTML = itemThumbSVG(item);
   const svgEl = div.firstChild;
   const img = new Image();
   const svgStr = new XMLSerializer().serializeToString(svgEl);
   img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
-  img.onload = () => { ctx.drawImage(img, 0, 0, 60, 60); };
-  ctx.restore();
+  img.onload = () => {
+    ctx.save();
+    ctx.translate(cx - size / 2, cy - size / 2);
+    ctx.scale(size / 60, size / 60);
+    ctx.drawImage(img, 0, 0, 60, 60);
+    ctx.restore();
+  };
 }
 
 /* ---------------- 상점 ---------------- */
@@ -928,7 +930,11 @@ function spawnEnemy() {
 }
 
 function spawnBoss(b) {
-  game.boss = { def: b, x: CW / 2, y: 90, vx: 1.4, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null };
+  game.boss = {
+    def: b, x: CW / 2, y: 90, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null,
+    wanderPhase: Math.random() * Math.PI * 2,
+    chaseSpeed: 1.1 + Math.random() * 0.6,
+  };
   document.getElementById('boss-name').textContent = b.name;
   document.getElementById('wave-label').textContent = '보스전 · ' + b.patternLabel;
 }
@@ -1124,23 +1130,26 @@ function update(dt) {
 
   const zone = getZone();
   const playerRow = zone.cy - zone.h / 2;
+  const zoneBottom = zone.cy + zone.h / 2 + PLAYER_R + 10;
 
   // 적 이동 + 플레이어와 충돌 판정 (회피 가능)
+  // 존 안쪽 전체 구간을 매 프레임 검사한다 (아래쪽에 서 있다고 판정을 피해가지 못하도록)
   for (let i = game.enemies.length - 1; i >= 0; i--) {
     const e = game.enemies[i];
     e.y += e.speed * dt * 60;
     e.age += dt;
     e.x = Math.max(20, Math.min(CW - 20, e.baseX + e.drift * e.age + Math.sin(e.age * e.wobbleFreq + e.wobblePhase) * e.wobbleAmp));
     if (!e.resolved && e.y >= playerRow) {
-      e.resolved = true;
       const dist = Math.hypot(e.x - game.player.x, e.y - game.player.y);
       if (dist < PLAYER_R + 14) {
+        e.resolved = true;
         game.baseHp -= 8; game.baseBounce = 1; game.hitFlash = 1;
         game.enemies.splice(i, 1);
         updateBaseHp();
         if (game.baseHp <= 0) { gameOver(false); return; }
         continue;
       }
+      if (e.y > zoneBottom) e.resolved = true;
     }
     if (e.y > CH + 40) game.enemies.splice(i, 1);
   }
@@ -1178,14 +1187,16 @@ function update(dt) {
     flashMsg(`WAVE ${game.wave} 시작!`);
   }
 
-  // 보스 로직 (보스마다 다른 공격 패턴)
+  // 보스 로직 (보스마다 다른 공격 패턴 + 플레이어를 쫓는 AI 이동)
   if (game.boss) {
     const b = game.boss;
     if (b.telegraph && b.telegraph.pattern === 'dash' && b.dashTarget !== null) {
       b.x += (b.dashTarget - b.x) * Math.min(1, dt * 8);
     } else {
-      b.x += b.vx * dt * 60;
-      if (b.x < 60 || b.x > CW - 60) b.vx *= -1;
+      // 플레이어를 은근히 추적하되, 좌우로 흔들리며 완전히 예측 가능하지 않게 움직인다
+      const weave = Math.sin(performance.now() / 850 + b.wanderPhase) * 100;
+      const desiredX = Math.max(70, Math.min(CW - 70, game.player.x + weave));
+      b.x += (desiredX - b.x) * Math.min(1, dt * b.chaseSpeed);
     }
     b.atkTimer -= dt;
     if (b.telegraph) {
@@ -1203,20 +1214,23 @@ function update(dt) {
     const bp = game.bossProjectiles[i];
     bp.y += bp.speed * dt * 60;
     if (!bp.resolved && bp.y >= playerRow) {
-      bp.resolved = true;
       const dist = Math.hypot(bp.x - game.player.x, bp.y - game.player.y);
       const hitRadius = PLAYER_R + (bp.type === 'wide' ? 32 : 16);
-      const hit = dist < hitRadius;
-      if (hit) {
+      if (dist < hitRadius) {
+        bp.resolved = true;
         game.baseHp -= bp.dmg; game.baseBounce = 1; game.hitFlash = 1; updateBaseHp();
         if (bp.type === 'slow') game.slowTimer = 2.2;
+        if (bp.type === 'poison') game.hazards.push({ x: bp.x, y: bp.y, r: 34, timer: 3.0, dps: 7 });
+        game.bossProjectiles.splice(i, 1);
         if (game.baseHp <= 0) { gameOver(false); return; }
+        continue;
       }
-      if (bp.type === 'poison') {
-        game.hazards.push({ x: bp.x, y: bp.y, r: 34, timer: 3.0, dps: 7 });
+      if (bp.y > zoneBottom) {
+        bp.resolved = true;
+        if (bp.type === 'poison') game.hazards.push({ x: bp.x, y: bp.y, r: 34, timer: 3.0, dps: 7 });
+        game.bossProjectiles.splice(i, 1);
+        continue;
       }
-      game.bossProjectiles.splice(i, 1);
-      continue;
     }
     if (bp.y > CH + 40) game.bossProjectiles.splice(i, 1);
   }

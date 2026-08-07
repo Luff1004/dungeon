@@ -6,7 +6,8 @@ html, body {
   color: #f0e9ff;
   touch-action: none;
 }
-#app { position: relative; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
+body { background: #0a080d; }
+#app { position: relative; width: 100%; max-width: 560px; margin: 0 auto; height: 100vh; height: 100dvh; overflow: hidden; container-type: inline-size; box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 0 80px rgba(0,0,0,0.7); }
 
 .screen {
   position: absolute; inset: 0;
@@ -23,7 +24,7 @@ html, body {
   background: rgba(0,0,0,0.25);
   border-bottom: 2px solid rgba(255,255,255,0.06);
 }
-.sub-header h2 { margin: 0; font-size: 1.15rem; letter-spacing: 1px; color: #ffe9b0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); flex: 1; }
+.sub-header h2 { margin: 0; font-size: 1.35rem; letter-spacing: 1px; color: #ffe9b0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); flex: 1; }
 .back-btn, .ingame-back {
   width: 38px; height: 38px; border-radius: 50%; border: none;
   background: radial-gradient(circle at 30% 30%, #5c4a7a, #2c2140);
@@ -47,7 +48,7 @@ html, body {
 .lobby-torch.left { left: 8%; } .lobby-torch.right { right: 8%; }
 @keyframes flicker { 0%,100%{ transform: scaleY(1) translateX(0); opacity:0.9;} 50%{ transform: scaleY(1.15) translateX(2px); opacity:0.65;} }
 .lobby-title { position: relative; text-align: center; margin-bottom: 40px; margin-top: 34px; }
-.lobby-title h1 { font-size: clamp(1.5rem, 7vw, 2.2rem); margin: 0; color: #cfc6b8; text-shadow: 0 0 14px rgba(180,40,30,0.5), 0 3px 0 #000; letter-spacing: 3px; font-family: Georgia, 'Times New Roman', serif; }
+.lobby-title h1 { font-size: clamp(1.8rem, 8cqw, 2.6rem); margin: 0; color: #cfc6b8; text-shadow: 0 0 14px rgba(180,40,30,0.5), 0 3px 0 #000; letter-spacing: 3px; font-family: Georgia, 'Times New Roman', serif; }
 .lobby-title .subtitle { margin: 6px 0 0; color: #766a5c; font-size: 0.85rem; letter-spacing: 1px; }
 .lobby-currency { position: absolute; top: 10px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; }
 .cur-pill { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); font-weight: 600; font-size: 0.85rem; }
@@ -71,9 +72,9 @@ html, body {
 .card-wide { position: relative; min-height: 92px; border-radius: 20px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; box-shadow: 0 6px 14px rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.12); overflow: hidden; }
 .card-wide .card-icon { width: 58px; height: 58px; border-radius: 14px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; box-shadow: inset 0 0 10px rgba(0,0,0,0.35); }
 .card-wide .card-text { flex: 1; }
-.card-wide .card-title { font-size: 1.05rem; font-weight: 800; margin: 0 0 3px; }
-.card-wide .card-sub { font-size: 0.78rem; opacity: 0.85; margin: 0; }
-.card-wide .card-tag { position: absolute; top: 10px; right: 14px; font-size: 0.68rem; padding: 3px 9px; border-radius: 10px; background: rgba(0,0,0,0.35); }
+.card-wide .card-title { font-size: 1.2rem; font-weight: 800; margin: 0 0 4px; }
+.card-wide .card-sub { font-size: 0.88rem; opacity: 0.9; margin: 0; }
+.card-wide .card-tag { position: absolute; top: 10px; right: 14px; font-size: 0.74rem; padding: 3px 9px; border-radius: 10px; background: rgba(0,0,0,0.35); }
 .card-wide.locked { filter: grayscale(0.7) brightness(0.55); }
 .card-wide .lock-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; }
 .card-wide .lock-icon .body { position:absolute; bottom:0; left:3px; width:24px; height:16px; background:#d8d0c0; border-radius:4px; }
@@ -103,7 +104,7 @@ html, body {
 /* ---------- 게임 화면 ---------- */
 #screen-game { background: #000; }
 .game-topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
-.wave-badge { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 14px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; }
+.wave-badge { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; }
 .boss-hp-wrap { flex: 1; }
 .boss-name { font-size: 0.72rem; text-align: center; margin-bottom: 2px; color: #ffb3b3; font-weight: 700; }
 .boss-hp-bar { height: 12px; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.25); overflow: hidden; }
@@ -157,9 +158,9 @@ html, body {
 .item-card { position: relative; border-radius: 18px; padding: 14px; min-height: 118px; display: flex; gap: 12px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 5px 12px rgba(0,0,0,0.3); }
 .item-card .item-thumb { width: 62px; height: 62px; border-radius: 12px; flex-shrink: 0; box-shadow: inset 0 0 8px rgba(0,0,0,0.4); }
 .item-card .item-info { flex: 1; display: flex; flex-direction: column; }
-.item-card .item-name { font-weight: 800; font-size: 0.95rem; margin: 0 0 4px; }
-.item-card .item-rarity { font-size: 0.68rem; opacity: 0.85; margin: 0 0 6px; letter-spacing: 1px; }
-.item-card .item-lv { font-size: 0.72rem; opacity: 0.9; margin: 0 0 8px; }
+.item-card .item-name { font-weight: 800; font-size: 1.1rem; margin: 0 0 4px; }
+.item-card .item-rarity { font-size: 0.78rem; opacity: 0.9; margin: 0 0 6px; letter-spacing: 1px; }
+.item-card .item-lv { font-size: 0.82rem; opacity: 0.95; margin: 0 0 8px; }
 .item-card .upgrade-mini-btn { align-self: flex-start; border: none; padding: 6px 16px; border-radius: 10px; background: linear-gradient(180deg, #ffe08a, #f0a93a); font-weight: 700; font-size: 0.75rem; color: #3a2500; }
 .item-card.equipped::before { content: '장착중'; position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,0.4); font-size: 0.65rem; padding: 2px 8px; border-radius: 8px; }
 .item-card.awakened { box-shadow: 0 0 16px 2px rgba(190,120,255,0.6), 0 5px 12px rgba(0,0,0,0.3); }
@@ -174,11 +175,11 @@ html, body {
 /* ---------- 업그레이드 화면 ---------- */
 .upgrade-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
 .upgrade-item-card { display: flex; gap: 16px; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 14px; }
-#upgradeItemCanvas { width: min(46vw, 200px); height: min(46vw, 200px); border-radius: 14px; background: radial-gradient(circle, #241f2c, #120f18); flex-shrink: 0; }
+#upgradeItemCanvas { width: min(52cqw, 230px); height: min(52cqw, 230px); border-radius: 14px; background: radial-gradient(circle, #241f2c, #120f18); flex-shrink: 0; }
 .upgrade-stats { display: flex; flex-direction: column; gap: 8px; }
-.ustat { display: flex; justify-content: space-between; gap: 16px; font-size: 0.85rem; background: rgba(0,0,0,0.25); padding: 6px 12px; border-radius: 8px; }
-.ustat span { opacity: 0.7; }
-.upgrade-desc { font-size: 0.85rem; line-height: 1.5; opacity: 0.85; }
+.ustat { display: flex; justify-content: space-between; gap: 16px; font-size: 1rem; background: rgba(0,0,0,0.25); padding: 8px 14px; border-radius: 8px; }
+.ustat span { opacity: 0.75; }
+.upgrade-desc { font-size: 1rem; line-height: 1.6; opacity: 0.9; }
 .awaken-btn { border: none; padding: 14px; border-radius: 14px; font-weight: 800; background: linear-gradient(160deg, #d9a9ff, #6a2fbf); color: #fff; box-shadow: 0 0 16px rgba(180,110,255,0.6); }
 .upgrade-footer { margin-top: auto; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
 .upgrade-preview-change { font-size: 0.8rem; color: #9de8b0; }
@@ -195,10 +196,10 @@ html, body {
 
 /* ---------- 상점 ---------- */
 .merchant-card { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100%; justify-content: center; }
-.merchant-bubble { background: #fff; color: #3a2c1e; font-size: 0.8rem; font-weight: 700; padding: 8px 14px; border-radius: 14px; position: relative; max-width: 46vw; text-align: center; }
+.merchant-bubble { background: #fff; color: #3a2c1e; font-size: 0.85rem; font-weight: 700; padding: 8px 14px; border-radius: 14px; position: relative; max-width: 46cqw; text-align: center; }
 .merchant-bubble::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #fff; }
 .merchant-visual { height: min(64vh, 480px); aspect-ratio: 3 / 4; position: relative; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 22px rgba(0,0,0,0.45); }
-.merchant-name { font-weight: 800; font-size: 1rem; }
+.merchant-name { font-weight: 800; font-size: 1.05rem; }
 .gacha-launch { flex-shrink: 0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; height: 100%; }
 
 /* 상인1: 일반 잡화상 */
@@ -267,8 +268,8 @@ html, body {
 .modal-list { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; max-height: 46vh; }
 .shop-item-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.06); padding: 10px; border-radius: 12px; }
 .shop-item-row .item-thumb { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; }
-.shop-item-row .si-name { font-weight: 700; font-size: 0.85rem; }
-.shop-item-row .si-price { font-size: 0.75rem; opacity: 0.8; }
+.shop-item-row .si-name { font-weight: 700; font-size: 0.95rem; }
+.shop-item-row .si-price { font-size: 0.82rem; opacity: 0.85; }
 .shop-item-row .si-buy { margin-left: auto; border: none; padding: 8px 14px; border-radius: 10px; background: linear-gradient(180deg, #ffe08a, #f0a93a); font-weight: 700; font-size: 0.75rem; }
 .discount-tag { color: #ff8a8a; text-decoration: line-through; margin-right: 4px; }
 .modal-close { border: none; padding: 12px; border-radius: 12px; background: #4a3a70; color: #fff; font-weight: 700; }
