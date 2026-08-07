@@ -77,39 +77,39 @@ const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
 
 const BOSSES = [
   { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime',
-    pattern: 'single', patternLabel: '단발 조준탄 + 젤리 해일', atkInterval: 1.7,
-    wall: { gapWidth: 110, duration: 2.4, motion: 'slide', color: '80,220,120', interval: 5.5 },
+    pattern: 'single', patternLabel: '단발 조준탄 + 튀는 젤리 폭탄', atkInterval: 1.7,
+    big: { type: 'bounce', dmg: 24, interval: 6.0, telegraphT: 0.5 },
     reward: { gold: 300, gem: 8 }, rewardItem: 'sw_curve' },
   { id: 2, name: '해골 군주', hp: 780, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull',
-    pattern: 'spread', patternLabel: '3방향 부채꼴 + 뼈의 장막', atkInterval: 2.0,
-    wall: { gapWidth: 90, duration: 2.0, motion: 'slide', color: '220,220,230', interval: 5.0 },
+    pattern: 'spread', patternLabel: '3방향 부채꼴 + 뼈 소나기', atkInterval: 2.0,
+    big: { type: 'rain', count: 13, dmg: 9, interval: 5.0, telegraphT: 0.5 },
     reward: { gold: 420, gem: 10 }, rewardItem: 'ar_boss_skull' },
   { id: 3, name: '망령 백작', hp: 1000, color1: '#b38aff', color2: '#4a2a8a', shape: 'ghost',
-    pattern: 'teleport', patternLabel: '순간이동 기습 + 저주의 장막', atkInterval: 1.6,
-    wall: { gapWidth: 85, duration: 2.0, motion: 'jump', color: '180,120,255', interval: 5.0 },
+    pattern: 'teleport', patternLabel: '순간이동 기습 + 즉사급 기습타', atkInterval: 1.6,
+    big: { type: 'pointblank', dmg: 28, interval: 4.8, telegraphT: 0.4 },
     reward: { gold: 560, gem: 13 }, rewardItem: 'wp_boss_wraith' },
   { id: 4, name: '용암 골렘', hp: 1350, color1: '#ff8a4a', color2: '#8a2a0a', shape: 'golem',
-    pattern: 'slam', patternLabel: '광역 강타 + 용암 해일', atkInterval: 2.3,
-    wall: { gapWidth: 100, duration: 2.6, motion: 'slide', color: '255,120,50', interval: 6.0 },
+    pattern: 'slam', patternLabel: '광역 강타 + 확산하는 용암 웅덩이', atkInterval: 2.3,
+    big: { type: 'expand', dmg: 9, startR: 20, endR: 150, duration: 2.6, interval: 6.5, telegraphT: 0.6 },
     reward: { gold: 720, gem: 16 }, rewardItem: 'ar_boss_magma' },
   { id: 5, name: '독전 마녀 로자린', hp: 1550, color1: '#8aff9e', color2: '#1f5a2f', shape: 'witch',
-    pattern: 'poison', patternLabel: '맹독 웅덩이 + 독안개 장막', atkInterval: 2.1,
-    wall: { gapWidth: 90, duration: 2.2, motion: 'slide', color: '110,230,130', secondary: 'poison', interval: 5.5 },
+    pattern: 'poison', patternLabel: '맹독 웅덩이 + 독안개 3연폭', atkInterval: 2.1,
+    big: { type: 'multiExpand', count: 3, dmg: 7, startR: 14, endR: 62, duration: 1.9, interval: 6.0, telegraphT: 0.5 },
     reward: { gold: 860, gem: 18 }, rewardItem: 'wp_cannon' },
   { id: 6, name: '빙결 여제 시렌', hp: 1750, color1: '#bdeeff', color2: '#2a6a8a', shape: 'ice',
-    pattern: 'slow', patternLabel: '냉기탄 + 빙결 장막 (닿으면 더 느려짐)', atkInterval: 2.0,
-    wall: { gapWidth: 85, duration: 2.2, motion: 'slide', color: '140,220,255', secondary: 'slow', interval: 5.2 },
+    pattern: 'slow', patternLabel: '냉기탄 + 굴러오는 얼음 바위', atkInterval: 2.0,
+    big: { type: 'boulder', dmg: 22, speed: 2.6, radius: 32, duration: 3.4, interval: 6.0, telegraphT: 0.5 },
     reward: { gold: 950, gem: 20 }, rewardItem: 'wp_frost' },
   { id: 7, name: '뇌전 폭군 자칸', hp: 1950, color1: '#fff26a', color2: '#8a7a10', shape: 'thunder',
-    pattern: 'double', patternLabel: '연속 2연발 + 초고속 번개 장막', atkInterval: 1.3,
-    wall: { gapWidth: 70, duration: 1.3, motion: 'slide', color: '255,240,110', interval: 4.2 },
+    pattern: 'double', patternLabel: '연속 2연발 + 연쇄 낙뢰 3연타', atkInterval: 1.3,
+    big: { type: 'rainwave', waves: 3, perWave: 5, dmg: 10, gap: 0.42, interval: 5.0, telegraphT: 0.3 },
     reward: { gold: 1050, gem: 22 }, rewardItem: 'wp_laser' },
   { id: 8, name: '칠흑룡 벨카누스', hp: 2200, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon',
     pattern: 'sweep', patternLabel: '전방위 브레스 (안전지대 찾기)', atkInterval: 2.6,
     reward: { gold: 1300, gem: 26 }, rewardItem: 'wp_boss_dragon' },
   { id: 9, name: '심연의 사냥꾼 크로바', hp: 2450, color1: '#ff6a8a', color2: '#4a0a1a', shape: 'hunter',
-    pattern: 'dash', patternLabel: '고속 돌진 저격 + 갈지자 장막', atkInterval: 1.5,
-    wall: { gapWidth: 80, duration: 2.4, motion: 'zigzag', color: '255,110,140', interval: 4.8 },
+    pattern: 'dash', patternLabel: '고속 돌진 저격 + 3연속 급습', atkInterval: 1.5,
+    big: { type: 'tripledash', dashes: 3, dmg: 18, gap: 0.35, interval: 5.0, telegraphT: 0.3 },
     reward: { gold: 1500, gem: 30 }, rewardItem: 'sw_void' },
   { id: 10, name: '태초의 화신', hp: 3200, color1: '#ffe9a8', color2: '#5a3a10', shape: 'genesis',
     pattern: 'combo', patternLabel: '모든 패턴 복합 사용', atkInterval: 1.6,
@@ -1146,18 +1146,126 @@ function spawnBoss(b) {
     def: b, x: CW / 2, y: 90, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null,
     wanderPhase: Math.random() * Math.PI * 2,
     chaseSpeed: 1.1 + Math.random() * 0.6,
-    wallTimer: b.wall ? 4.2 : null,
+    bigTimer: b.big ? 4.0 : null, bigPending: null, bigActive: null,
   };
   document.getElementById('boss-name').textContent = b.name;
   document.getElementById('wave-label').textContent = '보스전 · ' + b.patternLabel;
 }
 
-function startBossWall(b) {
-  const w = b.def.wall;
-  const startX = Math.max(80, Math.min(CW - 80, game.player.x));
-  let targetX = startX + (Math.random() < 0.5 ? -1 : 1) * (CW * 0.5);
-  targetX = Math.max(80, Math.min(CW - 80, targetX));
-  b.wallPending = { t: 0.7, startX, targetX, gapWidth: w.gapWidth, duration: w.duration, motion: w.motion, color: w.color, secondary: w.secondary || null };
+/* ---- 보스 전용 대형 패턴 (각자 완전히 다른 방식) ---- */
+
+function spawnRainBurst(count, dmg) {
+  for (let i = 0; i < count; i++) {
+    const x = 20 + Math.random() * (CW - 40);
+    game.bossProjectiles.push({ x, y: -20 - Math.random() * 160, speed: 4 + Math.random() * 3, resolved: false, type: 'normal', dmg });
+  }
+}
+
+function activateBigMove(b) {
+  const big = b.def.big;
+  const zone = getZone();
+  const playerRow = zone.cy - zone.h / 2;
+  if (big.type === 'bounce') {
+    const ang = Math.random() * Math.PI * 2;
+    b.bigActive = { type: 'bounce', big, x: game.player.x, y: playerRow - 120, vx: Math.cos(ang) * 2.6, vy: Math.abs(Math.sin(ang)) * 2.2 + 1, elapsed: 0 };
+  } else if (big.type === 'rain') {
+    spawnRainBurst(big.count, big.dmg);
+  } else if (big.type === 'pointblank') {
+    b.x = Math.max(60, Math.min(CW - 60, game.player.x + (Math.random() < 0.5 ? -1 : 1) * 30));
+    game.bossProjectiles.push({ x: b.x, y: b.y + 20, speed: 9, resolved: false, type: 'wide', dmg: big.dmg });
+    b.bigActive = { type: 'flash', elapsed: 0, duration: 0.3, x: b.x };
+  } else if (big.type === 'expand') {
+    const x = Math.max(60, Math.min(CW - 60, game.player.x + (Math.random() - 0.5) * 160));
+    b.bigActive = { type: 'expand', big, x, y: playerRow + zone.h * 0.4, r: big.startR, elapsed: 0 };
+  } else if (big.type === 'multiExpand') {
+    const circles = [];
+    for (let i = 0; i < big.count; i++) {
+      circles.push({ x: Math.max(50, Math.min(CW - 50, game.player.x + (Math.random() - 0.5) * 220)), y: playerRow + zone.h * (0.3 + Math.random() * 0.5), r: big.startR });
+    }
+    b.bigActive = { type: 'multiExpand', big, circles, elapsed: 0 };
+  } else if (big.type === 'boulder') {
+    const dir = Math.random() < 0.5 ? -1 : 1;
+    b.bigActive = { type: 'boulder', big, x: dir < 0 ? CW - 40 : 40, y: playerRow + zone.h * 0.5, vx: dir * -big.speed, elapsed: 0, trailTimer: 0 };
+  } else if (big.type === 'rainwave') {
+    b.bigActive = { type: 'rainwave', big, wavesLeft: big.waves, timer: 0 };
+  } else if (big.type === 'tripledash') {
+    b.bigActive = { type: 'tripledash', big, dashesLeft: big.dashes, timer: 0 };
+  }
+}
+
+function updateBigActive(b, dt) {
+  const ba = b.bigActive;
+  if (!ba) return;
+  const big = ba.big;
+  const zone = getZone();
+  const playerRow = zone.cy - zone.h / 2;
+  const yMin = playerRow - 160, yMax = zone.cy + zone.h / 2 - 10;
+  if (ba.type === 'flash') {
+    ba.elapsed += dt;
+    if (ba.elapsed >= ba.duration) b.bigActive = null;
+    return;
+  }
+  if (ba.type === 'bounce') {
+    ba.elapsed += dt;
+    ba.x += ba.vx * dt * 60; ba.y += ba.vy * dt * 60;
+    if (ba.x < 30 || ba.x > CW - 30) ba.vx *= -1;
+    if (ba.y < yMin || ba.y > yMax) ba.vy *= -1;
+    ba.x = Math.max(30, Math.min(CW - 30, ba.x));
+    ba.y = Math.max(yMin, Math.min(yMax, ba.y));
+    if (Math.hypot(ba.x - game.player.x, ba.y - game.player.y) < PLAYER_R + 26) {
+      game.baseHp -= big.dmg * dt * 2.5; game.hitFlash = Math.max(game.hitFlash, 0.4); updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
+    if (ba.elapsed > 5.5) b.bigActive = null;
+  } else if (ba.type === 'expand') {
+    ba.elapsed += dt;
+    const t = Math.min(1, ba.elapsed / big.duration);
+    ba.r = big.startR + (big.endR - big.startR) * t;
+    if (Math.hypot(ba.x - game.player.x, ba.y - game.player.y) < ba.r) {
+      game.baseHp -= big.dmg * dt * 4; game.hitFlash = Math.max(game.hitFlash, 0.4); updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
+    if (ba.elapsed >= big.duration) b.bigActive = null;
+  } else if (ba.type === 'multiExpand') {
+    ba.elapsed += dt;
+    const t = Math.min(1, ba.elapsed / big.duration);
+    let hit = false;
+    ba.circles.forEach((c) => {
+      c.r = big.startR + (big.endR - big.startR) * t;
+      if (Math.hypot(c.x - game.player.x, c.y - game.player.y) < c.r) hit = true;
+    });
+    if (hit) {
+      game.baseHp -= big.dmg * dt * 4; game.hitFlash = Math.max(game.hitFlash, 0.4); updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
+    if (ba.elapsed >= big.duration) b.bigActive = null;
+  } else if (ba.type === 'boulder') {
+    ba.elapsed += dt;
+    ba.x += ba.vx * dt * 60;
+    ba.trailTimer -= dt;
+    if (ba.trailTimer <= 0) { ba.trailTimer = 0.22; game.hazards.push({ x: ba.x, y: ba.y, r: 24, timer: 2.2, dps: 0, frost: true }); }
+    if (Math.hypot(ba.x - game.player.x, ba.y - game.player.y) < PLAYER_R + big.radius) {
+      game.baseHp -= big.dmg; game.hitFlash = 1; updateBaseHp();
+      b.bigActive = null;
+      if (game.baseHp <= 0) { gameOver(false); return; }
+      return;
+    }
+    if (ba.x < -60 || ba.x > CW + 60) b.bigActive = null;
+  } else if (ba.type === 'rainwave') {
+    ba.timer -= dt;
+    if (ba.timer <= 0 && ba.wavesLeft > 0) {
+      spawnRainBurst(big.perWave, big.dmg);
+      ba.wavesLeft--; ba.timer = big.gap;
+    }
+    if (ba.wavesLeft <= 0) b.bigActive = null;
+  } else if (ba.type === 'tripledash') {
+    ba.timer -= dt;
+    if (ba.timer <= 0 && ba.dashesLeft > 0) {
+      game.bossProjectiles.push({ x: game.player.x, y: playerRow - 6, speed: 99, resolved: false, type: 'wide', dmg: big.dmg });
+      ba.dashesLeft--; ba.timer = big.gap;
+    }
+    if (ba.dashesLeft <= 0) b.bigActive = null;
+  }
 }
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -1487,18 +1595,20 @@ function update(dt) {
       b.atkTimer = b.def.atkInterval || 1.7;
       startBossTelegraph(b);
     }
-    if (b.wallPending) {
-      b.wallPending.t -= dt;
-      if (b.wallPending.t <= 0) {
-        const p = b.wallPending;
-        b.laser = { startX: p.startX, targetX: p.targetX, gapX: p.startX, gapWidth: p.gapWidth, elapsed: 0, duration: p.duration, motion: p.motion, color: p.color, secondary: p.secondary, jumped: false };
-        b.wallPending = null;
+    if (b.bigPending) {
+      b.bigPending.t -= dt;
+      if (b.bigPending.t <= 0) {
+        activateBigMove(b);
+        b.bigPending = null;
       }
-    } else if (b.wallTimer !== null) {
-      b.wallTimer -= dt;
-      if (b.wallTimer <= 0 && !b.laser) {
-        b.wallTimer = b.def.wall.interval;
-        startBossWall(b);
+    } else if (b.bigActive) {
+      updateBigActive(b, dt);
+      if (!game.running) return;
+    } else if (b.bigTimer !== null) {
+      b.bigTimer -= dt;
+      if (b.bigTimer <= 0) {
+        b.bigTimer = b.def.big.interval;
+        b.bigPending = { t: b.def.big.telegraphT || 0.5 };
       }
     }
   }
@@ -1578,9 +1688,12 @@ function update(dt) {
     hz.timer -= dt;
     if (hz.timer <= 0) { game.hazards.splice(i, 1); continue; }
     if (Math.hypot(hz.x - game.player.x, hz.y - game.player.y) < hz.r) {
-      game.baseHp -= hz.dps * dt;
-      updateBaseHp();
-      if (game.baseHp <= 0) { gameOver(false); return; }
+      if (hz.frost) { game.slowTimer = 0.3; }
+      else {
+        game.baseHp -= hz.dps * dt;
+        updateBaseHp();
+        if (game.baseHp <= 0) { gameOver(false); return; }
+      }
     }
   }
 }
@@ -1652,12 +1765,18 @@ function render() {
 
   // 보스
   if (game.boss) drawBoss(game.boss);
-  // 지속 피해 웅덩이
+  // 지속 피해/지형 웅덩이 (독/서리)
   game.hazards.forEach(hz => {
     const a = 0.25 + 0.15 * Math.sin(performance.now() / 150 + hz.x);
     ctxG.beginPath(); ctxG.arc(hz.x, hz.y, hz.r, 0, Math.PI * 2);
-    ctxG.fillStyle = `rgba(90,220,110,${a})`; ctxG.fill();
-    ctxG.strokeStyle = 'rgba(140,255,160,0.5)'; ctxG.lineWidth = 2; ctxG.stroke();
+    if (hz.frost) {
+      ctxG.fillStyle = `rgba(140,220,255,${a})`; ctxG.fill();
+      ctxG.strokeStyle = 'rgba(200,240,255,0.6)';
+    } else {
+      ctxG.fillStyle = `rgba(90,220,110,${a})`; ctxG.fill();
+      ctxG.strokeStyle = 'rgba(140,255,160,0.5)';
+    }
+    ctxG.lineWidth = 2; ctxG.stroke();
   });
 
   const bpColors = { normal: '#ff4a4a', wide: '#ff9a3a', slow: '#7fd8ff', poison: '#8aff9e' };
@@ -1669,15 +1788,17 @@ function render() {
     ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
   });
 
-  // 장막(레이저) 경고 + 실제 효과
-  if (game.boss && game.boss.wallPending) {
-    const wp = game.boss.wallPending;
-    const flash = 0.15 + 0.15 * Math.sin(performance.now() / 40);
-    ctxG.fillStyle = `rgba(${wp.color},${flash})`;
+  // 보스 전용 대형 패턴 경고 + 실제 효과
+  if (game.boss && game.boss.bigPending) {
+    const col = game.boss.def.color1;
+    const flash = 0.12 + 0.12 * Math.sin(performance.now() / 40);
+    ctxG.save();
+    ctxG.globalAlpha = flash;
+    ctxG.fillStyle = col;
     ctxG.fillRect(0, 0, CW, CH);
-    ctxG.fillStyle = 'rgba(255,255,255,0.3)';
-    ctxG.fillRect(wp.startX - wp.gapWidth / 2, 0, wp.gapWidth, CH);
+    ctxG.restore();
   }
+  if (game.boss && game.boss.bigActive) drawBigActive(game.boss.bigActive);
   if (game.boss && game.boss.laser) {
     const lz = game.boss.laser;
     const gx = lz.gapX, gw = lz.gapWidth;
@@ -1871,6 +1992,41 @@ function drawPlayerBullet(p) {
     ctxG.closePath(); ctxG.fill();
   }
   ctxG.restore();
+}
+
+function drawBigActive(ba) {
+  if (ba.type === 'bounce') {
+    ctxG.save();
+    ctxG.beginPath(); ctxG.arc(ba.x, ba.y, 26, 0, Math.PI * 2);
+    const g = ctxG.createRadialGradient(ba.x - 6, ba.y - 6, 3, ba.x, ba.y, 26);
+    g.addColorStop(0, '#c9ffd6'); g.addColorStop(1, '#2f8a45');
+    ctxG.fillStyle = g; ctxG.shadowColor = '#7fe08a'; ctxG.shadowBlur = 16; ctxG.fill();
+    ctxG.restore();
+  } else if (ba.type === 'expand') {
+    ctxG.save();
+    ctxG.beginPath(); ctxG.arc(ba.x, ba.y, ba.r, 0, Math.PI * 2);
+    ctxG.fillStyle = 'rgba(255,100,40,0.35)'; ctxG.fill();
+    ctxG.strokeStyle = 'rgba(255,180,80,0.9)'; ctxG.lineWidth = 3; ctxG.stroke();
+    ctxG.restore();
+  } else if (ba.type === 'multiExpand') {
+    ba.circles.forEach((c) => {
+      ctxG.save();
+      ctxG.beginPath(); ctxG.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctxG.fillStyle = 'rgba(110,230,130,0.35)'; ctxG.fill();
+      ctxG.strokeStyle = 'rgba(160,255,180,0.9)'; ctxG.lineWidth = 3; ctxG.stroke();
+      ctxG.restore();
+    });
+  } else if (ba.type === 'boulder') {
+    ctxG.save();
+    ctxG.translate(ba.x, ba.y); ctxG.rotate(ba.elapsed * 2);
+    const g = ctxG.createRadialGradient(-8, -8, 4, 0, 0, 30);
+    g.addColorStop(0, '#eaf9ff'); g.addColorStop(1, '#4a90b8');
+    ctxG.fillStyle = g; ctxG.shadowColor = '#8fd8ff'; ctxG.shadowBlur = 14;
+    ctxG.beginPath();
+    for (let k = 0; k < 7; k++) { const a = (Math.PI * 2 * k) / 7; const r = 26 + (k % 2) * 4; const px = Math.cos(a) * r, py = Math.sin(a) * r; if (k === 0) ctxG.moveTo(px, py); else ctxG.lineTo(px, py); }
+    ctxG.closePath(); ctxG.fill();
+    ctxG.restore();
+  }
 }
 
 function drawStarBullet(bp) {
