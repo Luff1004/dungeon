@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>던전 디펜스 - 기지를 지켜라!</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== 로비 ===================== -->
+  <section id="screen-lobby" class="screen active">
+    <div class="lobby-bg">
+      <div class="lobby-torch left"></div>
+      <div class="lobby-torch right"></div>
+    </div>
+    <div class="lobby-title">
+      <h1>던전 디펜스</h1>
+      <p class="subtitle">기지를 지켜라!</p>
+    </div>
+    <div class="lobby-currency">
+      <div class="cur-pill gold"><span class="cur-icon"></span><span id="lobby-gold">0</span></div>
+      <div class="cur-pill gem"><span class="cur-icon"></span><span id="lobby-gem">0</span></div>
+    </div>
+    <div class="lobby-buttons">
+      <button class="lobby-btn start-btn" data-nav="type-select">
+        <span class="btn-shine"></span>
+        <span class="btn-label">시작</span>
+      </button>
+      <button class="lobby-btn equip-btn" data-nav="equip">
+        <span class="btn-label">장비</span>
+      </button>
+      <button class="lobby-btn shop-btn" data-nav="shop">
+        <span class="btn-label">상점</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===================== 유형 선택 (던전/보스/챌린지) ===================== -->
+  <section id="screen-type-select" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="lobby">◀</button>
+      <h2>모험 선택</h2>
+    </header>
+    <div class="scroll-list vertical" id="type-list"></div>
+  </section>
+
+  <!-- ===================== 던전 목록 ===================== -->
+  <section id="screen-dungeon-list" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="type-select">◀</button>
+      <h2>던전</h2>
+    </header>
+    <div class="scroll-list vertical" id="dungeon-list"></div>
+  </section>
+
+  <!-- ===================== 보스 목록 ===================== -->
+  <section id="screen-boss-list" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="type-select">◀</button>
+      <h2>보스 토벌</h2>
+    </header>
+    <div class="scroll-list vertical" id="boss-list"></div>
+  </section>
+
+  <!-- ===================== 챌린지 목록 ===================== -->
+  <section id="screen-challenge-list" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="type-select">◀</button>
+      <h2>챌린지</h2>
+    </header>
+    <div class="scroll-list vertical hell" id="challenge-list"></div>
+  </section>
+
+  <!-- ===================== 게임 플레이 ===================== -->
+  <section id="screen-game" class="screen">
+    <div class="game-topbar">
+      <button class="ingame-back" id="btn-quit">◀</button>
+      <div class="wave-badge"><span id="wave-label">WAVE 1</span></div>
+      <div class="boss-hp-wrap" id="boss-hp-wrap" style="display:none;">
+        <div class="boss-name" id="boss-name">보스</div>
+        <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-hp-fill"></div></div>
+      </div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="base-hp-wrap">
+      <div class="base-hp-bar"><div class="base-hp-fill" id="base-hp-fill"></div></div>
+    </div>
+
+    <div class="controls">
+      <div class="lane-controls">
+        <button class="lane-btn" id="lane-left">‹</button>
+        <div class="lane-indicator" id="lane-indicator">
+          <span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span>
+        </div>
+        <button class="lane-btn" id="lane-right">›</button>
+      </div>
+      <div class="attack-controls">
+        <div class="ammo-bar-wrap">
+          <div class="ammo-bar" id="ammo-bar"></div>
+        </div>
+        <div class="stick-row">
+          <div class="joystick special" id="special-stick">
+            <div class="stick-base"></div>
+            <div class="stick-knob"></div>
+          </div>
+          <div class="joystick main" id="main-stick">
+            <div class="stick-base"></div>
+            <div class="stick-knob"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay-message" style="display:none;">
+      <div class="overlay-box">
+        <h2 id="overlay-title"></h2>
+        <p id="overlay-desc"></p>
+        <div class="overlay-rewards" id="overlay-rewards"></div>
+        <div class="overlay-btns">
+          <button id="overlay-retry">다시하기</button>
+          <button id="overlay-lobby">로비로</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 장비 ===================== -->
+  <section id="screen-equip" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="lobby">◀</button>
+      <h2>장비</h2>
+    </header>
+    <div class="player-preview">
+      <canvas id="playerPreviewCanvas"></canvas>
+    </div>
+    <div class="equip-body">
+      <div class="equip-cats" id="equip-cats"></div>
+      <div class="equip-list" id="equip-list"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 업그레이드 화면 ===================== -->
+  <section id="screen-upgrade" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="equip">◀</button>
+      <h2 id="upgrade-item-name">업그레이드</h2>
+    </header>
+    <div class="player-preview small">
+      <canvas id="upgradePreviewCanvas"></canvas>
+    </div>
+    <div class="upgrade-body" id="upgrade-body-normal">
+      <div class="upgrade-item-card">
+        <canvas id="upgradeItemCanvas" width="160" height="160"></canvas>
+        <div class="upgrade-stats">
+          <div class="ustat"><span>레벨</span><b id="up-level">1</b></div>
+          <div class="ustat"><span>데미지</span><b id="up-damage">0</b></div>
+          <div class="ustat"><span>범위</span><b id="up-range">0</b></div>
+        </div>
+      </div>
+      <p class="upgrade-desc" id="upgrade-desc"></p>
+      <button class="awaken-btn" id="btn-awaken" style="display:none;">✦ 각성하기 ✦</button>
+      <div class="upgrade-footer">
+        <div class="upgrade-preview-change" id="upgrade-change"></div>
+        <div class="upgrade-cost" id="upgrade-cost"></div>
+        <button class="upgrade-confirm" id="btn-upgrade-confirm">업그레이드</button>
+      </div>
+    </div>
+    <div class="awaken-grid-wrap" id="awaken-grid-wrap" style="display:none;">
+      <div class="hex-grid" id="hex-grid"></div>
+      <button class="awaken-back" id="btn-awaken-back">돌아가기</button>
+    </div>
+  </section>
+
+  <!-- ===================== 상점 ===================== -->
+  <section id="screen-shop" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="lobby">◀</button>
+      <h2>상점</h2>
+      <div class="shop-currency">
+        <div class="cur-pill gold small"><span class="cur-icon"></span><span id="shop-gold">0</span></div>
+        <div class="cur-pill gem small"><span class="cur-icon"></span><span id="shop-gem">0</span></div>
+      </div>
+    </header>
+    <div class="scroll-list horizontal" id="merchant-row"></div>
+  </section>
+
+  <!-- 상인 물건 모달 -->
+  <div id="merchant-modal" class="modal" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-head" id="merchant-modal-head"></div>
+      <div class="modal-list" id="merchant-modal-list"></div>
+      <button class="modal-close" id="merchant-modal-close">닫기</button>
+    </div>
+  </div>
+
+  <!-- ===================== 가챠 ===================== -->
+  <section id="screen-gacha" class="screen">
+    <header class="sub-header">
+      <button class="back-btn" data-nav="shop">◀</button>
+      <h2>아이템 뽑기</h2>
+      <div class="shop-currency">
+        <div class="cur-pill gem small"><span class="cur-icon"></span><span id="gacha-gem">0</span></div>
+      </div>
+    </header>
+    <div class="gacha-row" id="gacha-row"></div>
+  </div>
+
+  <!-- 가챠 결과 모달 -->
+  <div id="gacha-result-modal" class="modal" style="display:none;">
+    <div class="modal-card gacha-result">
+      <div id="gacha-result-item"></div>
+      <button class="modal-close" id="gacha-result-close">확인</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

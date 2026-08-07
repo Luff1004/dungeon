@@ -1,0 +1,262 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  overflow: hidden; background: #14101c;
+  font-family: 'Segoe UI', 'Malgun Gothic', -apple-system, sans-serif;
+  color: #f0e9ff;
+  touch-action: none;
+}
+#app { position: relative; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
+
+.screen {
+  position: absolute; inset: 0;
+  display: none;
+  flex-direction: column;
+  background: linear-gradient(180deg, #221a33 0%, #17111f 60%, #0e0a14 100%);
+}
+.screen.active { display: flex; }
+
+/* ---------- 공통 헤더 ---------- */
+.sub-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; flex-shrink: 0;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 2px solid rgba(255,255,255,0.06);
+}
+.sub-header h2 { margin: 0; font-size: 1.15rem; letter-spacing: 1px; color: #ffe9b0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); flex: 1; }
+.back-btn, .ingame-back {
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: radial-gradient(circle at 30% 30%, #5c4a7a, #2c2140);
+  color: #fff; font-size: 1rem; box-shadow: 0 3px 0 #1a1428, inset 0 1px 2px rgba(255,255,255,0.2);
+}
+.shop-currency { display: flex; gap: 6px; }
+
+/* ---------- 로비 ---------- */
+#screen-lobby { align-items: center; justify-content: center; }
+.lobby-bg { position: absolute; inset: 0; background:
+  radial-gradient(circle at 20% 80%, rgba(255,140,60,0.15), transparent 40%),
+  radial-gradient(circle at 80% 80%, rgba(255,140,60,0.15), transparent 40%),
+  repeating-linear-gradient(90deg, #241a35 0 40px, #2a1f3d 40px 80px);
+}
+.lobby-torch { position: absolute; bottom: 30%; width: 14px; height: 40px; border-radius: 40% 40% 50% 50%;
+  background: radial-gradient(circle, #ffdd88, #ff8a3d 60%, transparent 70%); filter: blur(1px);
+  animation: flicker 1.6s infinite ease-in-out; }
+.lobby-torch.left { left: 8%; } .lobby-torch.right { right: 8%; }
+@keyframes flicker { 0%,100%{ transform: scaleY(1) translateX(0); opacity:1;} 50%{ transform: scaleY(1.15) translateX(2px); opacity:0.8;} }
+.lobby-title { position: relative; text-align: center; margin-bottom: 40px; margin-top: 34px; }
+.lobby-title h1 { font-size: clamp(1.5rem, 7vw, 2.3rem); margin: 0; color: #ffd9e8; text-shadow: 0 0 18px #ff9ad0, 0 3px 0 #6a2c50; letter-spacing: 2px; }
+.lobby-title .subtitle { margin: 4px 0 0; color: #b9a8d8; font-size: 0.95rem; }
+.lobby-currency { position: absolute; top: 10px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; }
+.cur-pill { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); font-weight: 600; font-size: 0.85rem; }
+.cur-pill.small { padding: 4px 9px; font-size: 0.75rem; }
+.cur-pill .cur-icon { width: 14px; height: 14px; border-radius: 50%; }
+.cur-pill.gold .cur-icon { background: radial-gradient(circle at 35% 35%, #fff3b0, #e0a923); }
+.cur-pill.gem .cur-icon { background: radial-gradient(circle at 35% 35%, #d0f4ff, #38a4d8); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+.lobby-buttons { position: relative; display: flex; flex-direction: column; gap: 16px; width: 74%; max-width: 320px; }
+.lobby-btn { position: relative; overflow: hidden; border: none; border-radius: 18px; padding: 18px 0; font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 3px; box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 8px 14px rgba(0,0,0,0.3); }
+.lobby-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
+.start-btn { background: linear-gradient(180deg, #ff9ecb, #ff5c9e); font-size: 1.35rem; }
+.equip-btn { background: linear-gradient(180deg, #9adfff, #4aa7e8); }
+.shop-btn { background: linear-gradient(180deg, #ffe08a, #f0a93a); }
+.btn-shine { position: absolute; top: -50%; left: -20%; width: 40%; height: 200%; background: rgba(255,255,255,0.35); transform: rotate(20deg); animation: shine 2.6s infinite; }
+@keyframes shine { 0% { left: -30%; } 60%,100% { left: 130%; } }
+
+/* ---------- 스크롤 리스트 (유형/던전/보스/챌린지) ---------- */
+.scroll-list { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px; display: flex; flex-direction: column; gap: 14px; -webkit-overflow-scrolling: touch; }
+.scroll-list.horizontal { flex-direction: row; overflow-x: auto; overflow-y: hidden; align-items: flex-end; padding-bottom: 30px; }
+
+.card-wide { position: relative; min-height: 92px; border-radius: 20px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; box-shadow: 0 6px 14px rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.12); overflow: hidden; }
+.card-wide .card-icon { width: 58px; height: 58px; border-radius: 14px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; box-shadow: inset 0 0 10px rgba(0,0,0,0.35); }
+.card-wide .card-text { flex: 1; }
+.card-wide .card-title { font-size: 1.05rem; font-weight: 800; margin: 0 0 3px; }
+.card-wide .card-sub { font-size: 0.78rem; opacity: 0.85; margin: 0; }
+.card-wide .card-tag { position: absolute; top: 10px; right: 14px; font-size: 0.68rem; padding: 3px 9px; border-radius: 10px; background: rgba(0,0,0,0.35); }
+.card-wide.locked { filter: grayscale(0.7) brightness(0.55); }
+.card-wide .lock-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; }
+.card-wide .lock-icon .body { position:absolute; bottom:0; left:3px; width:24px; height:16px; background:#d8d0c0; border-radius:4px; }
+.card-wide .lock-icon .shackle { position:absolute; top:0; left:7px; width:16px; height:14px; border:4px solid #d8d0c0; border-bottom:none; border-radius:10px 10px 0 0; }
+
+/* 유형 카드 각각 다른 디자인 */
+#type-list .card-wide.type-dungeon { background: linear-gradient(120deg, #2f4f3a, #1c3325); }
+#type-list .card-wide.type-dungeon .card-icon { background: conic-gradient(from 210deg, #6b5b3c, #3d3220); border-radius: 8px; }
+#type-list .card-wide.type-boss { background: linear-gradient(120deg, #5a1f2b, #2c0f16); border-color: #ff6a6a55; }
+#type-list .card-wide.type-boss .card-icon { background: radial-gradient(circle at 35% 30%, #ff8a8a, #7a1010); border-radius: 50% 50% 40% 40%; }
+#type-list .card-wide.type-challenge { background: linear-gradient(120deg, #402060, #200f33); }
+#type-list .card-wide.type-challenge .card-icon { background: linear-gradient(160deg, #c37bff, #5a1d8a); clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+
+/* 던전 카드: 난이도에 따라 색 진해짐 */
+.dungeon-card .card-icon { background: linear-gradient(160deg, var(--c1), var(--c2)); border-radius: 12px; }
+.dungeon-card { background: linear-gradient(120deg, var(--bg1), var(--bg2)); }
+
+/* 보스 카드 */
+.boss-card { background: linear-gradient(120deg, var(--bg1), var(--bg2)); }
+.boss-card .card-icon { background: var(--c1); }
+
+/* 챌린지 카드 (아래로 갈수록 지옥) */
+.challenge-card { background: linear-gradient(120deg, var(--bg1), var(--bg2)); }
+.challenge-card .card-icon { background: radial-gradient(circle at 40% 30%, var(--c1), var(--c2)); }
+.scroll-list.hell { background: radial-gradient(ellipse at bottom, rgba(90,0,0,0.15), transparent 60%); }
+
+/* ---------- 게임 화면 ---------- */
+#screen-game { background: #000; }
+.game-topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+.wave-badge { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 14px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; }
+.boss-hp-wrap { flex: 1; }
+.boss-name { font-size: 0.72rem; text-align: center; margin-bottom: 2px; color: #ffb3b3; font-weight: 700; }
+.boss-hp-bar { height: 12px; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.25); overflow: hidden; }
+.boss-hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #ff5c5c, #b30000); transition: width 0.25s; }
+
+#gameCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.base-hp-wrap { position: absolute; left: 50%; transform: translateX(-50%); bottom: 190px; width: 46%; max-width: 260px; z-index: 4; }
+.base-hp-bar { height: 10px; border-radius: 6px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.25); overflow: hidden; }
+.base-hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #7dffb0, #29c46a); transition: width 0.2s; }
+
+.controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; padding: 10px 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+.lane-controls { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.lane-btn { width: 46px; height: 46px; border-radius: 50%; border: none; font-size: 1.4rem; color: #fff;
+  background: radial-gradient(circle at 30% 30%, #8a6bd8, #402a80); box-shadow: 0 4px 0 #241757; }
+.lane-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #241757; }
+.lane-indicator { display: flex; gap: 8px; background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 12px; }
+.lane-indicator .slot { width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,0.12); }
+.lane-indicator .slot.active { background: linear-gradient(160deg, #ffe08a, #f0a93a); box-shadow: 0 0 8px #ffcf6699; }
+
+.attack-controls { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.ammo-bar-wrap { flex: 1; height: 10px; background: rgba(0,0,0,0.4); border-radius: 6px; overflow: hidden; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.15); }
+.ammo-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #ffe08a, #ff9e4a); transition: width 0.15s; }
+.stick-row { display: flex; align-items: flex-end; gap: 14px; }
+.joystick { position: relative; border-radius: 50%; }
+.joystick.main { width: 108px; height: 108px; }
+.joystick.special { width: 66px; height: 66px; }
+.stick-base { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.12), rgba(0,0,0,0.35)); border: 2px solid rgba(255,255,255,0.25); }
+.stick-knob { position: absolute; width: 46%; height: 46%; left: 27%; top: 27%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3d9, #d8397d); box-shadow: 0 3px 6px rgba(0,0,0,0.4); }
+.joystick.special .stick-knob { background: radial-gradient(circle at 35% 30%, #9adfff, #2a86c9); }
+
+.overlay { position: absolute; inset: 0; z-index: 20; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; }
+.overlay-box { background: linear-gradient(160deg, #2c2140, #1a1428); border: 2px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 26px 30px; text-align: center; width: 78%; max-width: 320px; }
+.overlay-box h2 { margin: 0 0 8px; color: #ffe08a; }
+.overlay-rewards { display: flex; gap: 8px; justify-content: center; margin: 14px 0; flex-wrap: wrap; }
+.overlay-btns { display: flex; gap: 10px; margin-top: 12px; }
+.overlay-btns button, .overlay-retry, .overlay-lobby { flex: 1; padding: 12px 0; border: none; border-radius: 12px; font-weight: 700; }
+#overlay-retry { background: linear-gradient(180deg, #ff9ecb, #ff5c9e); color: #fff; }
+#overlay-lobby { background: linear-gradient(180deg, #9adfff, #4aa7e8); color: #fff; }
+
+/* ---------- 장비 화면 ---------- */
+.player-preview { height: 30vh; flex-shrink: 0; position: relative; background: radial-gradient(ellipse at center, #2c2244, #150f22); border-bottom: 2px solid rgba(255,255,255,0.08); }
+.player-preview.small { height: 22vh; }
+.player-preview canvas { width: 100%; height: 100%; }
+.equip-body { flex: 1; display: flex; overflow: hidden; }
+.equip-cats { width: 78px; flex-shrink: 0; background: rgba(0,0,0,0.25); display: flex; flex-direction: column; padding: 10px 8px; gap: 10px; }
+.cat-btn { border: none; border-radius: 14px; padding: 12px 0; background: rgba(255,255,255,0.06); color: #cbb8ea; font-size: 0.78rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cat-btn .cat-ico { width: 26px; height: 26px; border-radius: 6px; }
+.cat-btn.active { background: linear-gradient(160deg, #a97bff, #5a2fbf); color: #fff; }
+.equip-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+
+.item-card { position: relative; border-radius: 18px; padding: 14px; min-height: 118px; display: flex; gap: 12px; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 5px 12px rgba(0,0,0,0.3); }
+.item-card .item-thumb { width: 62px; height: 62px; border-radius: 12px; flex-shrink: 0; box-shadow: inset 0 0 8px rgba(0,0,0,0.4); }
+.item-card .item-info { flex: 1; display: flex; flex-direction: column; }
+.item-card .item-name { font-weight: 800; font-size: 0.95rem; margin: 0 0 4px; }
+.item-card .item-rarity { font-size: 0.68rem; opacity: 0.85; margin: 0 0 6px; letter-spacing: 1px; }
+.item-card .item-lv { font-size: 0.72rem; opacity: 0.9; margin: 0 0 8px; }
+.item-card .upgrade-mini-btn { align-self: flex-start; border: none; padding: 6px 16px; border-radius: 10px; background: linear-gradient(180deg, #ffe08a, #f0a93a); font-weight: 700; font-size: 0.75rem; color: #3a2500; }
+.item-card.equipped::before { content: '장착중'; position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,0.4); font-size: 0.65rem; padding: 2px 8px; border-radius: 8px; }
+.item-card.awakened { box-shadow: 0 0 16px 2px rgba(190,120,255,0.6), 0 5px 12px rgba(0,0,0,0.3); }
+
+/* 레어도 색 */
+.rarity-common { background: linear-gradient(120deg, #4a4a52, #2c2c33); border-color: #8d8d9633; }
+.rarity-rare { background: linear-gradient(120deg, #244a72, #142c47); border-color: #4da6ff55; }
+.rarity-epic { background: linear-gradient(120deg, #4a2172, #2a1147); border-color: #b366ff55; }
+.rarity-legendary { background: linear-gradient(120deg, #7a5416, #4a3208); border-color: #ffb84d66; }
+.rarity-mythic { background: linear-gradient(120deg, #7a1d40, #3d0e20); border-color: #ff5c8a66; }
+
+/* ---------- 업그레이드 화면 ---------- */
+.upgrade-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.upgrade-item-card { display: flex; gap: 16px; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 14px; }
+#upgradeItemCanvas { border-radius: 14px; background: radial-gradient(circle, #2c2244, #150f22); }
+.upgrade-stats { display: flex; flex-direction: column; gap: 8px; }
+.ustat { display: flex; justify-content: space-between; gap: 16px; font-size: 0.85rem; background: rgba(0,0,0,0.25); padding: 6px 12px; border-radius: 8px; }
+.ustat span { opacity: 0.7; }
+.upgrade-desc { font-size: 0.85rem; line-height: 1.5; opacity: 0.85; }
+.awaken-btn { border: none; padding: 14px; border-radius: 14px; font-weight: 800; background: linear-gradient(160deg, #d9a9ff, #6a2fbf); color: #fff; box-shadow: 0 0 16px rgba(180,110,255,0.6); }
+.upgrade-footer { margin-top: auto; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.upgrade-preview-change { font-size: 0.8rem; color: #9de8b0; }
+.upgrade-cost { font-size: 0.85rem; opacity: 0.85; }
+.upgrade-confirm { border: none; padding: 14px; border-radius: 12px; font-weight: 800; background: #2c9e56; color: #fff; }
+.upgrade-confirm.disabled { background: #1c1c1c; color: #ff6b6b; }
+
+.awaken-grid-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; overflow: auto; }
+.hex-grid { display: grid; grid-template-columns: repeat(3, 70px); gap: 8px; margin-bottom: 16px; }
+.hex { width: 70px; height: 62px; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); background: #2c2c3c; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; border: 2px solid rgba(255,255,255,0.15); }
+.hex.done { background: linear-gradient(160deg, #d9a9ff, #6a2fbf); box-shadow: 0 0 12px rgba(180,110,255,0.7); }
+.hex.available { background: linear-gradient(160deg, #ffe08a, #f0a93a); color: #3a2500; }
+.awaken-back { border: none; padding: 12px 26px; border-radius: 12px; background: #4a3a70; color: #fff; font-weight: 700; }
+
+/* ---------- 상점 ---------- */
+.merchant-card { width: 190px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.merchant-bubble { background: #fff; color: #3a2c1e; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; position: relative; max-width: 170px; text-align: center; }
+.merchant-bubble::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #fff; }
+.merchant-visual { width: 150px; height: 190px; position: relative; border-radius: 16px 16px 0 0; overflow: hidden; }
+.merchant-name { font-weight: 800; font-size: 0.85rem; }
+.gacha-launch { width: 150px; flex-shrink: 0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+
+/* 상인1: 일반 잡화상 */
+.merchant-visual.type-general { background: linear-gradient(180deg, #6a4a2c 0%, #6a4a2c 30%, #8a6a3c 30%, #8a6a3c 100%); }
+.merchant-visual.type-general .npc { position:absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 90px; }
+.merchant-visual.type-general .npc .head { position:absolute; top:0; left:16px; width:28px; height:28px; border-radius:50%; background:#f0c090; }
+.merchant-visual.type-general .npc .hat { position:absolute; top:-8px; left:10px; width:40px; height:16px; background:#a0522d; border-radius:8px 8px 0 0; }
+.merchant-visual.type-general .npc .body { position:absolute; top:26px; left:8px; width:44px; height:50px; background:#c97a3d; border-radius:10px; }
+.merchant-visual.type-general .stall { position:absolute; top:8px; left:0; right:0; height:6px; background:#3d2a18; }
+
+/* 상인2: 대장장이 */
+.merchant-visual.type-smith { background: linear-gradient(180deg, #33302f 0%, #33302f 25%, #4a4442 25%, #4a4442 100%); }
+.merchant-visual.type-smith .npc { position:absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 66px; height: 96px; }
+.merchant-visual.type-smith .npc .head { position:absolute; top:0; left:19px; width:26px; height:26px; border-radius:50%; background:#d89a6a; }
+.merchant-visual.type-smith .npc .body { position:absolute; top:24px; left:6px; width:54px; height:58px; background:#5c5c66; border-radius:8px; }
+.merchant-visual.type-smith .npc .apron { position:absolute; top:38px; left:14px; width:38px; height:42px; background:#8a3a2c; border-radius:6px; }
+.merchant-visual.type-smith .anvil { position:absolute; bottom:4px; right:14px; width:34px; height:18px; background:#1c1c1c; border-radius:3px; }
+
+/* 상인3: 마녀 (그림자만) */
+.merchant-visual.type-witch { background: radial-gradient(circle at 50% 30%, #3a1f52, #150a22); }
+.merchant-visual.type-witch .shadow { position:absolute; bottom:10px; left:50%; transform: translateX(-50%); width:70px; height:120px;
+  background:#0a0512; clip-path: polygon(45% 0%, 55% 0%, 70% 25%, 60% 30%, 90% 55%, 65% 55%, 65% 100%, 35% 100%, 35% 55%, 10% 55%, 40% 30%, 30% 25%); }
+.merchant-visual.type-witch .eyes { position:absolute; top:30px; left:50%; transform:translateX(-50%); display:flex; gap:8px; }
+.merchant-visual.type-witch .eyes span { width:6px; height:6px; border-radius:50%; background:#9dffb0; box-shadow:0 0 6px #9dffb0; }
+
+/* 상인4: 꼬마 상인 */
+.merchant-visual.type-kid { background: linear-gradient(180deg, #2c4a3a 0%, #2c4a3a 60%, #3c5a48 60%, #3c5a48 100%); }
+.merchant-visual.type-kid .npc { position:absolute; bottom: 34px; left: 50%; transform: translateX(-50%); width: 46px; height: 66px; }
+.merchant-visual.type-kid .npc .head { position:absolute; top:0; left:9px; width:28px; height:28px; border-radius:50%; background:#f5c9a0; }
+.merchant-visual.type-kid .npc .body { position:absolute; top:24px; left:4px; width:38px; height:38px; background:#e0705a; border-radius:12px; }
+.merchant-visual.type-kid .cart { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); width:76px; height:26px; background:#7a5230; border-radius:6px; }
+.merchant-visual.type-kid .cart::after { content:''; position:absolute; bottom:-8px; left:8px; width:12px; height:12px; border-radius:50%; background:#3a2a18; box-shadow: 44px 0 0 #3a2a18; }
+
+.gacha-machine { width: 130px; height: 170px; border-radius: 16px 16px 30px 30px; position: relative; box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
+.gacha-machine .dome { position:absolute; top:10px; left:50%; transform:translateX(-50%); width:96px; height:76px; border-radius:50% 50% 40% 40%; background: rgba(255,255,255,0.25); border:3px solid rgba(255,255,255,0.4); }
+.gacha-machine .capsule { position:absolute; width:16px; height:16px; border-radius:50%; }
+.gacha-machine .base { position:absolute; bottom:0; left:0; right:0; height:70px; border-radius:0 0 30px 30px; background: rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; }
+
+.gacha-row { flex: 1; overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; gap: 26px; padding: 20px; }
+.gacha-tier { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.gacha-tier .tier-name { font-weight: 800; }
+.gacha-tier .pity { font-size: 0.7rem; opacity: 0.75; }
+.gacha-tier .pull-btn { border:none; padding: 10px 20px; border-radius: 12px; font-weight: 800; color:#fff; }
+
+/* ---------- 모달 ---------- */
+.modal { position: absolute; inset: 0; background: rgba(0,0,0,0.65); z-index: 30; display: flex; align-items: center; justify-content: center; }
+.modal-card { width: 84%; max-width: 360px; max-height: 70vh; background: linear-gradient(160deg, #2c2140, #1a1428); border-radius: 20px; border: 2px solid rgba(255,255,255,0.15); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.modal-head { font-weight: 800; font-size: 1.05rem; text-align: center; }
+.modal-list { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; max-height: 46vh; }
+.shop-item-row { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.06); padding: 10px; border-radius: 12px; }
+.shop-item-row .item-thumb { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; }
+.shop-item-row .si-name { font-weight: 700; font-size: 0.85rem; }
+.shop-item-row .si-price { font-size: 0.75rem; opacity: 0.8; }
+.shop-item-row .si-buy { margin-left: auto; border: none; padding: 8px 14px; border-radius: 10px; background: linear-gradient(180deg, #ffe08a, #f0a93a); font-weight: 700; font-size: 0.75rem; }
+.discount-tag { color: #ff8a8a; text-decoration: line-through; margin-right: 4px; }
+.modal-close { border: none; padding: 12px; border-radius: 12px; background: #4a3a70; color: #fff; font-weight: 700; }
+
+.gacha-result { align-items: center; text-align: center; }
+.result-thumb { width: 110px; height: 110px; border-radius: 20px; margin: 0 auto 10px; }
+.result-name { font-weight: 800; font-size: 1.1rem; }
+.result-rarity { font-size: 0.8rem; opacity: 0.85; margin-bottom: 6px; }
+
+::-webkit-scrollbar { width: 0; height: 0; }
