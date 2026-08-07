@@ -24,8 +24,13 @@
       <div class="cur-pill gold"><span class="cur-icon"></span><span id="lobby-gold">0</span></div>
       <div class="cur-pill gem"><span class="cur-icon"></span><span id="lobby-gem">0</span></div>
     </div>
+    <button class="checkin-badge" id="btn-checkin">
+      <span class="flame-icon"></span>
+      <span id="checkin-badge-num">0</span>
+      <span class="checkin-ping" id="checkin-ping" style="display:none;"></span>
+    </button>
     <div class="lobby-buttons">
-      <button class="lobby-btn start-btn" data-nav="type-select">
+      <button class="lobby-btn start-btn" id="btn-start">
         <span class="btn-shine"></span>
         <span class="btn-label">시작</span>
       </button>
@@ -35,6 +40,30 @@
       <button class="lobby-btn shop-btn" data-nav="shop">
         <span class="btn-label">상점</span>
       </button>
+    </div>
+  </section>
+
+  <!-- ===================== 캐릭터 직접 그리기 ===================== -->
+  <section id="screen-draw" class="screen">
+    <div class="draw-header">
+      <h2>그리세요!</h2>
+      <p>당신이 그린 그림이 캐릭터가 됩니다</p>
+    </div>
+    <div class="draw-canvas-wrap">
+      <canvas id="drawCanvas" width="320" height="320"></canvas>
+    </div>
+    <div class="draw-toolbar">
+      <div class="draw-colors" id="draw-colors"></div>
+      <div class="draw-sizes" id="draw-sizes">
+        <button class="brush-size-btn" data-size="3"><span style="width:5px;height:5px;"></span></button>
+        <button class="brush-size-btn active" data-size="6"><span style="width:9px;height:9px;"></span></button>
+        <button class="brush-size-btn" data-size="12"><span style="width:14px;height:14px;"></span></button>
+      </div>
+      <button class="draw-clear-btn" id="draw-clear">지우기</button>
+    </div>
+    <div class="draw-actions">
+      <button class="draw-skip-btn" id="draw-skip">나중에 할게요</button>
+      <button class="draw-done-btn" id="draw-done">완료!</button>
     </div>
   </section>
 
@@ -136,6 +165,7 @@
     </header>
     <div class="player-preview">
       <canvas id="playerPreviewCanvas"></canvas>
+      <button class="redraw-btn" id="btn-redraw">다시 그리기</button>
     </div>
     <div class="equip-body">
       <div class="equip-cats" id="equip-cats"></div>
@@ -207,13 +237,24 @@
       </div>
     </header>
     <div class="gacha-row" id="gacha-row"></div>
-  </div>
+  </section>
 
   <!-- 가챠 결과 모달 -->
   <div id="gacha-result-modal" class="modal" style="display:none;">
     <div class="modal-card gacha-result">
       <div id="gacha-result-item"></div>
       <button class="modal-close" id="gacha-result-close">확인</button>
+    </div>
+  </div>
+
+  <!-- ===================== 일일 출석 체크 ===================== -->
+  <div id="checkin-modal" class="modal" style="display:none;">
+    <div class="modal-card checkin-card">
+      <div class="modal-head">일일 출석 체크</div>
+      <p class="checkin-sub">연속 출석 <b id="checkin-streak-label">0</b>일째</p>
+      <div class="checkin-grid" id="checkin-grid"></div>
+      <button class="checkin-claim-btn" id="checkin-claim-btn">오늘 출석하기</button>
+      <button class="modal-close" id="checkin-modal-close">닫기</button>
     </div>
   </div>
 

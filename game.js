@@ -78,7 +78,7 @@ const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
 const BOSSES = [
   { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime',
     pattern: 'single', patternLabel: '단발 조준탄', atkInterval: 1.7,
-    reward: { gold: 300, gem: 8 } },
+    reward: { gold: 300, gem: 8 }, rewardItem: 'sw_curve' },
   { id: 2, name: '해골 군주', hp: 780, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull',
     pattern: 'spread', patternLabel: '3방향 부채꼴 사격', atkInterval: 2.0,
     reward: { gold: 420, gem: 10 }, rewardItem: 'ar_boss_skull' },
@@ -90,19 +90,19 @@ const BOSSES = [
     reward: { gold: 720, gem: 16 }, rewardItem: 'ar_boss_magma' },
   { id: 5, name: '독전 마녀 로자린', hp: 1550, color1: '#8aff9e', color2: '#1f5a2f', shape: 'witch',
     pattern: 'poison', patternLabel: '맹독 웅덩이 (지속 피해)', atkInterval: 2.1,
-    reward: { gold: 860, gem: 18 } },
+    reward: { gold: 860, gem: 18 }, rewardItem: 'wp_cannon' },
   { id: 6, name: '빙결 여제 시렌', hp: 1750, color1: '#bdeeff', color2: '#2a6a8a', shape: 'ice',
     pattern: 'slow', patternLabel: '냉기탄 (피격 시 이동속도 저하)', atkInterval: 2.0,
-    reward: { gold: 950, gem: 20 } },
+    reward: { gold: 950, gem: 20 }, rewardItem: 'wp_frost' },
   { id: 7, name: '뇌전 폭군 자칸', hp: 1950, color1: '#fff26a', color2: '#8a7a10', shape: 'thunder',
     pattern: 'double', patternLabel: '연속 2연발', atkInterval: 1.3,
-    reward: { gold: 1050, gem: 22 } },
+    reward: { gold: 1050, gem: 22 }, rewardItem: 'wp_laser' },
   { id: 8, name: '칠흑룡 벨카누스', hp: 2200, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon',
     pattern: 'sweep', patternLabel: '전방위 브레스 (안전지대 찾기)', atkInterval: 2.6,
     reward: { gold: 1300, gem: 26 }, rewardItem: 'wp_boss_dragon' },
   { id: 9, name: '심연의 사냥꾼 크로바', hp: 2450, color1: '#ff6a8a', color2: '#4a0a1a', shape: 'hunter',
     pattern: 'dash', patternLabel: '고속 돌진 저격', atkInterval: 1.5,
-    reward: { gold: 1500, gem: 30 } },
+    reward: { gold: 1500, gem: 30 }, rewardItem: 'sw_void' },
   { id: 10, name: '태초의 화신', hp: 3200, color1: '#ffe9a8', color2: '#5a3a10', shape: 'genesis',
     pattern: 'combo', patternLabel: '모든 패턴 복합 사용', atkInterval: 1.6,
     reward: { gold: 2200, gem: 45 }, rewardItem: 'wp_boss_genesis', rewardItem2: 'ar_boss_genesis' },
@@ -157,6 +157,9 @@ function defaultState() {
     dungeonCleared: 0,
     bossCleared: 0,
     pity: { common: 0, rare: 0, epic: 0, legendary: 0 },
+    lastCheckIn: null,
+    checkInStreak: 0,
+    playerSkin: null,
   };
 }
 
@@ -193,7 +196,7 @@ function itemPower(id) {
 function nav(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screenId).classList.add('active');
-  if (screenId === 'lobby') refreshCurrencyDisplays();
+  if (screenId === 'lobby') { refreshCurrencyDisplays(); updateCheckinBadge(); }
   if (screenId === 'type-select') buildTypeList();
   if (screenId === 'dungeon-list') buildDungeonList();
   if (screenId === 'boss-list') buildBossList();
@@ -536,7 +539,30 @@ function drawPlayerPreview(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, rect.width, rect.height);
-  drawAdventurer(ctx, rect.width / 2, rect.height * 0.66, rect.height * 0.56, state.equipped, 0);
+  drawPlayerCharacter(ctx, rect.width / 2, rect.height * 0.66, rect.height * 0.56, state.equipped, 0);
+}
+
+/* ---------------- 직접 그린 캐릭터 스킨 ---------------- */
+
+let playerSkinImg = null;
+function loadPlayerSkin() {
+  if (!state.playerSkin) { playerSkinImg = null; return; }
+  const img = new Image();
+  img.onload = () => { playerSkinImg = img; };
+  img.src = state.playerSkin;
+}
+
+function drawPlayerCharacter(ctx, cx, cy, scale, equipped, facing) {
+  if (!playerSkinImg) { drawAdventurer(ctx, cx, cy, scale, equipped, facing); return; }
+  ctx.save();
+  ctx.beginPath(); ctx.ellipse(cx, cy + scale * 0.48, scale * 0.34, scale * 0.09, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.fill();
+  const size = scale * 1.15;
+  if (facing < 0) {
+    ctx.translate(cx, 0); ctx.scale(-1, 1); ctx.translate(-cx, 0);
+  }
+  ctx.drawImage(playerSkinImg, cx - size / 2, cy - size / 2, size, size);
+  ctx.restore();
 }
 
 function darken(hex, amt) {
@@ -756,32 +782,40 @@ function buildGacha() {
   const row = document.getElementById('gacha-row');
   row.innerHTML = '';
   GACHA_TIERS.forEach(t => {
-    const wrap = document.createElement('div');
-    wrap.className = 'gacha-tier';
-    wrap.innerHTML = `
-      <div class="gacha-machine" style="background:linear-gradient(160deg,${t.colors[0]},${t.colors[1]});">
-        <div class="dome"></div>
-        <div class="capsule" style="top:32px;left:26px;background:#fff;"></div>
-        <div class="capsule" style="top:24px;left:58px;background:#fff;"></div>
-        <div class="capsule" style="top:44px;left:78px;background:#fff;"></div>
-        <div class="base">${t.price} 💎</div>
+    const pityLeft = t.pityMax - state.pity[t.id];
+    const pityPct = Math.min(100, (state.pity[t.id] / t.pityMax) * 100);
+    const card = document.createElement('div');
+    card.className = 'gacha-tier-card';
+    card.style.setProperty('--c1', t.colors[0]);
+    card.style.setProperty('--c2', t.colors[1]);
+    card.innerHTML = `
+      <div class="gacha-orb">
+        <div class="gacha-orb-core"></div>
+        <div class="gacha-orb-ring"></div>
+        <div class="gacha-orb-spark s1"></div>
+        <div class="gacha-orb-spark s2"></div>
+        <div class="gacha-orb-spark s3"></div>
       </div>
-      <div class="tier-name">${t.label}</div>
-      <div class="pity">천장까지 ${t.pityMax - state.pity[t.id]}회</div>
-      <button class="pull-btn" style="background:${t.colors[1]};">1회 뽑기</button>
+      <div class="gacha-info">
+        <p class="gt-name">${t.label}</p>
+        <div class="gt-pity-bar"><div class="gt-pity-fill" style="width:${pityPct}%;"></div></div>
+        <p class="gt-pity-label">천장까지 ${pityLeft}회 남음</p>
+      </div>
+      <div class="gacha-actions">
+        <button class="pull-btn single">1회<span>${t.price}</span></button>
+        <button class="pull-btn ten">10회<span>${Math.round(t.price * 9)}</span></button>
+      </div>
     `;
-    wrap.querySelector('.pull-btn').addEventListener('click', () => doGacha(t));
-    row.appendChild(wrap);
+    card.querySelector('.single').addEventListener('click', () => doGachaPull(t, 1));
+    card.querySelector('.ten').addEventListener('click', () => doGachaPull(t, 10));
+    row.appendChild(card);
   });
 }
 
-function doGacha(tier) {
-  if (state.gem < tier.price) { flashMsg('마력석이 부족합니다'); return; }
-  state.gem -= tier.price;
+function rollGachaOnce(tier) {
   state.pity[tier.id]++;
-
   const minRarityIdx = RARITY_ORDER.indexOf(tier.id);
-  let pool = ITEMS.filter(it => RARITY_ORDER.indexOf(it.rarity) >= minRarityIdx && !it.bossExclusive);
+  const pool = ITEMS.filter(it => RARITY_ORDER.indexOf(it.rarity) >= minRarityIdx && !it.bossExclusive);
   let result;
   if (state.pity[tier.id] >= tier.pityMax) {
     const topPool = pool.filter(it => it.rarity === RARITY_ORDER[RARITY_ORDER.length - 1] || it.rarity === 'legendary');
@@ -793,26 +827,131 @@ function doGacha(tier) {
     result = weighted[Math.floor(Math.random() * weighted.length)];
     if (result.rarity !== 'common') state.pity[tier.id] = 0;
   }
-
   const inv = state.inventory[result.id];
   const isNew = !inv.owned;
   inv.owned = true;
   if (inv.level < 1) inv.level = 1; else inv.level = Math.min(10, inv.level + 1);
-  save(); refreshCurrencyDisplays(); buildGacha();
-  showGachaResult(result, isNew);
+  return { item: result, isNew };
 }
 
-function showGachaResult(item, isNew) {
+function doGachaPull(tier, count) {
+  const totalPrice = count === 1 ? tier.price : Math.round(tier.price * 9);
+  if (state.gem < totalPrice) { flashMsg('마력석이 부족합니다'); return; }
+  state.gem -= totalPrice;
+  const results = [];
+  for (let i = 0; i < count; i++) results.push(rollGachaOnce(tier));
+  save(); refreshCurrencyDisplays(); buildGacha();
+  showGachaResults(results);
+}
+
+function showGachaResults(results) {
   const box = document.getElementById('gacha-result-item');
-  box.innerHTML = `
-    <div class="result-thumb" style="background:${svgToBg(itemThumbSVG(item))} center/70% no-repeat, radial-gradient(circle,#2c2244,#150f22)"></div>
-    <div class="result-name">${item.name}</div>
-    <div class="result-rarity" style="color:${RARITIES[item.rarity].color}">${RARITIES[item.rarity].label}${isNew ? ' · 신규 획득!' : ' · 강화 재료로 전환'}</div>
-  `;
+  box.className = results.length > 1 ? 'gacha-result-grid' : '';
+  box.innerHTML = results.map(({ item, isNew }) => `
+    <div class="result-slot ${RARITIES[item.rarity].cls}">
+      <div class="result-thumb" style="background:${svgToBg(itemThumbSVG(item))} center/70% no-repeat, radial-gradient(circle,#2c2244,#150f22)"></div>
+      <div class="result-name">${item.name}</div>
+      <div class="result-rarity" style="color:${RARITIES[item.rarity].color}">${RARITIES[item.rarity].label}${isNew ? ' · 신규' : ''}</div>
+    </div>
+  `).join('');
   document.getElementById('gacha-result-modal').style.display = 'flex';
 }
 document.getElementById('gacha-result-close').addEventListener('click', () => {
   document.getElementById('gacha-result-modal').style.display = 'none';
+});
+
+/* ---------------- 일일 출석 체크 ---------------- */
+
+const CHECKIN_REWARDS = [
+  { gold: 100, label: '100 G' },
+  { gold: 150, label: '150 G' },
+  { gold: 200, gem: 5, label: '200 G + 5' },
+  { gold: 300, label: '300 G' },
+  { gem: 10, label: '10 마력석' },
+  { gold: 500, gem: 10, label: '500 G + 10' },
+  { gold: 1000, gem: 30, bonus: true, label: '1000 G + 30 + 에픽 확정' },
+];
+
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function yesterdayStr() { const d = new Date(); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10); }
+function isCheckInAvailable() { return state.lastCheckIn !== todayStr(); }
+
+function rollFreeItem(minRarity) {
+  const minRarityIdx = RARITY_ORDER.indexOf(minRarity);
+  const pool = ITEMS.filter(it => RARITY_ORDER.indexOf(it.rarity) >= minRarityIdx && !it.bossExclusive);
+  const weighted = [];
+  pool.forEach(it => { for (let i = 0; i < RARITIES[it.rarity].weight; i++) weighted.push(it); });
+  const result = weighted[Math.floor(Math.random() * weighted.length)];
+  const inv = state.inventory[result.id];
+  const isNew = !inv.owned;
+  inv.owned = true;
+  if (inv.level < 1) inv.level = 1; else inv.level = Math.min(10, inv.level + 1);
+  return { item: result, isNew };
+}
+
+function updateCheckinBadge() {
+  document.getElementById('checkin-badge-num').textContent = state.checkInStreak;
+  document.getElementById('checkin-ping').style.display = isCheckInAvailable() ? 'block' : 'none';
+}
+
+function nextCheckinDayIdx() {
+  // 오늘 출석 시 부여될 사이클 내 일차 (0~6)
+  if (state.lastCheckIn === yesterdayStr()) return state.checkInStreak % 7;
+  if (state.lastCheckIn === todayStr()) return (state.checkInStreak - 1 + 7) % 7;
+  return 0;
+}
+
+function buildCheckinModal() {
+  document.getElementById('checkin-streak-label').textContent = state.checkInStreak;
+  const grid = document.getElementById('checkin-grid');
+  grid.innerHTML = '';
+  const claimedToday = !isCheckInAvailable();
+  const todayIdx = nextCheckinDayIdx();
+  CHECKIN_REWARDS.forEach((r, i) => {
+    const cell = document.createElement('div');
+    let cls = 'checkin-day';
+    if (r.bonus) cls += ' jackpot';
+    if (i < todayIdx || (i === todayIdx && claimedToday)) cls += ' claimed';
+    else if (i === todayIdx) cls += ' today';
+    else cls += ' future';
+    cell.className = cls;
+    cell.innerHTML = `<span class="cd-label">${i + 1}일차</span><span class="cd-icon"></span><span class="cd-amount">${r.label}</span>`;
+    grid.appendChild(cell);
+  });
+  const btn = document.getElementById('checkin-claim-btn');
+  if (claimedToday) {
+    btn.textContent = '내일 다시 와주세요';
+    btn.classList.add('disabled');
+  } else {
+    btn.textContent = '오늘 출석하기';
+    btn.classList.remove('disabled');
+  }
+}
+
+function openCheckinModal() {
+  buildCheckinModal();
+  document.getElementById('checkin-modal').style.display = 'flex';
+}
+
+function claimCheckIn() {
+  if (!isCheckInAvailable()) { flashMsg('오늘은 이미 출석했어요!'); return; }
+  const today = todayStr();
+  if (state.lastCheckIn === yesterdayStr()) state.checkInStreak += 1; else state.checkInStreak = 1;
+  state.lastCheckIn = today;
+  const reward = CHECKIN_REWARDS[(state.checkInStreak - 1) % 7];
+  state.gold += reward.gold || 0;
+  state.gem += reward.gem || 0;
+  let bonus = null;
+  if (reward.bonus) bonus = rollFreeItem('epic');
+  save(); refreshCurrencyDisplays(); updateCheckinBadge(); buildCheckinModal();
+  flashMsg(`출석 완료! ${reward.label} 획득`);
+  if (bonus) showGachaResults([bonus]);
+}
+
+document.getElementById('btn-checkin').addEventListener('click', openCheckinModal);
+document.getElementById('checkin-claim-btn').addEventListener('click', claimCheckIn);
+document.getElementById('checkin-modal-close').addEventListener('click', () => {
+  document.getElementById('checkin-modal').style.display = 'none';
 });
 
 /* ============================================================
@@ -919,7 +1058,23 @@ function spawnEnemy() {
   const zone = getZone();
   const baseX = Math.max(30, Math.min(CW - 30, zone.cx + (Math.random() - 0.5) * zone.w * 1.7));
   const hue = game.data.theme ? game.data.theme.c1 : (game.data.hellLevel !== undefined ? mixColor('#7fd48a', '#ff3b3b', game.data.hellLevel / 6) : '#ff8a8a');
+
+  const chargerChance = Math.min(0.32, 0.06 + game.wave * 0.025);
+  if (game.wave >= 2 && Math.random() < chargerChance) {
+    game.enemies.push({
+      type: 'charger', phase: 'fall',
+      x: baseX, baseX, y: -30, age: 0,
+      hp: Math.round(stats.hp * 0.65), maxHp: Math.round(stats.hp * 0.65),
+      speed: stats.speed * 0.55, dashSpeed: stats.speed * 5.5,
+      color: '#ff3b3b', resolved: false,
+      drift: 0, wobbleAmp: 0, wobbleFreq: 0, wobblePhase: 0,
+      chargeTimer: 0, lockX: baseX,
+    });
+    return;
+  }
+
   game.enemies.push({
+    type: 'normal',
     x: baseX, baseX, y: -30 - Math.random() * 60, age: 0,
     hp: stats.hp, maxHp: stats.hp, speed: stats.speed * (0.8 + Math.random() * 0.4), color: hue, resolved: false,
     drift: (Math.random() - 0.5) * 46,
@@ -1134,16 +1289,34 @@ function update(dt) {
 
   // 적 이동 + 플레이어와 충돌 판정 (회피 가능)
   // 존 안쪽 전체 구간을 매 프레임 검사한다 (아래쪽에 서 있다고 판정을 피해가지 못하도록)
+  const chargeTriggerY = playerRow - 90;
   for (let i = game.enemies.length - 1; i >= 0; i--) {
     const e = game.enemies[i];
-    e.y += e.speed * dt * 60;
-    e.age += dt;
-    e.x = Math.max(20, Math.min(CW - 20, e.baseX + e.drift * e.age + Math.sin(e.age * e.wobbleFreq + e.wobblePhase) * e.wobbleAmp));
+    if (e.type === 'charger') {
+      if (e.phase === 'fall') {
+        e.y += e.speed * dt * 60;
+        e.x = e.baseX;
+        if (e.y >= chargeTriggerY) { e.phase = 'telegraph'; e.chargeTimer = 0.5; e.lockX = game.player.x; }
+      } else if (e.phase === 'telegraph') {
+        e.chargeTimer -= dt;
+        e.lockX = e.lockX + (game.player.x - e.lockX) * Math.min(1, dt * 4);
+        if (e.chargeTimer <= 0) { e.phase = 'dash'; }
+      } else {
+        e.x = e.lockX;
+        e.y += e.dashSpeed * dt * 60;
+      }
+    } else {
+      e.y += e.speed * dt * 60;
+      e.age += dt;
+      e.x = Math.max(20, Math.min(CW - 20, e.baseX + e.drift * e.age + Math.sin(e.age * e.wobbleFreq + e.wobblePhase) * e.wobbleAmp));
+    }
+    const dmg = e.type === 'charger' ? 18 : 8;
+    const hitR = PLAYER_R + (e.type === 'charger' ? 16 : 14);
     if (!e.resolved && e.y >= playerRow) {
       const dist = Math.hypot(e.x - game.player.x, e.y - game.player.y);
-      if (dist < PLAYER_R + 14) {
+      if (dist < hitR) {
         e.resolved = true;
-        game.baseHp -= 8; game.baseBounce = 1; game.hitFlash = 1;
+        game.baseHp -= dmg; game.baseBounce = 1; game.hitFlash = 1;
         game.enemies.splice(i, 1);
         updateBaseHp();
         if (game.baseHp <= 0) { gameOver(false); return; }
@@ -1405,6 +1578,7 @@ function drawAimIndicator() {
 }
 
 function drawEnemy(e) {
+  if (e.type === 'charger') { drawCharger(e); return; }
   ctxG.save();
   ctxG.translate(e.x, e.y);
   ctxG.beginPath(); ctxG.ellipse(0, 22, 16, 5, 0, 0, Math.PI * 2); ctxG.fillStyle = 'rgba(0,0,0,0.3)'; ctxG.fill();
@@ -1417,6 +1591,36 @@ function drawEnemy(e) {
   // 체력바
   ctxG.fillStyle = 'rgba(0,0,0,0.5)'; ctxG.fillRect(-16, -28, 32, 5);
   ctxG.fillStyle = '#7dffb0'; ctxG.fillRect(-16, -28, 32 * Math.max(0, e.hp / e.maxHp), 5);
+  ctxG.restore();
+}
+
+function drawCharger(e) {
+  ctxG.save();
+  if (e.phase === 'dash') {
+    // 돌진 잔상
+    const grad = ctxG.createLinearGradient(e.x, e.y - 70, e.x, e.y);
+    grad.addColorStop(0, 'rgba(255,60,60,0)');
+    grad.addColorStop(1, 'rgba(255,90,60,0.55)');
+    ctxG.fillStyle = grad;
+    ctxG.beginPath(); ctxG.moveTo(e.x - 10, e.y - 70); ctxG.lineTo(e.x + 10, e.y - 70); ctxG.lineTo(e.x + 5, e.y); ctxG.lineTo(e.x - 5, e.y); ctxG.closePath(); ctxG.fill();
+  }
+  ctxG.translate(e.x, e.y);
+  const flash = e.phase === 'telegraph' ? (0.5 + 0.5 * Math.sin(performance.now() / 40)) : 1;
+  ctxG.beginPath(); ctxG.ellipse(0, 22, 16, 5, 0, 0, Math.PI * 2); ctxG.fillStyle = 'rgba(0,0,0,0.3)'; ctxG.fill();
+  // 가시 달린 몸체 (마름모 + 뾰족한 돌기)
+  ctxG.beginPath();
+  ctxG.moveTo(0, -20); ctxG.lineTo(6, -6); ctxG.lineTo(18, 0); ctxG.lineTo(6, 6); ctxG.lineTo(0, 20); ctxG.lineTo(-6, 6); ctxG.lineTo(-18, 0); ctxG.lineTo(-6, -6); ctxG.closePath();
+  ctxG.fillStyle = e.phase === 'telegraph' ? `rgba(255,${Math.round(60 + flash * 120)},${Math.round(40 + flash * 60)},1)` : '#ff3b3b';
+  ctxG.shadowColor = '#ff3b3b'; ctxG.shadowBlur = e.phase === 'telegraph' ? 16 : 8;
+  ctxG.fill();
+  ctxG.shadowBlur = 0;
+  ctxG.strokeStyle = '#5a0f0f'; ctxG.lineWidth = 2; ctxG.stroke();
+  ctxG.fillStyle = '#1a0a0a';
+  ctxG.beginPath(); ctxG.arc(-4, -1, 2.2, 0, Math.PI * 2); ctxG.fill();
+  ctxG.beginPath(); ctxG.arc(4, -1, 2.2, 0, Math.PI * 2); ctxG.fill();
+  // 체력바
+  ctxG.fillStyle = 'rgba(0,0,0,0.5)'; ctxG.fillRect(-16, -30, 32, 5);
+  ctxG.fillStyle = '#ff8a6a'; ctxG.fillRect(-16, -30, 32 * Math.max(0, e.hp / e.maxHp), 5);
   ctxG.restore();
 }
 
@@ -1457,10 +1661,134 @@ function drawPlayerOnField(x, y, angle) {
   ctxG.fillStyle = g; ctxG.beginPath(); ctxG.arc(x, y + 8, 42, 0, Math.PI * 2); ctxG.fill();
   ctxG.restore();
   const facing = angle !== null && Math.cos(angle) < 0 ? -1 : 1;
-  drawAdventurer(ctxG, x, y, 80, state.equipped, facing);
+  drawPlayerCharacter(ctxG, x, y, 80, state.equipped, facing);
 }
+
+/* ---------------- 캐릭터 그리기 화면 ---------------- */
+
+const DRAW_COLORS = ['#241a1a', '#ffffff', '#e0a06a', '#f5d9b0', '#c94a3a', '#e08a3a', '#e0c93a', '#5ab35a', '#3a8ac9', '#6a4ac9', '#c95aa8', '#7a5230'];
+let drawColor = '#241a1a';
+let drawSize = 6;
+let drawReturnScreen = 'type-select';
+
+const drawCanvas = document.getElementById('drawCanvas');
+const drawCtx = drawCanvas.getContext('2d');
+let drawing = false;
+let lastDrawPt = null;
+
+function drawCanvasPos(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  return {
+    x: (t.clientX - rect.left) * (drawCanvas.width / rect.width),
+    y: (t.clientY - rect.top) * (drawCanvas.height / rect.height),
+  };
+}
+function drawStart(e) {
+  drawing = true;
+  lastDrawPt = drawCanvasPos(e);
+  drawCtx.beginPath();
+  drawCtx.arc(lastDrawPt.x, lastDrawPt.y, drawSize / 2, 0, Math.PI * 2);
+  drawCtx.fillStyle = drawColor;
+  drawCtx.fill();
+  e.preventDefault();
+}
+function drawMove(e) {
+  if (!drawing) return;
+  const pt = drawCanvasPos(e);
+  drawCtx.strokeStyle = drawColor;
+  drawCtx.lineWidth = drawSize;
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastDrawPt.x, lastDrawPt.y);
+  drawCtx.lineTo(pt.x, pt.y);
+  drawCtx.stroke();
+  lastDrawPt = pt;
+  e.preventDefault();
+}
+function drawEnd() { drawing = false; lastDrawPt = null; }
+
+drawCanvas.addEventListener('mousedown', drawStart);
+drawCanvas.addEventListener('mousemove', drawMove);
+window.addEventListener('mouseup', drawEnd);
+drawCanvas.addEventListener('touchstart', drawStart, { passive: false });
+drawCanvas.addEventListener('touchmove', drawMove, { passive: false });
+drawCanvas.addEventListener('touchend', drawEnd);
+
+function buildDrawColors() {
+  const wrap = document.getElementById('draw-colors');
+  wrap.innerHTML = '';
+  DRAW_COLORS.forEach((c) => {
+    const b = document.createElement('button');
+    b.style.background = c;
+    if (c === drawColor) b.classList.add('active');
+    b.addEventListener('click', () => { drawColor = c; buildDrawColors(); });
+    wrap.appendChild(b);
+  });
+}
+buildDrawColors();
+
+document.querySelectorAll('.brush-size-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    drawSize = Number(btn.dataset.size);
+    document.querySelectorAll('.brush-size-btn').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+document.getElementById('draw-clear').addEventListener('click', () => {
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+});
+
+function openDrawScreen(returnTo) {
+  drawReturnScreen = returnTo;
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  nav('draw');
+}
+
+document.getElementById('draw-done').addEventListener('click', () => {
+  state.playerSkin = drawCanvas.toDataURL('image/png');
+  save();
+  loadPlayerSkin();
+  flashMsg('캐릭터 완성! 이제 이 모습으로 모험을 떠나요');
+  nav(drawReturnScreen);
+});
+document.getElementById('draw-skip').addEventListener('click', () => {
+  nav(drawReturnScreen);
+});
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  if (!state.playerSkin) openDrawScreen('type-select');
+  else nav('type-select');
+});
+document.getElementById('btn-redraw').addEventListener('click', () => {
+  openDrawScreen('equip');
+});
+
+/* ---------------- 개발자 코드 ---------------- */
+
+let cheatBuffer = '';
+window.addEventListener('keydown', (e) => {
+  if (!document.getElementById('screen-lobby').classList.contains('active')) { cheatBuffer = ''; return; }
+  if (e.key.length !== 1) return;
+  cheatBuffer = (cheatBuffer + e.key.toLowerCase()).slice(-20);
+  if (cheatBuffer.endsWith('amethyst')) {
+    cheatBuffer = '';
+    Object.keys(state.inventory).forEach((id) => {
+      state.inventory[id].owned = true;
+      if (state.inventory[id].level < 1) state.inventory[id].level = 1;
+    });
+    state.gold += 1000000000;
+    save();
+    refreshCurrencyDisplays();
+    flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 ✦');
+  }
+});
 
 /* ---------------- 초기화 ---------------- */
 
 resizeCanvas();
 refreshCurrencyDisplays();
+updateCheckinBadge();
+loadPlayerSkin();

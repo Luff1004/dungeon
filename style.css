@@ -55,6 +55,11 @@ body { background: #0a080d; }
 .cur-pill.small { padding: 4px 9px; font-size: 0.75rem; }
 .cur-pill .cur-icon { width: 14px; height: 14px; border-radius: 50%; }
 .cur-pill.gold .cur-icon { background: radial-gradient(circle at 35% 35%, #fff3b0, #e0a923); }
+
+.checkin-badge { position: absolute; top: 10px; left: 12px; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,180,90,0.4); border-radius: 20px; padding: 6px 12px 6px 8px; color: #ffd9a8; font-weight: 700; font-size: 0.85rem; }
+.checkin-badge .flame-icon { position: relative; width: 14px; height: 18px; }
+.checkin-badge .flame-icon::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 70%, #ffe08a, #ff8a3d 60%, transparent 75%); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: flicker 1.4s infinite ease-in-out; }
+.checkin-badge .checkin-ping { position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; border-radius: 50%; background: #ff4a4a; box-shadow: 0 0 6px #ff4a4a; animation: gacha-twinkle 1.2s ease-in-out infinite; }
 .cur-pill.gem .cur-icon { background: radial-gradient(circle at 35% 35%, #d0f4ff, #38a4d8); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 .lobby-buttons { position: relative; display: flex; flex-direction: column; gap: 16px; width: 74%; max-width: 320px; }
 .lobby-btn { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 0; font-size: 1rem; font-weight: 700; color: #d8cfc0; letter-spacing: 3px; box-shadow: 0 6px 0 rgba(0,0,0,0.55), 0 8px 14px rgba(0,0,0,0.5); }
@@ -148,6 +153,28 @@ body { background: #0a080d; }
 .player-preview { height: 30vh; flex-shrink: 0; position: relative; background: radial-gradient(ellipse at center, #2c2244, #150f22); border-bottom: 2px solid rgba(255,255,255,0.08); }
 .player-preview.small { height: 22vh; }
 .player-preview canvas { width: 100%; height: 100%; }
+.redraw-btn { position: absolute; bottom: 10px; right: 10px; border: none; padding: 8px 14px; border-radius: 10px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.2); color: #ffd97a; font-weight: 700; font-size: 0.75rem; }
+
+/* ---------- 캐릭터 그리기 ---------- */
+#screen-draw { flex-direction: column; align-items: center; justify-content: center; padding: 18px; gap: 14px; background: linear-gradient(180deg, #1c1626, #100b16); }
+.draw-header { text-align: center; }
+.draw-header h2 { margin: 0 0 4px; font-size: 1.5rem; color: #ffd97a; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+.draw-header p { margin: 0; font-size: 0.85rem; opacity: 0.8; }
+.draw-canvas-wrap { border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 4px rgba(255,255,255,0.12), 0 10px 24px rgba(0,0,0,0.5); }
+#drawCanvas { display: block; width: min(70cqw, 320px); height: min(70cqw, 320px); background: #fdf8ee; touch-action: none; }
+.draw-toolbar { width: 100%; max-width: 400px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.draw-colors { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.draw-colors button { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+.draw-colors button.active { border-color: #fff; box-shadow: 0 0 0 2px #000, 0 0 8px rgba(255,255,255,0.6); }
+.draw-sizes { display: flex; gap: 6px; }
+.brush-size-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); background: #2c2438; display: flex; align-items: center; justify-content: center; }
+.brush-size-btn span { display: block; border-radius: 50%; background: #fff; }
+.brush-size-btn.active { border-color: #ffd97a; background: #3a3050; }
+.draw-clear-btn { border: none; padding: 8px 14px; border-radius: 10px; background: #5a2020; color: #ffb3b3; font-weight: 700; font-size: 0.78rem; }
+.draw-actions { display: flex; gap: 12px; width: 100%; max-width: 400px; }
+.draw-skip-btn, .draw-done-btn { flex: 1; border: none; padding: 14px; border-radius: 12px; font-weight: 800; }
+.draw-skip-btn { background: #2c2438; color: #b8a8d8; }
+.draw-done-btn { background: linear-gradient(180deg, #ffe08a, #f0a93a); color: #3a2500; }
 .equip-body { flex: 1; display: flex; overflow: hidden; }
 .equip-cats { width: 78px; flex-shrink: 0; background: rgba(0,0,0,0.25); display: flex; flex-direction: column; padding: 10px 8px; gap: 10px; }
 .cat-btn { border: none; border-radius: 14px; padding: 12px 0; background: rgba(255,255,255,0.06); color: #cbb8ea; font-size: 0.78rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -255,11 +282,32 @@ body { background: #0a080d; }
 .gacha-machine .capsule { position:absolute; width:14%; height:11%; border-radius:50%; }
 .gacha-machine .base { position:absolute; bottom:0; left:0; right:0; height:38%; border-radius:0 0 40px 40px; background: rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; }
 
-.gacha-row { flex: 1; overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; gap: 26px; padding: 20px; }
-.gacha-tier { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.gacha-tier .tier-name { font-weight: 800; }
-.gacha-tier .pity { font-size: 0.7rem; opacity: 0.75; }
-.gacha-tier .pull-btn { border:none; padding: 10px 20px; border-radius: 12px; font-weight: 800; color:#fff; }
+.gacha-row { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 18px; padding: 18px; }
+
+.gacha-tier-card { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 22px;
+  background: linear-gradient(135deg, #1c1626, #120e1a); border: 2px solid var(--c1); box-shadow: 0 0 24px -8px var(--c1), 0 6px 14px rgba(0,0,0,0.4); }
+
+.gacha-orb { position: relative; width: 78px; height: 78px; flex-shrink: 0; }
+.gacha-orb-core { position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--c1), var(--c2)); box-shadow: 0 0 22px var(--c1); }
+.gacha-orb-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.5); animation: gacha-spin 7s linear infinite; }
+@keyframes gacha-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+.gacha-orb-spark { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px #fff; animation: gacha-twinkle 1.6s ease-in-out infinite; }
+.gacha-orb-spark.s1 { top: 12%; left: 22%; animation-delay: 0s; }
+.gacha-orb-spark.s2 { top: 58%; left: 78%; animation-delay: 0.5s; }
+.gacha-orb-spark.s3 { top: 75%; left: 28%; animation-delay: 1s; }
+@keyframes gacha-twinkle { 0%, 100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.35); } }
+
+.gacha-info { flex: 1; min-width: 0; }
+.gt-name { font-weight: 800; font-size: 1.1rem; margin: 0 0 8px; }
+.gt-pity-bar { height: 8px; border-radius: 6px; background: rgba(0,0,0,0.4); overflow: hidden; margin-bottom: 6px; }
+.gt-pity-fill { height: 100%; background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.gt-pity-label { font-size: 0.78rem; opacity: 0.8; margin: 0; }
+
+.gacha-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.gacha-actions .pull-btn { border: none; border-radius: 12px; padding: 8px 16px; font-weight: 800; color: #fff;
+  background: linear-gradient(180deg, var(--c1), var(--c2)); display: flex; flex-direction: column; align-items: center; font-size: 0.85rem; line-height: 1.3; }
+.gacha-actions .pull-btn span { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
+.gacha-actions .pull-btn.ten { background: linear-gradient(180deg, #ffe08a, #f0a93a); color: #3a2500; }
 
 /* ---------- 모달 ---------- */
 .modal { position: absolute; inset: 0; background: rgba(0,0,0,0.65); z-index: 30; display: flex; align-items: center; justify-content: center; }
@@ -278,5 +326,35 @@ body { background: #0a080d; }
 .result-thumb { width: 110px; height: 110px; border-radius: 20px; margin: 0 auto 10px; }
 .result-name { font-weight: 800; font-size: 1.1rem; }
 .result-rarity { font-size: 0.8rem; opacity: 0.85; margin-bottom: 6px; }
+.gacha-result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 50vh; overflow-y: auto; }
+.result-slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px; border-radius: 14px; overflow: hidden; animation: gachaReveal 0.5s ease; }
+.result-slot::before { content: ''; position: absolute; top: 50%; left: 50%; width: 160%; padding-top: 160%; transform: translate(-50%, -50%); border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255,255,255,0.22) 0deg 8deg, transparent 8deg 20deg);
+  animation: gachaSpinRay 4s linear infinite; pointer-events: none; z-index: 0; }
+.result-slot > * { position: relative; z-index: 1; }
+@keyframes gachaReveal { 0% { transform: scale(0.3) rotate(-10deg); opacity: 0; } 65% { transform: scale(1.1) rotate(3deg); opacity: 1; } 100% { transform: scale(1) rotate(0); } }
+@keyframes gachaSpinRay { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+.gacha-result-grid .result-slot .result-thumb { width: 64px; height: 64px; margin: 0; }
+.gacha-result-grid .result-name { font-size: 0.82rem; }
+.gacha-result-grid .result-rarity { font-size: 0.68rem; margin-bottom: 0; }
+.modal-card.gacha-result { animation: gachaCardPop 0.4s ease; }
+@keyframes gachaCardPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+/* ---------- 출석 체크 ---------- */
+.checkin-card { align-items: center; text-align: center; }
+.checkin-sub { margin: -4px 0 4px; font-size: 0.9rem; opacity: 0.85; }
+.checkin-sub b { color: #ffd97a; font-size: 1.05rem; }
+.checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.checkin-day { position: relative; border-radius: 14px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1); }
+.checkin-day .cd-label { font-size: 0.68rem; opacity: 0.7; }
+.checkin-day .cd-icon { width: 26px; height: 26px; border-radius: 7px; background: radial-gradient(circle at 35% 30%, #fff3b0, #e0a923); }
+.checkin-day .cd-amount { font-size: 0.66rem; font-weight: 700; }
+.checkin-day.jackpot .cd-icon { background: radial-gradient(circle at 35% 30%, #e6c9ff, #8a3fd8); }
+.checkin-day.claimed { background: linear-gradient(160deg, #2c6b45, #163a26); border-color: #7fe08a55; }
+.checkin-day.claimed::after { content: '✓'; position: absolute; top: 4px; right: 6px; color: #9dffb0; font-weight: 800; font-size: 0.75rem; }
+.checkin-day.today { border-color: #ffd97a; box-shadow: 0 0 14px rgba(255,217,122,0.5); }
+.checkin-day.future { opacity: 0.55; }
+.checkin-claim-btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; background: linear-gradient(180deg, #7fe08a, #2c9e56); color: #08210f; width: 100%; }
+.checkin-claim-btn.disabled { background: #22202a; color: #7a7482; }
 
 ::-webkit-scrollbar { width: 0; height: 0; }
