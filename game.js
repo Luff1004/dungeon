@@ -14,17 +14,17 @@ const RARITIES = {
 const RARITY_ORDER = ['common', 'rare', 'epic', 'legendary', 'mythic'];
 
 const CATEGORIES = [
-  { id: 'sword', label: '칼', icon: 'sword' },
-  { id: 'armor', label: '갑옷', icon: 'armor' },
-  { id: 'weapon', label: '무기', icon: 'weapon' },
+  { id: 'weapon', label: '무기', sub: '일반공격', icon: 'weapon' },
+  { id: 'sword', label: '칼', sub: '특수공격', icon: 'sword' },
+  { id: 'armor', label: '갑옷', sub: '방어력', icon: 'armor' },
 ];
 
 const ITEMS = [
-  { id: 'sw_short', name: '녹슨 단검', cat: 'sword', rarity: 'common', baseDmg: 8, baseRange: 60, shape: 'blade-straight', desc: '녹슨 게 아니라 빈티지 감성입니다. 절대 안 부러져요... 아마도.' },
-  { id: 'sw_curve', name: '초승달 검', cat: 'sword', rarity: 'rare', baseDmg: 14, baseRange: 70, shape: 'blade-curve', desc: '낮에 쓰면 그냥 좀 휜 칼, 밤에 쓰면 있어 보이는 칼.' },
-  { id: 'sw_fire', name: '화염의 대검', cat: 'sword', rarity: 'epic', baseDmg: 24, baseRange: 80, shape: 'blade-flame', desc: '상대도 뜨겁고 손잡이도 뜨겁습니다. 장갑은 필수 구매.' },
-  { id: 'sw_holy', name: '천상의 성검', cat: 'sword', rarity: 'legendary', baseDmg: 40, baseRange: 90, shape: 'blade-holy', desc: '신이 내려주셨는데 택배비는 제가 냈습니다.' },
-  { id: 'sw_void', name: '공허의 칼날', cat: 'sword', rarity: 'mythic', baseDmg: 70, baseRange: 100, shape: 'blade-void', desc: '어디서 났는지는 묻지 마세요. 저도 몰라요.' },
+  { id: 'sw_short', name: '녹슨 단검', cat: 'sword', rarity: 'common', baseDmg: 8, baseRange: 60, shape: 'blade-straight', aimStyle: 'dotted', desc: '녹슨 게 아니라 빈티지 감성입니다. 절대 안 부러져요... 아마도.' },
+  { id: 'sw_curve', name: '초승달 검', cat: 'sword', rarity: 'rare', baseDmg: 14, baseRange: 70, shape: 'blade-curve', aimStyle: 'dotted', desc: '낮에 쓰면 그냥 좀 휜 칼, 밤에 쓰면 있어 보이는 칼.' },
+  { id: 'sw_fire', name: '화염의 대검', cat: 'sword', rarity: 'epic', baseDmg: 24, baseRange: 80, shape: 'blade-flame', aimStyle: 'block', desc: '상대도 뜨겁고 손잡이도 뜨겁습니다. 장갑은 필수 구매.' },
+  { id: 'sw_holy', name: '천상의 성검', cat: 'sword', rarity: 'legendary', baseDmg: 40, baseRange: 90, shape: 'blade-holy', aimStyle: 'trident', desc: '신이 내려주셨는데 택배비는 제가 냈습니다.' },
+  { id: 'sw_void', name: '공허의 칼날', cat: 'sword', rarity: 'mythic', baseDmg: 70, baseRange: 100, shape: 'blade-void', aimStyle: 'trident', desc: '어디서 났는지는 묻지 마세요. 저도 몰라요.' },
 
   { id: 'ar_cloth', name: '수련생의 로브', cat: 'armor', rarity: 'common', baseDmg: 0, baseRange: 0, def: 6, shape: 'armor-cloth', desc: '방어력은 거의 없지만 도망만큼은 국가대표급.' },
   { id: 'ar_leather', name: '가죽 갑주', cat: 'armor', rarity: 'rare', def: 12, shape: 'armor-leather', desc: '가죽 냄새가 좀 나지만 몬스터는 코가 없어서 상관없음.' },
@@ -380,7 +380,7 @@ function mixColor(a, b, t) {
 
 /* ---------------- 장비 화면 ---------------- */
 
-let currentCat = 'sword';
+let currentCat = 'weapon';
 
 function buildEquip() {
   const catsEl = document.getElementById('equip-cats');
@@ -388,7 +388,7 @@ function buildEquip() {
   CATEGORIES.forEach(c => {
     const b = document.createElement('button');
     b.className = 'cat-btn' + (c.id === currentCat ? ' active' : '');
-    b.innerHTML = `<div class="cat-ico" style="background:${lighten('#5a2fbf')}"></div>${c.label}`;
+    b.innerHTML = `<div class="cat-ico" style="background:${lighten('#5a2fbf')}"></div>${c.label}<span class="cat-sub">${c.sub}</span>`;
     b.addEventListener('click', () => { currentCat = c.id; buildEquip(); });
     catsEl.appendChild(b);
   });
@@ -399,7 +399,7 @@ function buildEquip() {
     const owned = inv && inv.owned;
     const equipped = state.equipped[it.cat] === it.id;
     const card = document.createElement('div');
-    card.className = `item-card ${RARITIES[it.rarity].cls}` + (equipped ? ' equipped' : '') + (inv && inv.awakened.length >= 6 ? ' awakened' : '');
+    card.className = `item-card ${RARITIES[it.rarity].cls}` + (equipped ? ' equipped' : '') + (inv && inv.awakened.length >= HEX_TOTAL ? ' awakened' : '');
     card.innerHTML = `
       <div class="item-thumb" style="background:${svgToBg(itemThumbSVG(it))} center/70% no-repeat, radial-gradient(circle,#2c2244,#150f22)"></div>
       <div class="item-info">
@@ -445,6 +445,8 @@ function renderUpgrade() {
   const lvl = Math.max(1, inv.level);
   const pow = itemPower(upgradingId);
   document.getElementById('up-level').textContent = lvl + (inv.awakened.length ? ` (+${inv.awakened.length}각성)` : '');
+  const dmgLabel = it.cat === 'weapon' ? '일반공격 데미지' : it.cat === 'sword' ? '특수공격 데미지' : '방어력';
+  document.getElementById('up-damage-label').textContent = dmgLabel;
   document.getElementById('up-damage').textContent = pow.dmg || pow.def;
   document.getElementById('up-range').textContent = pow.range || '-';
 
@@ -468,7 +470,7 @@ function renderUpgrade() {
     confirmBtn.style.display = 'none';
   } else {
     const nextPow = Math.round((it.baseDmg || it.def || 0) * (1 + lvl * 0.18));
-    changeEl.textContent = `${(it.baseDmg ? '데미지' : '방어력')} ${pow.dmg || pow.def} → ${nextPow}`;
+    changeEl.textContent = `${dmgLabel} ${pow.dmg || pow.def} → ${nextPow}`;
     costEl.textContent = `필요 골드: ${cost}`;
     confirmBtn.style.display = 'block';
     confirmBtn.classList.toggle('disabled', state.gold < cost);
@@ -496,25 +498,72 @@ function renderUpgrade() {
   document.getElementById('awaken-grid-wrap').style.display = 'none';
 }
 
+// 벌집 구조: 0번(중심)을 각성해야 그에 연결된 1~6번이 해금된다
+const HEX_TOTAL = 7;
+const HEX_CENTER = 0;
+function hexNeighbors(i) { return i === HEX_CENTER ? [1, 2, 3, 4, 5, 6] : [HEX_CENTER]; }
+function hexCost(count) { return 300 + count * 250; } // count = 이미 각성한 개수
+function hexEffectLabel(it) { return (it.baseDmg ? '데미지' : '방어력') + ' +12%'; }
+
+function isHexAvailable(inv, i) {
+  if (inv.awakened.includes(i)) return false;
+  if (i === HEX_CENTER) return true;
+  return inv.awakened.includes(HEX_CENTER);
+}
+
 function buildHexGrid() {
   const grid = document.getElementById('hex-grid');
   grid.innerHTML = '';
   const inv = state.inventory[upgradingId];
   const it = getItem(upgradingId);
-  for (let i = 0; i < 9; i++) {
+
+  const info = document.getElementById('awaken-info');
+  const doneCount = inv.awakened.length;
+  const nextCost = doneCount < HEX_TOTAL ? hexCost(doneCount) : null;
+  info.innerHTML = `
+    <p class="ai-progress">각성 진행도 <b>${doneCount} / ${HEX_TOTAL}</b></p>
+    <p class="ai-effect">칸당 효과: <b>${hexEffectLabel(it)}</b>${nextCost !== null ? ` · 다음 각성 비용: <b>${nextCost} 마력석</b>` : ' · 완전 각성 완료!'}</p>
+  `;
+
+  // 중심(0) + 주변 6개를 정육각형 모양으로 배치
+  const positions = [{ x: 0, y: 0 }];
+  for (let k = 0; k < 6; k++) {
+    const angle = (-90 + 60 * k) * Math.PI / 180;
+    positions.push({ x: Math.cos(angle) * 74, y: Math.sin(angle) * 74 });
+  }
+
+  // 중심-주변 연결선
+  for (let i = 1; i < HEX_TOTAL; i++) {
+    const p = positions[i];
+    const dist = Math.hypot(p.x, p.y);
+    const angleDeg = Math.atan2(p.y, p.x) * 180 / Math.PI;
+    const line = document.createElement('div');
+    line.className = 'hex-link' + (inv.awakened.includes(0) ? ' lit' : '');
+    line.style.width = dist + 'px';
+    line.style.transform = `translate(0, -50%) rotate(${angleDeg}deg)`;
+    grid.appendChild(line);
+  }
+
+  for (let i = 0; i < HEX_TOTAL; i++) {
     const hex = document.createElement('div');
     const done = inv.awakened.includes(i);
-    const available = !done && (i === 0 || inv.awakened.includes(i - 1)) && inv.awakened.length < 9;
+    const available = isHexAvailable(inv, i) && doneCount < HEX_TOTAL;
     hex.className = 'hex' + (done ? ' done' : '') + (available ? ' available' : '');
-    hex.textContent = done ? '✦' : (i + 1);
+    hex.style.left = `calc(50% + ${positions[i].x}px)`;
+    hex.style.top = `calc(50% + ${positions[i].y}px)`;
+    if (done) {
+      hex.innerHTML = `<span class="hex-mark">✦</span>`;
+    } else if (available) {
+      hex.innerHTML = `<span class="hex-cost">${hexCost(doneCount)}</span>`;
+    }
     if (available) {
       hex.addEventListener('click', () => {
-        const cost = 200 * (i + 1);
+        const cost = hexCost(doneCount);
         if (state.gem < cost) { flashMsg('마력석이 부족합니다'); return; }
         state.gem -= cost;
         inv.awakened.push(i);
         save(); refreshCurrencyDisplays(); buildHexGrid();
-        if (inv.awakened.length >= 9) flashMsg(`${it.name} 완전 각성!`);
+        if (inv.awakened.length >= HEX_TOTAL) flashMsg(`${it.name} 완전 각성!`);
       });
     }
     grid.appendChild(hex);
@@ -701,11 +750,11 @@ function buildShop() {
   const gachaCard = document.createElement('div');
   gachaCard.className = 'gacha-launch';
   gachaCard.innerHTML = `
-    <div class="gacha-machine" style="background:linear-gradient(160deg,#ff9ecb,#c93a7a);">
+    <div class="gacha-machine" style="background:linear-gradient(160deg,#b98aff,#4a1f8a);">
       <div class="dome"></div>
-      <div class="capsule" style="top:30px;left:30px;background:#ffd166;"></div>
-      <div class="capsule" style="top:24px;left:60px;background:#4da6ff;"></div>
-      <div class="capsule" style="top:40px;left:75px;background:#b366ff;"></div>
+      <div class="capsule" style="top:30px;left:30px;background:#ffd97a;"></div>
+      <div class="capsule" style="top:24px;left:60px;background:#7fe0ff;"></div>
+      <div class="capsule" style="top:40px;left:75px;background:#ff8ac4;"></div>
       <div class="base">GACHA</div>
     </div>
     <div class="merchant-name">아이템 뽑기</div>
@@ -991,12 +1040,10 @@ function startRun(cfg) {
   resizeCanvas();
   nav('game');
   resizeCanvas();
-  const pow = {
-    dmg: itemPower(state.equipped.weapon).dmg + itemPower(state.equipped.sword).dmg,
-    range: Math.max(itemPower(state.equipped.weapon).range, 160),
-    def: itemPower(state.equipped.armor).def,
-  };
-  const baseMaxHp = 100 + pow.def * 4;
+  const weaponPow = itemPower(state.equipped.weapon);
+  const swordPow = itemPower(state.equipped.sword);
+  const armorPow = itemPower(state.equipped.armor);
+  const baseMaxHp = 100 + armorPow.def * 4;
   const zone = getZone();
 
   game = {
@@ -1008,8 +1055,10 @@ function startRun(cfg) {
     speed: 200,
     baseHp: baseMaxHp,
     baseMaxHp,
-    playerDmg: Math.max(6, pow.dmg),
-    playerRange: pow.range,
+    playerDmg: Math.max(6, weaponPow.dmg),
+    playerRange: Math.max(weaponPow.range, 160),
+    specialDmg: Math.max(10, Math.round(swordPow.dmg * 2)),
+    specialRange: Math.max(swordPow.range * 2, 180),
     wave: 1,
     totalWaves: cfg.mode === 'boss' ? 1 : cfg.data.waves,
     enemies: [],
@@ -1096,17 +1145,24 @@ function spawnBoss(b) {
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
+const COMBO_PATTERNS = ['single', 'spread', 'slow', 'double', 'poison', 'sweep', 'slam', 'teleport', 'dash', 'starburst'];
+
 function startBossTelegraph(b) {
-  const pattern = b.def.pattern === 'combo' ? pickRandom(['single', 'spread', 'slow', 'double', 'poison']) : b.def.pattern;
+  const pattern = b.def.pattern === 'combo' ? pickRandom(COMBO_PATTERNS) : b.def.pattern;
   const px = game.player.x;
   let xs = [];
   let t = 0.75;
   if (pattern === 'spread') { xs = [px - 70, px, px + 70]; }
   else if (pattern === 'double') { xs = [px - 40, px + 40]; t = 0.6; }
   else if (pattern === 'sweep') {
-    const segCount = 5; const segW = CW / segCount; const safe = Math.floor(Math.random() * segCount);
-    for (let i = 0; i < segCount; i++) if (i !== safe) xs.push((i + 0.5) * segW);
-    t = 1.0;
+    const gapStart = Math.max(80, Math.min(CW - 80, px));
+    let gapTarget = gapStart + (Math.random() < 0.5 ? -1 : 1) * (CW * 0.55);
+    gapTarget = Math.max(80, Math.min(CW - 80, gapTarget));
+    b.telegraph = { xs: [], t: 0.9, pattern, gapStart, gapTarget };
+    return;
+  } else if (pattern === 'starburst') {
+    b.telegraph = { xs: [], t: 0.7, pattern };
+    return;
   } else if (pattern === 'teleport') {
     b.x = Math.max(60, Math.min(CW - 60, Math.random() * CW));
     xs = [px]; t = 0.55;
@@ -1119,6 +1175,23 @@ function startBossTelegraph(b) {
 
 function resolveBossTelegraph(b) {
   const pattern = b.telegraph.pattern;
+  if (pattern === 'sweep') {
+    game.boss.laser = {
+      startX: b.telegraph.gapStart, targetX: b.telegraph.gapTarget, gapX: b.telegraph.gapStart,
+      gapWidth: 85, elapsed: 0, duration: 2.1,
+    };
+    b.dashTarget = null;
+    return;
+  }
+  if (pattern === 'starburst') {
+    const n = 12;
+    for (let k = 0; k < n; k++) {
+      const ang = (Math.PI * 2 * k) / n + Math.random() * 0.15;
+      game.bossProjectiles.push({ x: b.x, y: b.y, vx: Math.cos(ang) * 4.6, vy: Math.sin(ang) * 4.6, angled: true, type: 'star', dmg: 12, resolved: false });
+    }
+    b.dashTarget = null;
+    return;
+  }
   b.telegraph.xs.forEach((x) => {
     if (pattern === 'poison') game.bossProjectiles.push({ x, y: b.y + 30, speed: 3.4, resolved: false, type: 'poison', dmg: 6 });
     else if (pattern === 'slow') game.bossProjectiles.push({ x, y: b.y + 30, speed: 3.8, resolved: false, type: 'slow', dmg: 10 });
@@ -1176,17 +1249,32 @@ setupMoveJoystick(document.getElementById('move-stick'), 34);
 
 /* ---------- 조준/발사: 모바일 조이스틱(조준 후 떼면 발사) + PC 마우스(클릭 발사) ---------- */
 
+function spawnPlayerShot(angle, dmg, special, item, speed, r) {
+  const style = item.aimStyle || 'dotted';
+  const color = RARITIES[item.rarity].color;
+  if (style === 'trident') {
+    [-0.16, 0, 0.16].forEach((off) => {
+      const a = angle + off;
+      game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, dmg: Math.round(dmg * 0.6), special, r, style, color });
+    });
+  } else {
+    game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, dmg, special, r, style, color });
+  }
+}
+
 function fireMain(angle) {
   if (!game || !game.running) return;
   if (game.ammo < 1) { flashMsg('탄약 부족!'); return; }
   game.ammo--; updateAmmoBar();
-  game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(angle) * 9, vy: Math.sin(angle) * 9, dmg: game.playerDmg, special: false, r: 6 });
+  const wp = getItem(state.equipped.weapon);
+  spawnPlayerShot(angle, game.playerDmg, false, wp, 9, 6);
 }
 function fireSpecial(angle) {
   if (!game || !game.running) return;
   if (game.special.cooldown > 0) { flashMsg('특수무기 재장전 중'); return; }
   game.special.cooldown = game.special.max;
-  game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(angle) * 7, vy: Math.sin(angle) * 7, dmg: game.playerDmg * 2.4, special: true, r: 12 });
+  const sw = getItem(state.equipped.sword);
+  spawnPlayerShot(angle, game.specialDmg, true, sw, 7, 12);
 }
 
 function setupAimJoystick(el, kind, onFire, radius) {
@@ -1385,6 +1473,19 @@ function update(dt) {
   }
   for (let i = game.bossProjectiles.length - 1; i >= 0; i--) {
     const bp = game.bossProjectiles[i];
+    if (bp.angled) {
+      // 전방위 탄막 (별 모양) - 매 프레임 위치/충돌 갱신
+      bp.x += bp.vx * dt * 60; bp.y += bp.vy * dt * 60;
+      if (!bp.resolved && Math.hypot(bp.x - game.player.x, bp.y - game.player.y) < PLAYER_R + 12) {
+        bp.resolved = true;
+        game.baseHp -= bp.dmg; game.baseBounce = 1; game.hitFlash = 1; updateBaseHp();
+        game.bossProjectiles.splice(i, 1);
+        if (game.baseHp <= 0) { gameOver(false); return; }
+        continue;
+      }
+      if (bp.x < -30 || bp.x > CW + 30 || bp.y < -30 || bp.y > CH + 30) game.bossProjectiles.splice(i, 1);
+      continue;
+    }
     bp.y += bp.speed * dt * 60;
     if (!bp.resolved && bp.y >= playerRow) {
       const dist = Math.hypot(bp.x - game.player.x, bp.y - game.player.y);
@@ -1406,6 +1507,19 @@ function update(dt) {
       }
     }
     if (bp.y > CH + 40) game.bossProjectiles.splice(i, 1);
+  }
+
+  // 가로 레이저 스윕 (칠흑룡 계열) - 좁은 안전 구간을 제외한 전 구간이 위험
+  if (game.boss && game.boss.laser) {
+    const lz = game.boss.laser;
+    lz.elapsed += dt;
+    const t = Math.min(1, lz.elapsed / lz.duration);
+    lz.gapX = lz.startX + (lz.targetX - lz.startX) * t;
+    if (Math.abs(game.player.x - lz.gapX) > lz.gapWidth / 2) {
+      game.baseHp -= 20 * dt; game.hitFlash = Math.max(game.hitFlash, 0.5); updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
+    if (lz.elapsed >= lz.duration) game.boss.laser = null;
   }
 
   // 지속 피해 웅덩이 (독전 마녀)
@@ -1498,26 +1612,51 @@ function render() {
 
   const bpColors = { normal: '#ff4a4a', wide: '#ff9a3a', slow: '#7fd8ff', poison: '#8aff9e' };
   game.bossProjectiles.forEach(bp => {
+    if (bp.type === 'star') { drawStarBullet(bp); return; }
     const r = bp.type === 'wide' ? 18 : (bp.type === 'slow' || bp.type === 'poison' ? 13 : 10);
     const col = bpColors[bp.type] || '#ff4a4a';
     ctxG.beginPath(); ctxG.arc(bp.x, bp.y, r, 0, Math.PI * 2);
     ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
   });
-  if (game.boss && game.boss.telegraph) {
-    const bottom = zone.cy - zone.h / 2;
-    game.boss.telegraph.xs.forEach(x => {
-      const halfW = game.boss.telegraph.pattern === 'slam' ? 60 : 40;
-      ctxG.fillStyle = `rgba(255,60,60,${0.18 + 0.15 * Math.sin(performance.now() / 60)})`;
-      ctxG.beginPath(); ctxG.moveTo(x - halfW, 0); ctxG.lineTo(x + halfW, 0); ctxG.lineTo(x + halfW * 0.4, bottom); ctxG.lineTo(x - halfW * 0.4, bottom); ctxG.closePath(); ctxG.fill();
-    });
+
+  // 가로 레이저 스윕 시각효과
+  if (game.boss && game.boss.laser) {
+    const lz = game.boss.laser;
+    const gx = lz.gapX, gw = lz.gapWidth;
+    const glow = 0.35 + 0.2 * Math.sin(performance.now() / 70);
+    ctxG.fillStyle = `rgba(180,40,255,${glow})`;
+    ctxG.fillRect(0, 0, Math.max(0, gx - gw / 2), CH);
+    ctxG.fillRect(Math.min(CW, gx + gw / 2), 0, CW, CH);
+    ctxG.fillStyle = 'rgba(220,180,255,0.9)';
+    ctxG.fillRect(gx - gw / 2 - 3, 0, 3, CH);
+    ctxG.fillRect(gx + gw / 2, 0, 3, CH);
   }
 
-  // 투사체
-  game.projectiles.forEach(p => {
-    ctxG.beginPath(); ctxG.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctxG.fillStyle = p.special ? '#9adfff' : '#ffe08a';
-    ctxG.shadowColor = ctxG.fillStyle; ctxG.shadowBlur = 10; ctxG.fill(); ctxG.shadowBlur = 0;
-  });
+  if (game.boss && game.boss.telegraph) {
+    const bottom = zone.cy - zone.h / 2;
+    const tp = game.boss.telegraph.pattern;
+    if (tp === 'sweep') {
+      const gx = game.boss.telegraph.gapStart;
+      ctxG.fillStyle = `rgba(180,40,255,${0.18 + 0.15 * Math.sin(performance.now() / 60)})`;
+      ctxG.fillRect(0, 0, CW, CH);
+      ctxG.fillStyle = 'rgba(255,255,255,0.25)';
+      ctxG.fillRect(gx - 45, 0, 90, CH);
+    } else if (tp === 'starburst') {
+      const pulse = 40 + 20 * Math.sin(performance.now() / 50);
+      ctxG.strokeStyle = `rgba(255,120,255,${0.5 + 0.3 * Math.sin(performance.now() / 50)})`;
+      ctxG.lineWidth = 3;
+      ctxG.beginPath(); ctxG.arc(game.boss.x, game.boss.y, pulse, 0, Math.PI * 2); ctxG.stroke();
+    } else {
+      game.boss.telegraph.xs.forEach(x => {
+        const halfW = tp === 'slam' ? 60 : 40;
+        ctxG.fillStyle = `rgba(255,60,60,${0.18 + 0.15 * Math.sin(performance.now() / 60)})`;
+        ctxG.beginPath(); ctxG.moveTo(x - halfW, 0); ctxG.lineTo(x + halfW, 0); ctxG.lineTo(x + halfW * 0.4, bottom); ctxG.lineTo(x - halfW * 0.4, bottom); ctxG.closePath(); ctxG.fill();
+      });
+    }
+  }
+
+  // 투사체 (무기 종류별로 다른 모양)
+  game.projectiles.forEach(p => drawPlayerBullet(p));
 
   // 조준선 (무기별 다른 모양)
   drawAimIndicator();
@@ -1548,10 +1687,10 @@ function drawZone(zone) {
 
 function drawAimIndicator() {
   if (!game.aim || !game.aim.active) return;
-  const wp = getItem(state.equipped.weapon);
   const kind = game.aim.kind;
-  const style = kind === 'special' ? 'burst' : (wp.aimStyle || 'dotted');
-  const length = kind === 'special' ? Math.max(140, game.playerRange * 0.65) : game.playerRange;
+  const activeItem = kind === 'special' ? getItem(state.equipped.sword) : getItem(state.equipped.weapon);
+  const style = activeItem.aimStyle || 'dotted';
+  const length = kind === 'special' ? game.specialRange : game.playerRange;
   const px = game.player.x, py = game.player.y, ang = game.aim.angle;
   ctxG.save();
   if (style === 'dotted') {
@@ -1651,6 +1790,44 @@ function drawBoss(b) {
   ctxG.fillStyle = '#ff4a4a';
   ctxG.beginPath(); ctxG.arc(-14, -6, 2, 0, Math.PI * 2); ctxG.fill();
   ctxG.beginPath(); ctxG.arc(14, -6, 2, 0, Math.PI * 2); ctxG.fill();
+  ctxG.restore();
+}
+
+function drawPlayerBullet(p) {
+  const col = p.color || (p.special ? '#9adfff' : '#ffe08a');
+  const ang = Math.atan2(p.vy, p.vx);
+  ctxG.save();
+  ctxG.translate(p.x, p.y); ctxG.rotate(ang);
+  ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 10;
+  if (p.style === 'block') {
+    ctxG.beginPath(); ctxG.arc(0, 0, p.r, 0, Math.PI * 2); ctxG.fill();
+    ctxG.fillStyle = 'rgba(255,255,255,0.55)';
+    ctxG.beginPath(); ctxG.arc(-p.r * 0.3, -p.r * 0.3, p.r * 0.35, 0, Math.PI * 2); ctxG.fill();
+  } else if (p.style === 'trident') {
+    ctxG.beginPath();
+    ctxG.moveTo(p.r * 1.6, 0); ctxG.lineTo(0, -p.r * 0.7); ctxG.lineTo(-p.r * 1.1, 0); ctxG.lineTo(0, p.r * 0.7);
+    ctxG.closePath(); ctxG.fill();
+  } else {
+    ctxG.beginPath();
+    ctxG.moveTo(p.r * 1.8, 0); ctxG.lineTo(-p.r * 1.1, -p.r * 0.55); ctxG.lineTo(-p.r * 0.5, 0); ctxG.lineTo(-p.r * 1.1, p.r * 0.55);
+    ctxG.closePath(); ctxG.fill();
+  }
+  ctxG.restore();
+}
+
+function drawStarBullet(bp) {
+  ctxG.save();
+  ctxG.translate(bp.x, bp.y);
+  ctxG.rotate(performance.now() / 180);
+  ctxG.fillStyle = '#ff7aff'; ctxG.shadowColor = '#ff7aff'; ctxG.shadowBlur = 10;
+  ctxG.beginPath();
+  for (let k = 0; k < 8; k++) {
+    const ang = (Math.PI * 2 * k) / 8;
+    const r = k % 2 === 0 ? 9 : 4;
+    const px = Math.cos(ang) * r, py = Math.sin(ang) * r;
+    if (k === 0) ctxG.moveTo(px, py); else ctxG.lineTo(px, py);
+  }
+  ctxG.closePath(); ctxG.fill();
   ctxG.restore();
 }
 
