@@ -90,12 +90,12 @@
     </div>
 
     <div class="controls">
-      <div class="lane-controls">
-        <button class="lane-btn" id="lane-left">‹</button>
-        <div class="lane-indicator" id="lane-indicator">
-          <span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span>
+      <div class="move-zone-wrap">
+        <div class="joystick move" id="move-stick">
+          <div class="stick-base"></div>
+          <div class="stick-knob"></div>
         </div>
-        <button class="lane-btn" id="lane-right">›</button>
+        <span class="pc-hint">WASD 이동</span>
       </div>
       <div class="attack-controls">
         <div class="ammo-bar-wrap">
@@ -111,6 +111,7 @@
             <div class="stick-knob"></div>
           </div>
         </div>
+        <span class="pc-hint">마우스 조준 · 클릭 발사</span>
       </div>
     </div>
 
@@ -153,7 +154,7 @@
     </div>
     <div class="upgrade-body" id="upgrade-body-normal">
       <div class="upgrade-item-card">
-        <canvas id="upgradeItemCanvas" width="160" height="160"></canvas>
+        <canvas id="upgradeItemCanvas" width="280" height="280"></canvas>
         <div class="upgrade-stats">
           <div class="ustat"><span>레벨</span><b id="up-level">1</b></div>
           <div class="ustat"><span>데미지</span><b id="up-damage">0</b></div>

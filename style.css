@@ -33,19 +33,22 @@ html, body {
 
 /* ---------- 로비 ---------- */
 #screen-lobby { align-items: center; justify-content: center; }
+#screen-lobby { background: linear-gradient(180deg, #0e0d10 0%, #131113 55%, #0a0909 100%); }
 .lobby-bg { position: absolute; inset: 0; background:
-  radial-gradient(circle at 20% 80%, rgba(255,140,60,0.15), transparent 40%),
-  radial-gradient(circle at 80% 80%, rgba(255,140,60,0.15), transparent 40%),
-  repeating-linear-gradient(90deg, #241a35 0 40px, #2a1f3d 40px 80px);
+  radial-gradient(circle at 20% 78%, rgba(255,120,40,0.10), transparent 38%),
+  radial-gradient(circle at 80% 78%, rgba(255,120,40,0.10), transparent 38%),
+  radial-gradient(ellipse at 50% 0%, rgba(60,50,40,0.25), transparent 60%),
+  repeating-linear-gradient(90deg, #17151a 0 44px, #1c1a1f 44px 88px);
 }
-.lobby-torch { position: absolute; bottom: 30%; width: 14px; height: 40px; border-radius: 40% 40% 50% 50%;
-  background: radial-gradient(circle, #ffdd88, #ff8a3d 60%, transparent 70%); filter: blur(1px);
+.lobby-bg::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.25) 0 2px, transparent 2px 5px); opacity: 0.35; mix-blend-mode: multiply; }
+.lobby-torch { position: absolute; bottom: 30%; width: 12px; height: 34px; border-radius: 40% 40% 50% 50%;
+  background: radial-gradient(circle, #ffb04d, #b34d10 60%, transparent 70%); filter: blur(1px);
   animation: flicker 1.6s infinite ease-in-out; }
 .lobby-torch.left { left: 8%; } .lobby-torch.right { right: 8%; }
-@keyframes flicker { 0%,100%{ transform: scaleY(1) translateX(0); opacity:1;} 50%{ transform: scaleY(1.15) translateX(2px); opacity:0.8;} }
+@keyframes flicker { 0%,100%{ transform: scaleY(1) translateX(0); opacity:0.9;} 50%{ transform: scaleY(1.15) translateX(2px); opacity:0.65;} }
 .lobby-title { position: relative; text-align: center; margin-bottom: 40px; margin-top: 34px; }
-.lobby-title h1 { font-size: clamp(1.5rem, 7vw, 2.3rem); margin: 0; color: #ffd9e8; text-shadow: 0 0 18px #ff9ad0, 0 3px 0 #6a2c50; letter-spacing: 2px; }
-.lobby-title .subtitle { margin: 4px 0 0; color: #b9a8d8; font-size: 0.95rem; }
+.lobby-title h1 { font-size: clamp(1.5rem, 7vw, 2.2rem); margin: 0; color: #cfc6b8; text-shadow: 0 0 14px rgba(180,40,30,0.5), 0 3px 0 #000; letter-spacing: 3px; font-family: Georgia, 'Times New Roman', serif; }
+.lobby-title .subtitle { margin: 6px 0 0; color: #766a5c; font-size: 0.85rem; letter-spacing: 1px; }
 .lobby-currency { position: absolute; top: 10px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; }
 .cur-pill { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); font-weight: 600; font-size: 0.85rem; }
 .cur-pill.small { padding: 4px 9px; font-size: 0.75rem; }
@@ -53,17 +56,17 @@ html, body {
 .cur-pill.gold .cur-icon { background: radial-gradient(circle at 35% 35%, #fff3b0, #e0a923); }
 .cur-pill.gem .cur-icon { background: radial-gradient(circle at 35% 35%, #d0f4ff, #38a4d8); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 .lobby-buttons { position: relative; display: flex; flex-direction: column; gap: 16px; width: 74%; max-width: 320px; }
-.lobby-btn { position: relative; overflow: hidden; border: none; border-radius: 18px; padding: 18px 0; font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 3px; box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 8px 14px rgba(0,0,0,0.3); }
-.lobby-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
-.start-btn { background: linear-gradient(180deg, #ff9ecb, #ff5c9e); font-size: 1.35rem; }
-.equip-btn { background: linear-gradient(180deg, #9adfff, #4aa7e8); }
-.shop-btn { background: linear-gradient(180deg, #ffe08a, #f0a93a); }
-.btn-shine { position: absolute; top: -50%; left: -20%; width: 40%; height: 200%; background: rgba(255,255,255,0.35); transform: rotate(20deg); animation: shine 2.6s infinite; }
+.lobby-btn { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 0; font-size: 1rem; font-weight: 700; color: #d8cfc0; letter-spacing: 3px; box-shadow: 0 6px 0 rgba(0,0,0,0.55), 0 8px 14px rgba(0,0,0,0.5); }
+.lobby-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.5); }
+.start-btn { background: linear-gradient(180deg, #5a1b1b, #2c0d0d); font-size: 1.2rem; color: #ffd9c4; }
+.equip-btn { background: linear-gradient(180deg, #3a4048, #1c2024); }
+.shop-btn { background: linear-gradient(180deg, #5a4620, #2c2210); color: #f0d9a0; }
+.btn-shine { position: absolute; top: -50%; left: -20%; width: 40%; height: 200%; background: rgba(255,255,255,0.12); transform: rotate(20deg); animation: shine 3.4s infinite; }
 @keyframes shine { 0% { left: -30%; } 60%,100% { left: 130%; } }
 
 /* ---------- 스크롤 리스트 (유형/던전/보스/챌린지) ---------- */
 .scroll-list { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px; display: flex; flex-direction: column; gap: 14px; -webkit-overflow-scrolling: touch; }
-.scroll-list.horizontal { flex-direction: row; overflow-x: auto; overflow-y: hidden; align-items: flex-end; padding-bottom: 30px; }
+.scroll-list.horizontal { flex-direction: row; overflow-x: auto; overflow-y: hidden; align-items: center; justify-content: flex-start; padding: 20px 16px; gap: 22px; }
 
 .card-wide { position: relative; min-height: 92px; border-radius: 20px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; box-shadow: 0 6px 14px rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.12); overflow: hidden; }
 .card-wide .card-icon { width: 58px; height: 58px; border-radius: 14px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; box-shadow: inset 0 0 10px rgba(0,0,0,0.35); }
@@ -112,25 +115,22 @@ html, body {
 .base-hp-bar { height: 10px; border-radius: 6px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.25); overflow: hidden; }
 .base-hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #7dffb0, #29c46a); transition: width 0.2s; }
 
-.controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; padding: 10px 14px 18px; display: flex; flex-direction: column; gap: 10px; }
-.lane-controls { display: flex; align-items: center; justify-content: center; gap: 14px; }
-.lane-btn { width: 46px; height: 46px; border-radius: 50%; border: none; font-size: 1.4rem; color: #fff;
-  background: radial-gradient(circle at 30% 30%, #8a6bd8, #402a80); box-shadow: 0 4px 0 #241757; }
-.lane-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #241757; }
-.lane-indicator { display: flex; gap: 8px; background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 12px; }
-.lane-indicator .slot { width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,0.12); }
-.lane-indicator .slot.active { background: linear-gradient(160deg, #ffe08a, #f0a93a); box-shadow: 0 0 8px #ffcf6699; }
+.controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; padding: 10px 18px 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.move-zone-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pc-hint { font-size: 0.62rem; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; }
 
-.attack-controls { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
-.ammo-bar-wrap { flex: 1; height: 10px; background: rgba(0,0,0,0.4); border-radius: 6px; overflow: hidden; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.15); }
+.attack-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.ammo-bar-wrap { width: 150px; height: 10px; background: rgba(0,0,0,0.4); border-radius: 6px; overflow: hidden; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15); align-self: center; }
 .ammo-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #ffe08a, #ff9e4a); transition: width 0.15s; }
 .stick-row { display: flex; align-items: flex-end; gap: 14px; }
 .joystick { position: relative; border-radius: 50%; }
 .joystick.main { width: 108px; height: 108px; }
 .joystick.special { width: 66px; height: 66px; }
-.stick-base { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.12), rgba(0,0,0,0.35)); border: 2px solid rgba(255,255,255,0.25); }
-.stick-knob { position: absolute; width: 46%; height: 46%; left: 27%; top: 27%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffb3d9, #d8397d); box-shadow: 0 3px 6px rgba(0,0,0,0.4); }
+.joystick.move { width: 100px; height: 100px; }
+.stick-base { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.1), rgba(0,0,0,0.4)); border: 2px solid rgba(255,255,255,0.2); }
+.stick-knob { position: absolute; width: 46%; height: 46%; left: 27%; top: 27%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d8b98a, #6b4a28); box-shadow: 0 3px 6px rgba(0,0,0,0.5); }
 .joystick.special .stick-knob { background: radial-gradient(circle at 35% 30%, #9adfff, #2a86c9); }
+.joystick.move .stick-knob { background: radial-gradient(circle at 35% 30%, #b8c4d0, #4a5a68); }
 
 .overlay { position: absolute; inset: 0; z-index: 20; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; }
 .overlay-box { background: linear-gradient(160deg, #2c2140, #1a1428); border: 2px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 26px 30px; text-align: center; width: 78%; max-width: 320px; }
@@ -172,7 +172,7 @@ html, body {
 /* ---------- 업그레이드 화면 ---------- */
 .upgrade-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
 .upgrade-item-card { display: flex; gap: 16px; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; padding: 14px; }
-#upgradeItemCanvas { border-radius: 14px; background: radial-gradient(circle, #2c2244, #150f22); }
+#upgradeItemCanvas { width: min(46vw, 200px); height: min(46vw, 200px); border-radius: 14px; background: radial-gradient(circle, #241f2c, #120f18); flex-shrink: 0; }
 .upgrade-stats { display: flex; flex-direction: column; gap: 8px; }
 .ustat { display: flex; justify-content: space-between; gap: 16px; font-size: 0.85rem; background: rgba(0,0,0,0.25); padding: 6px 12px; border-radius: 8px; }
 .ustat span { opacity: 0.7; }
@@ -192,48 +192,48 @@ html, body {
 .awaken-back { border: none; padding: 12px 26px; border-radius: 12px; background: #4a3a70; color: #fff; font-weight: 700; }
 
 /* ---------- 상점 ---------- */
-.merchant-card { width: 190px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.merchant-bubble { background: #fff; color: #3a2c1e; font-size: 0.72rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; position: relative; max-width: 170px; text-align: center; }
+.merchant-card { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100%; justify-content: center; }
+.merchant-bubble { background: #fff; color: #3a2c1e; font-size: 0.8rem; font-weight: 700; padding: 8px 14px; border-radius: 14px; position: relative; max-width: 46vw; text-align: center; }
 .merchant-bubble::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #fff; }
-.merchant-visual { width: 150px; height: 190px; position: relative; border-radius: 16px 16px 0 0; overflow: hidden; }
-.merchant-name { font-weight: 800; font-size: 0.85rem; }
-.gacha-launch { width: 150px; flex-shrink: 0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.merchant-visual { height: min(64vh, 480px); aspect-ratio: 3 / 4; position: relative; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 22px rgba(0,0,0,0.45); }
+.merchant-name { font-weight: 800; font-size: 1rem; }
+.gacha-launch { flex-shrink: 0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; height: 100%; }
 
 /* 상인1: 일반 잡화상 */
 .merchant-visual.type-general { background: linear-gradient(180deg, #6a4a2c 0%, #6a4a2c 30%, #8a6a3c 30%, #8a6a3c 100%); }
-.merchant-visual.type-general .npc { position:absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 90px; }
-.merchant-visual.type-general .npc .head { position:absolute; top:0; left:16px; width:28px; height:28px; border-radius:50%; background:#f0c090; }
-.merchant-visual.type-general .npc .hat { position:absolute; top:-8px; left:10px; width:40px; height:16px; background:#a0522d; border-radius:8px 8px 0 0; }
-.merchant-visual.type-general .npc .body { position:absolute; top:26px; left:8px; width:44px; height:50px; background:#c97a3d; border-radius:10px; }
-.merchant-visual.type-general .stall { position:absolute; top:8px; left:0; right:0; height:6px; background:#3d2a18; }
+.merchant-visual.type-general .npc { position:absolute; bottom: 14%; left: 50%; transform: translateX(-50%); width: 40%; height: 48%; }
+.merchant-visual.type-general .npc .head { position:absolute; top:0; left:26%; width:48%; height:36%; border-radius:50%; background:#f0c090; }
+.merchant-visual.type-general .npc .hat { position:absolute; top:-11%; left:16%; width:68%; height:20%; background:#a0522d; border-radius:10px 10px 0 0; }
+.merchant-visual.type-general .npc .body { position:absolute; top:32%; left:12%; width:76%; height:60%; background:#c97a3d; border-radius:12px; }
+.merchant-visual.type-general .stall { position:absolute; top:6%; left:0; right:0; height:2.5%; background:#3d2a18; }
 
 /* 상인2: 대장장이 */
 .merchant-visual.type-smith { background: linear-gradient(180deg, #33302f 0%, #33302f 25%, #4a4442 25%, #4a4442 100%); }
-.merchant-visual.type-smith .npc { position:absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 66px; height: 96px; }
-.merchant-visual.type-smith .npc .head { position:absolute; top:0; left:19px; width:26px; height:26px; border-radius:50%; background:#d89a6a; }
-.merchant-visual.type-smith .npc .body { position:absolute; top:24px; left:6px; width:54px; height:58px; background:#5c5c66; border-radius:8px; }
-.merchant-visual.type-smith .npc .apron { position:absolute; top:38px; left:14px; width:38px; height:42px; background:#8a3a2c; border-radius:6px; }
-.merchant-visual.type-smith .anvil { position:absolute; bottom:4px; right:14px; width:34px; height:18px; background:#1c1c1c; border-radius:3px; }
+.merchant-visual.type-smith .npc { position:absolute; bottom: 12%; left: 50%; transform: translateX(-50%); width: 46%; height: 52%; }
+.merchant-visual.type-smith .npc .head { position:absolute; top:0; left:28%; width:44%; height:32%; border-radius:50%; background:#d89a6a; }
+.merchant-visual.type-smith .npc .body { position:absolute; top:26%; left:10%; width:80%; height:66%; background:#5c5c66; border-radius:10px; }
+.merchant-visual.type-smith .npc .apron { position:absolute; top:40%; left:22%; width:56%; height:52%; background:#8a3a2c; border-radius:8px; }
+.merchant-visual.type-smith .anvil { position:absolute; bottom:2%; right:8%; width:26%; height:9%; background:#1c1c1c; border-radius:4px; }
 
 /* 상인3: 마녀 (그림자만) */
 .merchant-visual.type-witch { background: radial-gradient(circle at 50% 30%, #3a1f52, #150a22); }
-.merchant-visual.type-witch .shadow { position:absolute; bottom:10px; left:50%; transform: translateX(-50%); width:70px; height:120px;
+.merchant-visual.type-witch .shadow { position:absolute; bottom:8%; left:50%; transform: translateX(-50%); width:52%; height:64%;
   background:#0a0512; clip-path: polygon(45% 0%, 55% 0%, 70% 25%, 60% 30%, 90% 55%, 65% 55%, 65% 100%, 35% 100%, 35% 55%, 10% 55%, 40% 30%, 30% 25%); }
-.merchant-visual.type-witch .eyes { position:absolute; top:30px; left:50%; transform:translateX(-50%); display:flex; gap:8px; }
-.merchant-visual.type-witch .eyes span { width:6px; height:6px; border-radius:50%; background:#9dffb0; box-shadow:0 0 6px #9dffb0; }
+.merchant-visual.type-witch .eyes { position:absolute; top:20%; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
+.merchant-visual.type-witch .eyes span { width:8px; height:8px; border-radius:50%; background:#9dffb0; box-shadow:0 0 8px #9dffb0; }
 
 /* 상인4: 꼬마 상인 */
 .merchant-visual.type-kid { background: linear-gradient(180deg, #2c4a3a 0%, #2c4a3a 60%, #3c5a48 60%, #3c5a48 100%); }
-.merchant-visual.type-kid .npc { position:absolute; bottom: 34px; left: 50%; transform: translateX(-50%); width: 46px; height: 66px; }
-.merchant-visual.type-kid .npc .head { position:absolute; top:0; left:9px; width:28px; height:28px; border-radius:50%; background:#f5c9a0; }
-.merchant-visual.type-kid .npc .body { position:absolute; top:24px; left:4px; width:38px; height:38px; background:#e0705a; border-radius:12px; }
-.merchant-visual.type-kid .cart { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); width:76px; height:26px; background:#7a5230; border-radius:6px; }
-.merchant-visual.type-kid .cart::after { content:''; position:absolute; bottom:-8px; left:8px; width:12px; height:12px; border-radius:50%; background:#3a2a18; box-shadow: 44px 0 0 #3a2a18; }
+.merchant-visual.type-kid .npc { position:absolute; bottom: 22%; left: 50%; transform: translateX(-50%); width: 36%; height: 40%; }
+.merchant-visual.type-kid .npc .head { position:absolute; top:0; left:20%; width:60%; height:44%; border-radius:50%; background:#f5c9a0; }
+.merchant-visual.type-kid .npc .body { position:absolute; top:36%; left:8%; width:84%; height:56%; background:#e0705a; border-radius:14px; }
+.merchant-visual.type-kid .cart { position:absolute; bottom:4%; left:50%; transform:translateX(-50%); width:58%; height:12%; background:#7a5230; border-radius:6px; }
+.merchant-visual.type-kid .cart::after { content:''; position:absolute; bottom:-30%; left:12%; width:14%; height:60%; border-radius:50%; background:#3a2a18; box-shadow: 130% 0 0 #3a2a18; }
 
-.gacha-machine { width: 130px; height: 170px; border-radius: 16px 16px 30px 30px; position: relative; box-shadow: 0 6px 14px rgba(0,0,0,0.4); }
-.gacha-machine .dome { position:absolute; top:10px; left:50%; transform:translateX(-50%); width:96px; height:76px; border-radius:50% 50% 40% 40%; background: rgba(255,255,255,0.25); border:3px solid rgba(255,255,255,0.4); }
-.gacha-machine .capsule { position:absolute; width:16px; height:16px; border-radius:50%; }
-.gacha-machine .base { position:absolute; bottom:0; left:0; right:0; height:70px; border-radius:0 0 30px 30px; background: rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; }
+.gacha-machine { height: min(56vh, 420px); aspect-ratio: 3 / 4; border-radius: 20px 20px 40px 40px; position: relative; box-shadow: 0 10px 22px rgba(0,0,0,0.45); }
+.gacha-machine .dome { position:absolute; top:8%; left:50%; transform:translateX(-50%); width:78%; height:44%; border-radius:50% 50% 40% 40%; background: rgba(255,255,255,0.25); border:3px solid rgba(255,255,255,0.4); }
+.gacha-machine .capsule { position:absolute; width:14%; height:11%; border-radius:50%; }
+.gacha-machine .base { position:absolute; bottom:0; left:0; right:0; height:38%; border-radius:0 0 40px 40px; background: rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; }
 
 .gacha-row { flex: 1; overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; gap: 26px; padding: 20px; }
 .gacha-tier { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
