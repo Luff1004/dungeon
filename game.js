@@ -77,31 +77,39 @@ const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
 
 const BOSSES = [
   { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime',
-    pattern: 'single', patternLabel: '단발 조준탄', atkInterval: 1.7,
+    pattern: 'single', patternLabel: '단발 조준탄 + 젤리 해일', atkInterval: 1.7,
+    wall: { gapWidth: 110, duration: 2.4, motion: 'slide', color: '80,220,120', interval: 5.5 },
     reward: { gold: 300, gem: 8 }, rewardItem: 'sw_curve' },
   { id: 2, name: '해골 군주', hp: 780, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull',
-    pattern: 'spread', patternLabel: '3방향 부채꼴 사격', atkInterval: 2.0,
+    pattern: 'spread', patternLabel: '3방향 부채꼴 + 뼈의 장막', atkInterval: 2.0,
+    wall: { gapWidth: 90, duration: 2.0, motion: 'slide', color: '220,220,230', interval: 5.0 },
     reward: { gold: 420, gem: 10 }, rewardItem: 'ar_boss_skull' },
   { id: 3, name: '망령 백작', hp: 1000, color1: '#b38aff', color2: '#4a2a8a', shape: 'ghost',
-    pattern: 'teleport', patternLabel: '순간이동 기습', atkInterval: 1.6,
+    pattern: 'teleport', patternLabel: '순간이동 기습 + 저주의 장막', atkInterval: 1.6,
+    wall: { gapWidth: 85, duration: 2.0, motion: 'jump', color: '180,120,255', interval: 5.0 },
     reward: { gold: 560, gem: 13 }, rewardItem: 'wp_boss_wraith' },
   { id: 4, name: '용암 골렘', hp: 1350, color1: '#ff8a4a', color2: '#8a2a0a', shape: 'golem',
-    pattern: 'slam', patternLabel: '광역 강타 (느리지만 넓음)', atkInterval: 2.3,
+    pattern: 'slam', patternLabel: '광역 강타 + 용암 해일', atkInterval: 2.3,
+    wall: { gapWidth: 100, duration: 2.6, motion: 'slide', color: '255,120,50', interval: 6.0 },
     reward: { gold: 720, gem: 16 }, rewardItem: 'ar_boss_magma' },
   { id: 5, name: '독전 마녀 로자린', hp: 1550, color1: '#8aff9e', color2: '#1f5a2f', shape: 'witch',
-    pattern: 'poison', patternLabel: '맹독 웅덩이 (지속 피해)', atkInterval: 2.1,
+    pattern: 'poison', patternLabel: '맹독 웅덩이 + 독안개 장막', atkInterval: 2.1,
+    wall: { gapWidth: 90, duration: 2.2, motion: 'slide', color: '110,230,130', secondary: 'poison', interval: 5.5 },
     reward: { gold: 860, gem: 18 }, rewardItem: 'wp_cannon' },
   { id: 6, name: '빙결 여제 시렌', hp: 1750, color1: '#bdeeff', color2: '#2a6a8a', shape: 'ice',
-    pattern: 'slow', patternLabel: '냉기탄 (피격 시 이동속도 저하)', atkInterval: 2.0,
+    pattern: 'slow', patternLabel: '냉기탄 + 빙결 장막 (닿으면 더 느려짐)', atkInterval: 2.0,
+    wall: { gapWidth: 85, duration: 2.2, motion: 'slide', color: '140,220,255', secondary: 'slow', interval: 5.2 },
     reward: { gold: 950, gem: 20 }, rewardItem: 'wp_frost' },
   { id: 7, name: '뇌전 폭군 자칸', hp: 1950, color1: '#fff26a', color2: '#8a7a10', shape: 'thunder',
-    pattern: 'double', patternLabel: '연속 2연발', atkInterval: 1.3,
+    pattern: 'double', patternLabel: '연속 2연발 + 초고속 번개 장막', atkInterval: 1.3,
+    wall: { gapWidth: 70, duration: 1.3, motion: 'slide', color: '255,240,110', interval: 4.2 },
     reward: { gold: 1050, gem: 22 }, rewardItem: 'wp_laser' },
   { id: 8, name: '칠흑룡 벨카누스', hp: 2200, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon',
     pattern: 'sweep', patternLabel: '전방위 브레스 (안전지대 찾기)', atkInterval: 2.6,
     reward: { gold: 1300, gem: 26 }, rewardItem: 'wp_boss_dragon' },
   { id: 9, name: '심연의 사냥꾼 크로바', hp: 2450, color1: '#ff6a8a', color2: '#4a0a1a', shape: 'hunter',
-    pattern: 'dash', patternLabel: '고속 돌진 저격', atkInterval: 1.5,
+    pattern: 'dash', patternLabel: '고속 돌진 저격 + 갈지자 장막', atkInterval: 1.5,
+    wall: { gapWidth: 80, duration: 2.4, motion: 'zigzag', color: '255,110,140', interval: 4.8 },
     reward: { gold: 1500, gem: 30 }, rewardItem: 'sw_void' },
   { id: 10, name: '태초의 화신', hp: 3200, color1: '#ffe9a8', color2: '#5a3a10', shape: 'genesis',
     pattern: 'combo', patternLabel: '모든 패턴 복합 사용', atkInterval: 1.6,
@@ -1138,9 +1146,18 @@ function spawnBoss(b) {
     def: b, x: CW / 2, y: 90, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null,
     wanderPhase: Math.random() * Math.PI * 2,
     chaseSpeed: 1.1 + Math.random() * 0.6,
+    wallTimer: b.wall ? 4.2 : null,
   };
   document.getElementById('boss-name').textContent = b.name;
   document.getElementById('wave-label').textContent = '보스전 · ' + b.patternLabel;
+}
+
+function startBossWall(b) {
+  const w = b.def.wall;
+  const startX = Math.max(80, Math.min(CW - 80, game.player.x));
+  let targetX = startX + (Math.random() < 0.5 ? -1 : 1) * (CW * 0.5);
+  targetX = Math.max(80, Math.min(CW - 80, targetX));
+  b.wallPending = { t: 0.7, startX, targetX, gapWidth: w.gapWidth, duration: w.duration, motion: w.motion, color: w.color, secondary: w.secondary || null };
 }
 
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -1178,7 +1195,7 @@ function resolveBossTelegraph(b) {
   if (pattern === 'sweep') {
     game.boss.laser = {
       startX: b.telegraph.gapStart, targetX: b.telegraph.gapTarget, gapX: b.telegraph.gapStart,
-      gapWidth: 85, elapsed: 0, duration: 2.1,
+      gapWidth: 85, elapsed: 0, duration: 2.1, motion: 'slide', color: '150,80,255', secondary: null, jumped: false,
     };
     b.dashTarget = null;
     return;
@@ -1470,6 +1487,20 @@ function update(dt) {
       b.atkTimer = b.def.atkInterval || 1.7;
       startBossTelegraph(b);
     }
+    if (b.wallPending) {
+      b.wallPending.t -= dt;
+      if (b.wallPending.t <= 0) {
+        const p = b.wallPending;
+        b.laser = { startX: p.startX, targetX: p.targetX, gapX: p.startX, gapWidth: p.gapWidth, elapsed: 0, duration: p.duration, motion: p.motion, color: p.color, secondary: p.secondary, jumped: false };
+        b.wallPending = null;
+      }
+    } else if (b.wallTimer !== null) {
+      b.wallTimer -= dt;
+      if (b.wallTimer <= 0 && !b.laser) {
+        b.wallTimer = b.def.wall.interval;
+        startBossWall(b);
+      }
+    }
   }
   for (let i = game.bossProjectiles.length - 1; i >= 0; i--) {
     const bp = game.bossProjectiles[i];
@@ -1509,17 +1540,36 @@ function update(dt) {
     if (bp.y > CH + 40) game.bossProjectiles.splice(i, 1);
   }
 
-  // 가로 레이저 스윕 (칠흑룡 계열) - 좁은 안전 구간을 제외한 전 구간이 위험
+  // 가로 장막(레이저) - 보스마다 다른 방식으로 안전 구간이 움직인다
   if (game.boss && game.boss.laser) {
     const lz = game.boss.laser;
     lz.elapsed += dt;
     const t = Math.min(1, lz.elapsed / lz.duration);
-    lz.gapX = lz.startX + (lz.targetX - lz.startX) * t;
+    if (lz.motion === 'jump') {
+      if (t >= 0.5 && !lz.jumped) {
+        lz.jumped = true;
+        lz.startX = lz.gapX;
+        lz.targetX = Math.max(80, Math.min(CW - 80, lz.targetX + (Math.random() < 0.5 ? -1 : 1) * 120));
+      }
+      lz.gapX = t < 0.5 ? lz.startX : lz.targetX;
+    } else if (lz.motion === 'zigzag') {
+      const bounce = Math.abs(((t * 3) % 2) - 1);
+      lz.gapX = lz.startX + (lz.targetX - lz.startX) * bounce;
+    } else {
+      lz.gapX = lz.startX + (lz.targetX - lz.startX) * t;
+    }
     if (Math.abs(game.player.x - lz.gapX) > lz.gapWidth / 2) {
       game.baseHp -= 20 * dt; game.hitFlash = Math.max(game.hitFlash, 0.5); updateBaseHp();
+      if (lz.secondary === 'slow') game.slowTimer = 0.3;
       if (game.baseHp <= 0) { gameOver(false); return; }
     }
-    if (lz.elapsed >= lz.duration) game.boss.laser = null;
+    if (lz.elapsed >= lz.duration) {
+      if (lz.secondary === 'poison') {
+        const edgeX = lz.gapX + (lz.gapX < CW / 2 ? lz.gapWidth : -lz.gapWidth);
+        game.hazards.push({ x: Math.max(30, Math.min(CW - 30, edgeX)), y: playerRow + 10, r: 40, timer: 3.5, dps: 6 });
+      }
+      game.boss.laser = null;
+    }
   }
 
   // 지속 피해 웅덩이 (독전 마녀)
@@ -1619,15 +1669,23 @@ function render() {
     ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
   });
 
-  // 가로 레이저 스윕 시각효과
+  // 장막(레이저) 경고 + 실제 효과
+  if (game.boss && game.boss.wallPending) {
+    const wp = game.boss.wallPending;
+    const flash = 0.15 + 0.15 * Math.sin(performance.now() / 40);
+    ctxG.fillStyle = `rgba(${wp.color},${flash})`;
+    ctxG.fillRect(0, 0, CW, CH);
+    ctxG.fillStyle = 'rgba(255,255,255,0.3)';
+    ctxG.fillRect(wp.startX - wp.gapWidth / 2, 0, wp.gapWidth, CH);
+  }
   if (game.boss && game.boss.laser) {
     const lz = game.boss.laser;
     const gx = lz.gapX, gw = lz.gapWidth;
-    const glow = 0.35 + 0.2 * Math.sin(performance.now() / 70);
-    ctxG.fillStyle = `rgba(180,40,255,${glow})`;
+    const glow = 0.4 + 0.2 * Math.sin(performance.now() / 70);
+    ctxG.fillStyle = `rgba(${lz.color},${glow})`;
     ctxG.fillRect(0, 0, Math.max(0, gx - gw / 2), CH);
     ctxG.fillRect(Math.min(CW, gx + gw / 2), 0, CW, CH);
-    ctxG.fillStyle = 'rgba(220,180,255,0.9)';
+    ctxG.fillStyle = 'rgba(255,255,255,0.9)';
     ctxG.fillRect(gx - gw / 2 - 3, 0, 3, CH);
     ctxG.fillRect(gx + gw / 2, 0, 3, CH);
   }
