@@ -84,11 +84,41 @@ const DUNGEON_NAMES = [
   '화산 심장부', '그림자 미궁', '천공의 폐허', '악몽의 늪', '종말의 문',
 ];
 
+// 던전마다 테마에 맞는 고유 기믹
+const DUNGEON_GIMMICKS = [
+  null, // 초록 숲 입구 - 튜토리얼, 기믹 없음
+  { type: 'fallingHazard', label: '낙석 주의', color: '#a89a7f', interval: 3.2, dmg: 12 },
+  { type: 'pushForce', label: '모래바람', color: '#c4b87f', interval: 4.0, mode: 'gust', force: 90, duration: 1.6 },
+  { type: 'fallingHazard', label: '용암탄 낙하', color: '#ff8a4a', interval: 3.0, dmg: 16 },
+  { type: 'slowTrap', label: '늪 수렁', color: '#8a6fd4', interval: 3.5, r: 40 },
+  { type: 'homing', label: '저주받은 원혼', color: '#ff5a5a', interval: 5.0, dmg: 10 },
+  { type: 'pushForce', label: '모래 늪 소용돌이', color: '#e0c96a', interval: 4.5, mode: 'vortex', force: 70, duration: 2.2 },
+  { type: 'obscure', label: '눈보라 시야방해', color: '#eaf5ff', interval: 5.5, duration: 2.2 },
+  { type: 'homing', label: '유령 화살', color: '#d47f7f', interval: 4.2, dmg: 12 },
+  { type: 'pushForce', label: '심연의 소용돌이', color: '#8a4a4a', interval: 4.0, mode: 'vortex', force: 95, duration: 2.2 },
+  { type: 'obscure', label: '눈보라 시야방해', color: '#bde8ff', interval: 5.0, duration: 2.2 },
+  { type: 'train', label: '열차 습격', color: '#c9c4e0', interval: 6.0 },
+  { type: 'web', label: '거미줄 함정', color: '#c48ae0', interval: 4.5 },
+  { type: 'fallingHazard', label: '갱도 붕괴', color: '#8a6a7f', interval: 2.8, dmg: 16 },
+  { type: 'slowTrap', label: '저주받은 덩굴', color: '#a8e07f', interval: 3.5, r: 42 },
+  { type: 'fallingHazard', label: '낙뢰', color: '#fff26a', interval: 3.4, dmg: 15 },
+  { type: 'homing', label: '떠도는 저주받은 책', color: '#e0c98a', interval: 4.6, dmg: 10 },
+  { type: 'fallingHazard', label: '수정 파편 낙하', color: '#8aeaff', interval: 3.0, dmg: 13 },
+  { type: 'slowTrap', label: '뼈 함정', color: '#e8e2d0', interval: 3.6, r: 40 },
+  { type: 'pushForce', label: '해류', color: '#5ac4d4', interval: 4.2, mode: 'gust', force: 85, duration: 1.8 },
+  { type: 'fallingHazard', label: '용암 폭발', color: '#ff6a3a', interval: 2.6, dmg: 18 },
+  { type: 'obscure', label: '칠흑의 어둠', color: '#9a7ad0', interval: 4.8, duration: 2.8 },
+  { type: 'pushForce', label: '폭풍의 돌풍', color: '#eaf5ff', interval: 3.8, mode: 'gust', force: 110, duration: 1.6 },
+  { type: 'homing', label: '악몽의 안개', color: '#6a8a5a', interval: 4.2, dmg: 11 },
+  { type: 'fallingHazard', label: '운석우 + 암흑', color: '#ff2a3a', interval: 2.4, dmg: 20, obscure: true },
+];
+
 const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
   id: i + 1,
   name,
   waves: 10,
   theme: DUNGEON_THEMES[i],
+  gimmick: DUNGEON_GIMMICKS[i],
   enemyHp: 20 + i * 18,
   enemySpeed: 0.35 + i * 0.035,
   reward: { gold: 40 + i * 25, gem: i >= 4 ? (i - 3) : 0 },
@@ -338,7 +368,7 @@ function buildDungeonList() {
       <div class="card-icon"></div>
       <div class="card-text">
         <p class="card-title">${i + 1}. ${d.name}</p>
-        <p class="card-sub">웨이브 ${d.waves} · 난이도 ${'★'.repeat(Math.min(5, 1 + Math.floor(i / 5)))}</p>
+        <p class="card-sub">웨이브 ${d.waves} · 난이도 ${'★'.repeat(Math.min(5, 1 + Math.floor(i / 5)))}${d.gimmick ? ` · <span style="color:${d.theme.c1}">${d.gimmick.label}</span>` : ''}</p>
       </div>
       ${locked ? `<div class="lock-icon"><div class="shackle"></div><div class="body"></div></div>` : `<span class="card-tag">${i < state.dungeonCleared ? '클리어' : '도전 가능'}</span>`}
     `;
@@ -1102,6 +1132,13 @@ function startRun(cfg) {
     hitFlash: 0,
     slowTimer: 0,
     lastTime: performance.now(),
+    gimmick: cfg.mode === 'dungeon' ? cfg.data.gimmick : null,
+    gimmickTimer: 2.5,
+    gimmickPending: null,
+    gimmickActive: null,
+    gimmickObjects: [],
+    obscureTimer: 0,
+    pushForce: { x: 0, y: 0 },
   };
 
   document.getElementById('overlay-message').style.display = 'none';
@@ -1284,6 +1321,100 @@ function updateBigActive(b, dt) {
       ba.dashesLeft--; ba.timer = big.gap;
     }
     if (ba.dashesLeft <= 0) b.bigActive = null;
+  }
+}
+
+/* ---------------- 던전 전용 환경 기믹 ---------------- */
+
+function updateGimmickTick(dt) {
+  const g = game.gimmick;
+  if (game.gimmickPending) {
+    game.gimmickPending.t -= dt;
+    if (game.gimmickPending.t <= 0) { activateGimmick(); game.gimmickPending = null; }
+  } else if (game.gimmickActive) {
+    updateGimmickActive(dt);
+  } else {
+    game.gimmickTimer -= dt;
+    if (game.gimmickTimer <= 0) {
+      game.gimmickTimer = g.interval;
+      game.gimmickPending = { t: 0.55 };
+    }
+  }
+  if (game.obscureTimer > 0) game.obscureTimer = Math.max(0, game.obscureTimer - dt);
+  if (game.gimmickObjects.length) updateGimmickObjects(dt);
+}
+
+function activateGimmick() {
+  const g = game.gimmick;
+  const zone = getZone();
+  const playerRow = zone.cy - zone.h / 2;
+  if (g.type === 'fallingHazard') {
+    const x = Math.max(24, Math.min(CW - 24, game.player.x + (Math.random() - 0.5) * 180));
+    game.bossProjectiles.push({ x, y: -20, speed: 4.4, resolved: false, type: 'normal', dmg: g.dmg, envColor: g.color });
+    if (g.obscure) game.obscureTimer = 1.4;
+  } else if (g.type === 'homing') {
+    game.gimmickObjects.push({ type: 'homing', x: Math.random() < 0.5 ? -20 : CW + 20, y: playerRow - 60, vx: 0, vy: 0, dmg: g.dmg, life: 6 });
+  } else if (g.type === 'slowTrap') {
+    const x = Math.max(30, Math.min(CW - 30, game.player.x + (Math.random() - 0.5) * 200));
+    game.hazards.push({ x, y: playerRow + zone.h * 0.5, r: g.r, timer: 4.0, dps: 0, frost: true });
+  } else if (g.type === 'obscure') {
+    game.obscureTimer = g.duration;
+  } else if (g.type === 'pushForce') {
+    game.gimmickActive = { type: 'pushForce', mode: g.mode, force: g.force, elapsed: 0, duration: g.duration, angle: Math.random() * Math.PI * 2 };
+  } else if (g.type === 'train') {
+    const dir = Math.random() < 0.5 ? -1 : 1;
+    game.gimmickActive = { type: 'train', x: dir < 0 ? CW + 80 : -80, dir, y: playerRow + zone.h * 0.5, speed: 6.5 };
+  } else if (g.type === 'web') {
+    for (let i = 0; i < 3; i++) {
+      const x = Math.max(30, Math.min(CW - 30, game.player.x + (Math.random() - 0.5) * 240));
+      game.hazards.push({ x, y: playerRow + zone.h * (0.2 + Math.random() * 0.6), r: 44, timer: 4.5, dps: 0, frost: true, web: true });
+    }
+    game.obscureTimer = 2.0;
+  }
+}
+
+function updateGimmickActive(dt) {
+  const ga = game.gimmickActive;
+  const zone = getZone();
+  const playerRow = zone.cy - zone.h / 2;
+  if (ga.type === 'pushForce') {
+    ga.elapsed += dt;
+    if (ga.mode === 'vortex') {
+      const cx = CW / 2, cy = zone.cy;
+      const dx = cx - game.player.x, dy = cy - game.player.y;
+      const d = Math.max(1, Math.hypot(dx, dy));
+      game.pushForce.x = (dx / d) * ga.force; game.pushForce.y = (dy / d) * ga.force;
+    } else {
+      game.pushForce.x = Math.cos(ga.angle) * ga.force; game.pushForce.y = Math.sin(ga.angle) * ga.force * 0.3;
+    }
+    if (ga.elapsed >= ga.duration) { game.pushForce.x = 0; game.pushForce.y = 0; game.gimmickActive = null; }
+  } else if (ga.type === 'train') {
+    ga.x += ga.dir * ga.speed * dt * 60;
+    if (Math.abs(game.player.x - ga.x) < 70 && Math.abs(game.player.y - ga.y) < 55) {
+      game.baseHp -= 30 * dt * 3; game.hitFlash = 1; updateBaseHp();
+      if (game.baseHp <= 0) { gameOver(false); return; }
+    }
+    if (ga.x < -100 || ga.x > CW + 100) game.gimmickActive = null;
+  }
+}
+
+function updateGimmickObjects(dt) {
+  for (let i = game.gimmickObjects.length - 1; i >= 0; i--) {
+    const o = game.gimmickObjects[i];
+    o.life -= dt;
+    const dx = game.player.x - o.x, dy = game.player.y - o.y;
+    const d = Math.max(1, Math.hypot(dx, dy));
+    const homeSpeed = 1.6;
+    o.vx += (dx / d) * homeSpeed * dt * 20; o.vy += (dy / d) * homeSpeed * dt * 20;
+    o.vx *= 0.96; o.vy *= 0.96;
+    o.x += o.vx * dt; o.y += o.vy * dt;
+    if (Math.hypot(dx, dy) < PLAYER_R + 14) {
+      game.baseHp -= o.dmg; game.baseBounce = 1; game.hitFlash = 1; updateBaseHp();
+      game.gimmickObjects.splice(i, 1);
+      if (game.baseHp <= 0) { gameOver(false); return; }
+      continue;
+    }
+    if (o.life <= 0) game.gimmickObjects.splice(i, 1);
   }
 }
 
@@ -1499,11 +1630,19 @@ function update(dt) {
   const mlen = Math.hypot(mvx, mvy);
   if (game.slowTimer > 0) game.slowTimer = Math.max(0, game.slowTimer - dt);
   const effSpeed = game.speed * (game.slowTimer > 0 ? 0.5 : 1);
+  let targetX = game.player.x, targetY = game.player.y;
   if (mlen > 0.01) {
     const nx = mvx / Math.max(1, mlen), ny = mvy / Math.max(1, mlen);
-    const clamped = clampToZone(game.player.x + nx * effSpeed * dt, game.player.y + ny * effSpeed * dt);
+    targetX += nx * effSpeed * dt; targetY += ny * effSpeed * dt;
+  }
+  if (game.pushForce.x || game.pushForce.y) { targetX += game.pushForce.x * dt; targetY += game.pushForce.y * dt; }
+  if (targetX !== game.player.x || targetY !== game.player.y) {
+    const clamped = clampToZone(targetX, targetY);
     game.player.x = clamped.x; game.player.y = clamped.y;
   }
+
+  // 던전 전용 기믹
+  if (game.gimmick) { updateGimmickTick(dt); if (!game.running) return; }
 
   // 웨이브 스폰
   if (game.mode !== 'boss') {
@@ -1788,24 +1927,46 @@ function render() {
   game.hazards.forEach(hz => {
     const a = 0.25 + 0.15 * Math.sin(performance.now() / 150 + hz.x);
     ctxG.beginPath(); ctxG.arc(hz.x, hz.y, hz.r, 0, Math.PI * 2);
-    if (hz.frost) {
+    if (hz.web) {
+      ctxG.fillStyle = `rgba(230,220,255,${a * 0.9})`; ctxG.fill();
+      ctxG.strokeStyle = 'rgba(255,255,255,0.5)'; ctxG.lineWidth = 1.5;
+      for (let k = 0; k < 6; k++) { const ang = (Math.PI * 2 * k) / 6; ctxG.beginPath(); ctxG.moveTo(hz.x, hz.y); ctxG.lineTo(hz.x + Math.cos(ang) * hz.r, hz.y + Math.sin(ang) * hz.r); ctxG.stroke(); }
+    } else if (hz.frost) {
       ctxG.fillStyle = `rgba(140,220,255,${a})`; ctxG.fill();
-      ctxG.strokeStyle = 'rgba(200,240,255,0.6)';
+      ctxG.strokeStyle = 'rgba(200,240,255,0.6)'; ctxG.lineWidth = 2; ctxG.stroke();
     } else {
       ctxG.fillStyle = `rgba(90,220,110,${a})`; ctxG.fill();
-      ctxG.strokeStyle = 'rgba(140,255,160,0.5)';
+      ctxG.strokeStyle = 'rgba(140,255,160,0.5)'; ctxG.lineWidth = 2; ctxG.stroke();
     }
-    ctxG.lineWidth = 2; ctxG.stroke();
   });
 
   const bpColors = { normal: '#ff4a4a', wide: '#ff9a3a', slow: '#7fd8ff', poison: '#8aff9e' };
   game.bossProjectiles.forEach(bp => {
     if (bp.type === 'star') { drawStarBullet(bp); return; }
     const r = bp.type === 'wide' ? 18 : (bp.type === 'slow' || bp.type === 'poison' ? 13 : 10);
-    const col = bpColors[bp.type] || '#ff4a4a';
+    const col = bp.envColor || bpColors[bp.type] || '#ff4a4a';
     ctxG.beginPath(); ctxG.arc(bp.x, bp.y, r, 0, Math.PI * 2);
     ctxG.fillStyle = col; ctxG.shadowColor = col; ctxG.shadowBlur = 12; ctxG.fill(); ctxG.shadowBlur = 0;
   });
+
+  // 던전 기믹: 유도체/열차
+  game.gimmickObjects.forEach(o => {
+    ctxG.save();
+    ctxG.beginPath(); ctxG.arc(o.x, o.y, 12, 0, Math.PI * 2);
+    ctxG.fillStyle = '#ff5a5a'; ctxG.shadowColor = '#ff5a5a'; ctxG.shadowBlur = 10; ctxG.fill();
+    ctxG.restore();
+  });
+  if (game.gimmickActive && game.gimmickActive.type === 'train') {
+    const t = game.gimmickActive;
+    ctxG.save();
+    ctxG.translate(t.x, t.y);
+    ctxG.fillStyle = '#241f30'; ctxG.fillRect(-70, -55, 140, 110);
+    ctxG.fillStyle = '#ffe08a';
+    for (let k = -50; k <= 50; k += 25) { ctxG.beginPath(); ctxG.arc(k, -20, 6, 0, Math.PI * 2); ctxG.fill(); }
+    ctxG.fillStyle = '#ff4a4a';
+    ctxG.beginPath(); ctxG.arc(t.dir < 0 ? -66 : 66, 10, 8, 0, Math.PI * 2); ctxG.fill();
+    ctxG.restore();
+  }
 
   // 보스 전용 대형 패턴 경고 + 실제 효과
   if (game.boss && game.boss.bigPending) {
@@ -1818,6 +1979,12 @@ function render() {
     ctxG.restore();
   }
   if (game.boss && game.boss.bigActive) drawBigActive(game.boss.bigActive);
+
+  // 던전 기믹 경고
+  if (game.gimmickPending) {
+    const flash = 0.12 + 0.14 * Math.sin(performance.now() / 35);
+    ctxG.save(); ctxG.globalAlpha = flash; ctxG.fillStyle = game.gimmick.color; ctxG.fillRect(0, 0, CW, CH); ctxG.restore();
+  }
   if (game.boss && game.boss.laser) {
     const lz = game.boss.laser;
     const gx = lz.gapX, gw = lz.gapWidth;
@@ -1869,6 +2036,30 @@ function render() {
     vg.addColorStop(0, 'rgba(200,0,0,0)');
     vg.addColorStop(1, `rgba(200,0,0,${game.hitFlash * 0.45})`);
     ctxG.fillStyle = vg; ctxG.fillRect(0, 0, CW, CH);
+  }
+
+  // 시야 방해 (눈보라/거미줄/암흑)
+  if (game.obscureTimer > 0) {
+    const alpha = Math.min(0.55, game.obscureTimer * 0.35);
+    ctxG.save();
+    ctxG.globalAlpha = alpha;
+    const g2 = ctxG.createRadialGradient(game.player.x, game.player.y, 40, game.player.x, game.player.y, CW * 0.6);
+    g2.addColorStop(0, 'rgba(20,15,25,0)');
+    g2.addColorStop(1, 'rgba(230,230,240,0.95)');
+    ctxG.fillStyle = g2; ctxG.fillRect(0, 0, CW, CH);
+    ctxG.restore();
+  }
+
+  // 바람/소용돌이 힘 표시
+  if (game.pushForce.x || game.pushForce.y) {
+    ctxG.save();
+    ctxG.strokeStyle = 'rgba(255,255,255,0.25)'; ctxG.lineWidth = 2;
+    const ang = Math.atan2(game.pushForce.y, game.pushForce.x);
+    for (let k = 0; k < 5; k++) {
+      const lx = (k / 5) * CW, ly = 40 + k * 30;
+      ctxG.beginPath(); ctxG.moveTo(lx, ly); ctxG.lineTo(lx + Math.cos(ang) * 30, ly + Math.sin(ang) * 30); ctxG.stroke();
+    }
+    ctxG.restore();
   }
 }
 
