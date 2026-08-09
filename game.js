@@ -2369,6 +2369,19 @@ document.getElementById('btn-redraw').addEventListener('click', () => {
 
 /* ---------------- 개발자 코드 ---------------- */
 
+function activateCheatCode() {
+  Object.keys(state.inventory).forEach((id) => {
+    state.inventory[id].owned = true;
+    if (state.inventory[id].level < 1) state.inventory[id].level = 1;
+  });
+  state.gold += 1000000000;
+  state.dungeonCleared = DUNGEONS.length - 1;
+  save();
+  refreshCurrencyDisplays();
+  updateCheckinBadge();
+  flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 + 전 던전 해금 ✦');
+}
+
 let cheatBuffer = '';
 window.addEventListener('keydown', (e) => {
   if (!document.getElementById('screen-lobby').classList.contains('active')) { cheatBuffer = ''; return; }
@@ -2376,15 +2389,26 @@ window.addEventListener('keydown', (e) => {
   cheatBuffer = (cheatBuffer + e.key.toLowerCase()).slice(-20);
   if (cheatBuffer.endsWith('amethyst')) {
     cheatBuffer = '';
-    Object.keys(state.inventory).forEach((id) => {
-      state.inventory[id].owned = true;
-      if (state.inventory[id].level < 1) state.inventory[id].level = 1;
-    });
-    state.gold += 1000000000;
-    state.dungeonCleared = DUNGEONS.length - 1;
-    save();
-    refreshCurrencyDisplays();
-    flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 + 전 던전 해금 ✦');
+    activateCheatCode();
+  }
+});
+
+// 모바일 등 키보드가 없는 환경을 위한 숨겨진 탭 제스처: 로비 타이틀 5번 연속 탭 -> 코드 입력창
+let titleTapCount = 0;
+let titleTapTimer = null;
+document.querySelector('.lobby-title').addEventListener('click', () => {
+  titleTapCount++;
+  if (titleTapTimer) clearTimeout(titleTapTimer);
+  titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 2000);
+  if (titleTapCount >= 5) {
+    titleTapCount = 0;
+    clearTimeout(titleTapTimer);
+    const code = window.prompt('개발자 코드를 입력하세요');
+    if (code && code.trim().toLowerCase() === 'amethyst') {
+      activateCheatCode();
+    } else if (code) {
+      flashMsg('잘못된 코드입니다');
+    }
   }
 });
 
