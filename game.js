@@ -2381,9 +2381,10 @@ window.addEventListener('keydown', (e) => {
       if (state.inventory[id].level < 1) state.inventory[id].level = 1;
     });
     state.gold += 1000000000;
+    state.dungeonCleared = DUNGEONS.length - 1;
     save();
     refreshCurrencyDisplays();
-    flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 ✦');
+    flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 + 전 던전 해금 ✦');
   }
 });
 
