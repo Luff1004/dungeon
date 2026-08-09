@@ -60,6 +60,12 @@ body { background: #0a080d; }
 .checkin-badge .flame-icon { position: relative; width: 14px; height: 18px; }
 .checkin-badge .flame-icon::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 70%, #ffe08a, #ff8a3d 60%, transparent 75%); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: flicker 1.4s infinite ease-in-out; }
 .checkin-badge .checkin-ping { position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; border-radius: 50%; background: #ff4a4a; box-shadow: 0 0 6px #ff4a4a; animation: gacha-twinkle 1.2s ease-in-out infinite; }
+
+.quest-badge { position: absolute; top: 10px; right: 12px; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); border: 1px solid rgba(140,190,255,0.4); border-radius: 20px; padding: 6px 12px 6px 8px; color: #bcdcff; font-weight: 700; font-size: 0.85rem; }
+.quest-badge .scroll-icon { position: relative; width: 15px; height: 16px; background: linear-gradient(180deg, #f0e6cf, #d9c9a0); border-radius: 3px; }
+.quest-badge .scroll-icon::before, .quest-badge .scroll-icon::after { content: ''; position: absolute; left: -1px; right: -1px; height: 3px; border-radius: 2px; background: #b8a578; }
+.quest-badge .scroll-icon::before { top: -1px; }
+.quest-badge .scroll-icon::after { bottom: -1px; }
 .cur-pill.gem .cur-icon { background: radial-gradient(circle at 35% 35%, #d0f4ff, #38a4d8); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 .lobby-buttons { position: relative; display: flex; flex-direction: column; gap: 16px; width: 74%; max-width: 320px; }
 .lobby-btn { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 0; font-size: 1rem; font-weight: 700; color: #d8cfc0; letter-spacing: 3px; box-shadow: 0 6px 0 rgba(0,0,0,0.55), 0 8px 14px rgba(0,0,0,0.5); }
@@ -368,5 +374,21 @@ body { background: #0a080d; }
 .checkin-day.future { opacity: 0.55; }
 .checkin-claim-btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; background: linear-gradient(180deg, #7fe08a, #2c9e56); color: #08210f; width: 100%; }
 .checkin-claim-btn.disabled { background: #22202a; color: #7a7482; }
+
+/* ---------- 일일 퀘스트 ---------- */
+.quest-sub { text-align: center; margin: -4px 0 4px; font-size: 0.8rem; opacity: 0.75; }
+.quest-list { display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; }
+.quest-row { background: rgba(255,255,255,0.06); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; border: 2px solid rgba(255,255,255,0.08); }
+.quest-row.done { border-color: rgba(140,255,160,0.4); }
+.quest-row .qr-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.quest-row .qr-desc { font-size: 0.88rem; font-weight: 700; }
+.quest-row .qr-reward { font-size: 0.72rem; opacity: 0.8; white-space: nowrap; }
+.quest-row .qr-bar { height: 8px; border-radius: 6px; background: rgba(0,0,0,0.4); overflow: hidden; }
+.quest-row .qr-bar-fill { height: 100%; background: linear-gradient(90deg, #7fe08a, #2c9e56); }
+.quest-row .qr-bottom { display: flex; justify-content: space-between; align-items: center; }
+.quest-row .qr-progress-label { font-size: 0.72rem; opacity: 0.75; }
+.quest-claim-btn { border: none; padding: 6px 16px; border-radius: 10px; font-weight: 800; font-size: 0.75rem; background: linear-gradient(180deg, #ffe08a, #f0a93a); color: #3a2500; }
+.quest-claim-btn.disabled { background: #22202a; color: #7a7482; }
+.quest-claim-btn.claimed { background: #1c2c20; color: #7fe08a; }
 
 ::-webkit-scrollbar { width: 0; height: 0; }

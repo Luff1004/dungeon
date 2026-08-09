@@ -217,6 +217,8 @@ function defaultState() {
     lastCheckIn: null,
     checkInStreak: 0,
     playerSkin: null,
+    dailyQuestDate: null,
+    dailyQuests: [],
   };
 }
 
@@ -253,7 +255,7 @@ function itemPower(id) {
 function nav(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screenId).classList.add('active');
-  if (screenId === 'lobby') { refreshCurrencyDisplays(); updateCheckinBadge(); }
+  if (screenId === 'lobby') { refreshCurrencyDisplays(); updateCheckinBadge(); updateQuestBadge(); }
   if (screenId === 'type-select') buildTypeList();
   if (screenId === 'dungeon-list') buildDungeonList();
   if (screenId === 'boss-list') buildBossList();
@@ -535,6 +537,7 @@ function renderUpgrade() {
       if (state.gold < cost) return;
       state.gold -= cost;
       inv.level = lvl + 1;
+      addQuestProgress('upgrade');
       save(); refreshCurrencyDisplays(); renderUpgrade();
     };
   }
@@ -946,6 +949,7 @@ function doGachaPull(tier, count) {
   state.gem -= totalPrice;
   const results = [];
   for (let i = 0; i < count; i++) results.push(rollGachaOnce(tier));
+  addQuestProgress('gachaPull', count);
   save(); refreshCurrencyDisplays(); buildGacha();
   showGachaResults(results);
 }
@@ -1058,6 +1062,90 @@ document.getElementById('btn-checkin').addEventListener('click', openCheckinModa
 document.getElementById('checkin-claim-btn').addEventListener('click', claimCheckIn);
 document.getElementById('checkin-modal-close').addEventListener('click', () => {
   document.getElementById('checkin-modal').style.display = 'none';
+});
+
+/* ---------------- 일일 퀘스트 ---------------- */
+
+const QUEST_POOL = [
+  { id: 'dungeon2', desc: '던전 2회 클리어', target: 2, type: 'dungeonClear', reward: { gold: 200 } },
+  { id: 'dungeon4', desc: '던전 4회 클리어', target: 4, type: 'dungeonClear', reward: { gold: 350, gem: 3 } },
+  { id: 'boss1', desc: '보스 1회 처치', target: 1, type: 'bossClear', reward: { gold: 300, gem: 5 } },
+  { id: 'gacha1', desc: '가챠 1회 뽑기', target: 1, type: 'gachaPull', reward: { gold: 150 } },
+  { id: 'gacha3', desc: '가챠 3회 뽑기', target: 3, type: 'gachaPull', reward: { gold: 300, gem: 3 } },
+  { id: 'kill30', desc: '몬스터 30마리 처치', target: 30, type: 'enemyKill', reward: { gold: 180 } },
+  { id: 'kill60', desc: '몬스터 60마리 처치', target: 60, type: 'enemyKill', reward: { gold: 280, gem: 3 } },
+  { id: 'upgrade1', desc: '장비 업그레이드 1회', target: 1, type: 'upgrade', reward: { gold: 150 } },
+  { id: 'wave5', desc: '웨이브 5회 클리어', target: 5, type: 'waveClear', reward: { gold: 170 } },
+  { id: 'wave10', desc: '웨이브 10회 클리어', target: 10, type: 'waveClear', reward: { gold: 260, gem: 2 } },
+  { id: 'special10', desc: '특수공격 10회 사용', target: 10, type: 'specialUse', reward: { gold: 160 } },
+];
+
+function ensureDailyQuests() {
+  const today = todayStr();
+  if (state.dailyQuestDate !== today) {
+    state.dailyQuestDate = today;
+    const shuffled = [...QUEST_POOL].sort(() => Math.random() - 0.5).slice(0, 4);
+    state.dailyQuests = shuffled.map((q) => ({ ...q, progress: 0, claimed: false }));
+    save();
+  }
+}
+
+function addQuestProgress(type, amount) {
+  ensureDailyQuests();
+  let changed = false;
+  state.dailyQuests.forEach((q) => {
+    if (q.type === type && q.progress < q.target) {
+      q.progress = Math.min(q.target, q.progress + (amount || 1));
+      changed = true;
+    }
+  });
+  if (changed) { save(); updateQuestBadge(); }
+}
+
+function updateQuestBadge() {
+  ensureDailyQuests();
+  const claimable = state.dailyQuests.filter((q) => q.progress >= q.target && !q.claimed).length;
+  const doneCount = state.dailyQuests.filter((q) => q.claimed).length;
+  document.getElementById('quest-badge-num').textContent = `${doneCount}/${state.dailyQuests.length}`;
+  document.getElementById('quest-ping').style.display = claimable > 0 ? 'block' : 'none';
+}
+
+function buildQuestModal() {
+  ensureDailyQuests();
+  const list = document.getElementById('quest-list');
+  list.innerHTML = '';
+  state.dailyQuests.forEach((q) => {
+    const done = q.progress >= q.target;
+    const row = document.createElement('div');
+    row.className = 'quest-row' + (done ? ' done' : '');
+    const rewardLabel = [q.reward.gold ? `${q.reward.gold}G` : '', q.reward.gem ? `${q.reward.gem}마력석` : ''].filter(Boolean).join(' + ');
+    row.innerHTML = `
+      <div class="qr-top">
+        <span class="qr-desc">${q.desc}</span>
+        <span class="qr-reward">${rewardLabel}</span>
+      </div>
+      <div class="qr-bar"><div class="qr-bar-fill" style="width:${Math.min(100, (q.progress / q.target) * 100)}%;"></div></div>
+      <div class="qr-bottom">
+        <span class="qr-progress-label">${q.progress} / ${q.target}</span>
+        <button class="quest-claim-btn ${q.claimed ? 'claimed' : (done ? '' : 'disabled')}">${q.claimed ? '완료' : '받기'}</button>
+      </div>
+    `;
+    if (done && !q.claimed) {
+      row.querySelector('.quest-claim-btn').addEventListener('click', () => {
+        q.claimed = true;
+        state.gold += q.reward.gold || 0;
+        state.gem += q.reward.gem || 0;
+        save(); refreshCurrencyDisplays(); updateQuestBadge(); buildQuestModal();
+        flashMsg(`퀘스트 완료! ${rewardLabel} 획득`);
+      });
+    }
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('btn-quest').addEventListener('click', () => { buildQuestModal(); document.getElementById('quest-modal').style.display = 'flex'; });
+document.getElementById('quest-modal-close').addEventListener('click', () => {
+  document.getElementById('quest-modal').style.display = 'none';
 });
 
 /* ============================================================
@@ -1550,6 +1638,7 @@ function fireSpecial(angle) {
   game.special.cooldown = game.special.max;
   const sw = getItem(state.equipped.sword);
   spawnPlayerShot(angle, game.specialDmg, true, sw, 7, 12);
+  addQuestProgress('specialUse');
 }
 
 function setupAimJoystick(el, kind, onFire, radius) {
@@ -1715,7 +1804,7 @@ function update(dt) {
         const e = game.enemies[j];
         if (Math.hypot(p.x - e.x, p.y - e.y) < 22) {
           e.hp -= p.dmg; hit = true;
-          if (e.hp <= 0) game.enemies.splice(j, 1);
+          if (e.hp <= 0) { game.enemies.splice(j, 1); addQuestProgress('enemyKill'); }
           break;
         }
       }
@@ -1725,6 +1814,7 @@ function update(dt) {
 
   // 웨이브 클리어 체크
   if (game.mode !== 'boss' && game.spawnQueue <= 0 && game.enemies.length === 0) {
+    addQuestProgress('waveClear');
     if (game.wave >= game.totalWaves) { gameOver(true); return; }
     game.wave++;
     prepareWave();
@@ -1877,9 +1967,10 @@ function gameOver(win) {
     desc.textContent = '수고하셨습니다!';
     reward = game.data.reward;
     state.gold += reward.gold; state.gem += reward.gem;
-    if (game.mode === 'dungeon') state.dungeonCleared = Math.max(state.dungeonCleared, DUNGEONS.indexOf(game.data) + 1);
+    if (game.mode === 'dungeon') { state.dungeonCleared = Math.max(state.dungeonCleared, DUNGEONS.indexOf(game.data) + 1); addQuestProgress('dungeonClear'); }
     if (game.mode === 'boss') {
       state.bossCleared = Math.max(state.bossCleared, BOSSES.indexOf(game.data) + 1);
+      addQuestProgress('bossClear');
       ['rewardItem', 'rewardItem2'].forEach((key) => {
         const itemId = game.data[key];
         if (!itemId) return;
@@ -2417,4 +2508,5 @@ document.querySelector('.lobby-title').addEventListener('click', () => {
 resizeCanvas();
 refreshCurrencyDisplays();
 updateCheckinBadge();
+updateQuestBadge();
 loadPlayerSkin();

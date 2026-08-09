@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>던전 디펜스 - 기지를 지켜라!</title>
-<link rel="stylesheet" href="style.css?v=20260807a">
+<link rel="stylesheet" href="style.css?v=20260807b">
 </head>
 <body>
 
@@ -28,6 +28,11 @@
       <span class="flame-icon"></span>
       <span id="checkin-badge-num">0</span>
       <span class="checkin-ping" id="checkin-ping" style="display:none;"></span>
+    </button>
+    <button class="quest-badge" id="btn-quest">
+      <span class="scroll-icon"></span>
+      <span id="quest-badge-num">0/4</span>
+      <span class="checkin-ping" id="quest-ping" style="display:none;"></span>
     </button>
     <div class="lobby-buttons">
       <button class="lobby-btn start-btn" id="btn-start">
@@ -259,8 +264,18 @@
     </div>
   </div>
 
+  <!-- ===================== 일일 퀘스트 ===================== -->
+  <div id="quest-modal" class="modal" style="display:none;">
+    <div class="modal-card quest-card">
+      <div class="modal-head">일일 퀘스트</div>
+      <p class="quest-sub">매일 자정에 초기화됩니다</p>
+      <div class="quest-list" id="quest-list"></div>
+      <button class="modal-close" id="quest-modal-close">닫기</button>
+    </div>
+  </div>
+
 </div>
 
-<script src="game.js?v=20260807a"></script>
+<script src="game.js?v=20260807b"></script>
 </body>
 </html>
