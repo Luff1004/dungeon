@@ -62,8 +62,27 @@ const DUNGEON_THEMES = [
   { c1: '#9a9ad4', c2: '#4a4a7a', bg1: '#26263d', bg2: '#151524' },
   { c1: '#d47f7f', c2: '#7a2f2f', bg1: '#3d1f1f', bg2: '#240f0f' },
   { c1: '#4a4a52', c2: '#c41e1e', bg1: '#1c1c1e', bg2: '#0a0a0b' },
+  { c1: '#bde8ff', c2: '#3a7aa8', bg1: '#1f333d', bg2: '#101c24' },
+  { c1: '#c9c4e0', c2: '#5a4f7a', bg1: '#2a2438', bg2: '#161220' },
+  { c1: '#c48ae0', c2: '#4a1f6a', bg1: '#2a1a38', bg2: '#150c20' },
+  { c1: '#a08a94', c2: '#5a1a2a', bg1: '#241018', bg2: '#12060c' },
+  { c1: '#a8e07f', c2: '#4a6a1f', bg1: '#26301a', bg2: '#141a0c' },
+  { c1: '#fff26a', c2: '#5a5a7a', bg1: '#2a2a38', bg2: '#151520' },
+  { c1: '#e0c98a', c2: '#7a5a2f', bg1: '#302818', bg2: '#18140c' },
+  { c1: '#8aeaff', c2: '#c47ae0', bg1: '#241f38', bg2: '#120f20' },
+  { c1: '#e8e2d0', c2: '#8a7a5f', bg1: '#302c22', bg2: '#181610' },
+  { c1: '#5ac4d4', c2: '#0f3a5a', bg1: '#0f2430', bg2: '#081218' },
+  { c1: '#ff6a3a', c2: '#8a0a0a', bg1: '#301008', bg2: '#180804' },
+  { c1: '#9a7ad0', c2: '#1a0a2a', bg1: '#180f24', bg2: '#0a0512' },
+  { c1: '#eaf5ff', c2: '#7aa8c4', bg1: '#243038', bg2: '#12181c' },
+  { c1: '#6a8a5a', c2: '#1a2a0a', bg1: '#1a2412', bg2: '#0c1408' },
+  { c1: '#ff2a3a', c2: '#3a0505', bg1: '#1a0808', bg2: '#050000' },
 ];
-const DUNGEON_NAMES = ['초록 숲 입구', '이끼 낀 동굴', '메마른 협곡', '용암 지대', '보랏빛 늪지', '핏빛 신전', '황금 사막', '푸른 빙하', '핏빛 폐허', '심연의 나락'];
+const DUNGEON_NAMES = [
+  '초록 숲 입구', '이끼 낀 동굴', '메마른 협곡', '용암 지대', '보랏빛 늪지', '핏빛 신전', '황금 사막', '푸른 빙하', '핏빛 폐허', '심연의 나락',
+  '서리 협곡', '유령 열차', '거미 소굴', '흑요석 광산', '저주받은 정원', '폭풍의 탑', '잊혀진 서고', '수정 동굴', '뼈의 계곡', '심해 유적',
+  '화산 심장부', '그림자 미궁', '천공의 폐허', '악몽의 늪', '종말의 문',
+];
 
 const DUNGEONS = DUNGEON_NAMES.map((name, i) => ({
   id: i + 1,
@@ -283,7 +302,7 @@ function buildTypeList() {
         <p class="card-title">던전</p>
         <p class="card-sub">웨이브를 막아내고 던전을 정복하라</p>
       </div>
-      <span class="card-tag">${state.dungeonCleared}/10 클리어</span>
+      <span class="card-tag">${state.dungeonCleared}/${DUNGEONS.length} 클리어</span>
     </div>
     <div class="card-wide type-boss" data-nav="boss-list">
       <div class="card-icon"></div>
@@ -319,7 +338,7 @@ function buildDungeonList() {
       <div class="card-icon"></div>
       <div class="card-text">
         <p class="card-title">${i + 1}. ${d.name}</p>
-        <p class="card-sub">웨이브 ${d.waves} · 난이도 ${'★'.repeat(Math.min(5, 1 + Math.floor(i / 2)))}</p>
+        <p class="card-sub">웨이브 ${d.waves} · 난이도 ${'★'.repeat(Math.min(5, 1 + Math.floor(i / 5)))}</p>
       </div>
       ${locked ? `<div class="lock-icon"><div class="shackle"></div><div class="body"></div></div>` : `<span class="card-tag">${i < state.dungeonCleared ? '클리어' : '도전 가능'}</span>`}
     `;
