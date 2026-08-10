@@ -98,6 +98,9 @@ body { background: #0a080d; }
 #type-list .card-wide.type-boss .card-icon { background: radial-gradient(circle at 35% 30%, #ff8a8a, #7a1010); border-radius: 50% 50% 40% 40%; }
 #type-list .card-wide.type-challenge { background: linear-gradient(120deg, #402060, #200f33); }
 #type-list .card-wide.type-challenge .card-icon { background: linear-gradient(160deg, #c37bff, #5a1d8a); clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#type-list .card-wide.type-endless { background: linear-gradient(120deg, #14141c, #05050a); border-color: #6a6a8a55; }
+#type-list .card-wide.type-endless .card-icon { background: radial-gradient(circle, #8a8aff, #1a1a3a); border-radius: 50%; position: relative; overflow: hidden; }
+#type-list .card-wide.type-endless .card-icon::before { content: ''; position: absolute; inset: 30%; border: 3px solid rgba(255,255,255,0.5); border-radius: 50%; border-top-color: transparent; animation: gacha-spin 2.4s linear infinite; }
 
 /* 던전 카드: 난이도에 따라 색 진해짐 */
 .dungeon-card .card-icon { background: linear-gradient(160deg, var(--c1), var(--c2)); border-radius: 12px; }

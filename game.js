@@ -219,6 +219,7 @@ function defaultState() {
     playerSkin: null,
     dailyQuestDate: null,
     dailyQuests: [],
+    bestEndlessWave: 0,
   };
 }
 
@@ -342,7 +343,7 @@ function buildTypeList() {
         <p class="card-title">보스 토벌</p>
         <p class="card-sub">강력한 보스와 1:1로 맞서라</p>
       </div>
-      <span class="card-tag">${state.bossCleared}/5 처치</span>
+      <span class="card-tag">${state.bossCleared}/${BOSSES.length} 처치</span>
     </div>
     <div class="card-wide type-challenge" data-nav="challenge-list">
       <div class="card-icon"></div>
@@ -351,8 +352,17 @@ function buildTypeList() {
         <p class="card-sub">아래로 갈수록 지옥같은 난이도</p>
       </div>
       <span class="card-tag">특별 보상</span>
+    </div>
+    <div class="card-wide type-endless" id="endless-launch">
+      <div class="card-icon"></div>
+      <div class="card-text">
+        <p class="card-title">무한 모드</p>
+        <p class="card-sub">끝없이 몰려오는 적, 얼마나 버틸 수 있을까?</p>
+      </div>
+      <span class="card-tag">최고 웨이브 ${state.bestEndlessWave || 0}</span>
     </div>`;
-  list.querySelectorAll('.card-wide').forEach(el => el.addEventListener('click', () => nav(el.dataset.nav)));
+  list.querySelectorAll('.card-wide[data-nav]').forEach(el => el.addEventListener('click', () => nav(el.dataset.nav)));
+  document.getElementById('endless-launch').addEventListener('click', () => startRun({ mode: 'endless', data: { enemyHp: 24, enemySpeed: 0.4, endless: true } }));
 }
 
 function buildDungeonList() {
@@ -1205,7 +1215,7 @@ function startRun(cfg) {
     specialDmg: Math.max(10, Math.round(swordPow.dmg * 2)),
     specialRange: Math.max(swordPow.range * 2, 180),
     wave: 1,
-    totalWaves: cfg.mode === 'boss' ? 1 : cfg.data.waves,
+    totalWaves: cfg.mode === 'boss' ? 1 : (cfg.mode === 'endless' ? Infinity : cfg.data.waves),
     enemies: [],
     projectiles: [],
     bossProjectiles: [],
@@ -1248,7 +1258,7 @@ function currentEnemyStats() {
 }
 
 function prepareWave() {
-  document.getElementById('wave-label').textContent = `WAVE ${game.wave} / ${game.totalWaves}`;
+  document.getElementById('wave-label').textContent = game.mode === 'endless' ? `WAVE ${game.wave} (무한)` : `WAVE ${game.wave} / ${game.totalWaves}`;
   game.spawnQueue = 4 + game.wave * 2;
   game.spawnTimer = 0;
   game.enemies = [];
@@ -1982,6 +1992,15 @@ function gameOver(win) {
       });
     }
     save();
+  } else if (game.mode === 'endless') {
+    const reached = game.wave;
+    const isRecord = reached > state.bestEndlessWave;
+    if (isRecord) state.bestEndlessWave = reached;
+    reward = { gold: reached * 15, gem: Math.floor(reached / 3) };
+    state.gold += reward.gold; state.gem += reward.gem;
+    save();
+    title.textContent = isRecord ? '신기록 달성!' : '무한 모드 종료';
+    desc.textContent = `도달 웨이브: ${reached} (최고 기록: ${state.bestEndlessWave})`;
   } else {
     title.textContent = '기지가 파괴되었습니다...';
     desc.textContent = '다시 도전해보세요!';
@@ -1991,7 +2010,7 @@ function gameOver(win) {
       <div class="item-thumb" style="width:36px;height:36px;background:${svgToBg(itemThumbSVG(it))} center/70% no-repeat;"></div>
       <span>${it.name}</span>
     </div>`).join('');
-  rewardsEl.innerHTML = win ? `<div class="cur-pill gold"><span class="cur-icon"></span>${reward.gold}</div><div class="cur-pill gem"><span class="cur-icon"></span>${reward.gem}</div>${itemBadges}` : '';
+  rewardsEl.innerHTML = (win || game.mode === 'endless') ? `<div class="cur-pill gold"><span class="cur-icon"></span>${reward.gold}</div><div class="cur-pill gem"><span class="cur-icon"></span>${reward.gem}</div>${itemBadges}` : '';
 }
 
 /* ---------- 렌더링 ---------- */
@@ -1999,9 +2018,9 @@ function gameOver(win) {
 function render() {
   ctxG.clearRect(0, 0, CW, CH);
   const theme = game.data.theme;
-  const t = game.data.hellLevel !== undefined ? game.data.hellLevel / 6 : 0;
-  const bgTop = theme ? theme.bg1 : mixColor('#233d2a', '#3d0a0a', t);
-  const bgBot = theme ? theme.bg2 : mixColor('#14241a', '#1a0505', t);
+  const t = game.mode === 'endless' ? Math.min(1, game.wave / 30) : (game.data.hellLevel !== undefined ? game.data.hellLevel / 6 : 0);
+  const bgTop = theme ? theme.bg1 : mixColor(game.mode === 'endless' ? '#14141c' : '#233d2a', game.mode === 'endless' ? '#3a0a3a' : '#3d0a0a', t);
+  const bgBot = theme ? theme.bg2 : mixColor(game.mode === 'endless' ? '#05050a' : '#14241a', game.mode === 'endless' ? '#1a0518' : '#1a0505', t);
   const grad = ctxG.createLinearGradient(0, 0, 0, CH);
   grad.addColorStop(0, bgTop); grad.addColorStop(1, bgBot);
   ctxG.fillStyle = grad; ctxG.fillRect(0, 0, CW, CH);
