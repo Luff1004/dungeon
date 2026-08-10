@@ -49,6 +49,40 @@ const ITEMS = [
   { id: 'wp_boss_dragon', name: '칠흑룡의 숨결포', cat: 'weapon', rarity: 'mythic', baseDmg: 95, baseRange: 360, shape: 'gun-dragon', aimStyle: 'block', bossExclusive: true, desc: '원조 용도 이 위력을 보면 살짝 부끄러워할 겁니다.' },
   { id: 'wp_boss_genesis', name: '태초의 별빛창', cat: 'weapon', rarity: 'mythic', baseDmg: 120, baseRange: 400, shape: 'gun-genesis', aimStyle: 'trident', bossExclusive: true, desc: '우주 탄생 로열티는 안 받습니다. 무료 나눔이에요.' },
   { id: 'ar_boss_genesis', name: '태초의 화신 갑주', cat: 'armor', rarity: 'mythic', def: 100, shape: 'armor-genesis', bossExclusive: true, desc: '입기만 해도 후광 효과 발동. 인생샷 각입니다.' },
+
+  // 가챠 전용 추가 장비 30종
+  { id: 'sw_wind1', name: '질풍의 검', cat: 'sword', rarity: 'common', baseDmg: 9, baseRange: 58, shape: 'blade-wind', aimStyle: 'dotted', desc: '휘두르면 바람 소리가 납니다. 진짜예요, 믿어보세요.' },
+  { id: 'sw_thorn1', name: '가시 단검', cat: 'sword', rarity: 'common', baseDmg: 7, baseRange: 65, shape: 'blade-thorn', aimStyle: 'dotted', desc: '손잡이도 가시라서 쥐는 사람도 아픕니다.' },
+  { id: 'sw_shadow1', name: '그림자 검', cat: 'sword', rarity: 'rare', baseDmg: 15, baseRange: 68, shape: 'blade-shadow', aimStyle: 'dotted', desc: '어두운 곳에서 잃어버리기 딱 좋습니다.' },
+  { id: 'sw_crystal1', name: '서리 세검', cat: 'sword', rarity: 'rare', baseDmg: 13, baseRange: 75, shape: 'blade-crystal', aimStyle: 'block', desc: '차갑고 예쁘지만 그게 답니다.' },
+  { id: 'sw_bone1', name: '뼈검', cat: 'sword', rarity: 'epic', baseDmg: 22, baseRange: 82, shape: 'blade-bone', aimStyle: 'block', desc: '누구 뼈인지는 아무도 모릅니다.' },
+  { id: 'sw_wind2', name: '폭풍의 대검', cat: 'sword', rarity: 'epic', baseDmg: 26, baseRange: 78, shape: 'blade-wind', aimStyle: 'trident', desc: '너무 크게 휘두르면 본인이 넘어집니다.' },
+  { id: 'sw_shadow2', name: '왕가의 검', cat: 'sword', rarity: 'legendary', baseDmg: 38, baseRange: 95, shape: 'blade-shadow', aimStyle: 'trident', desc: '왕족이 아니어도 들 수 있습니다. 아마도요.' },
+  { id: 'sw_crystal2', name: '수정 검', cat: 'sword', rarity: 'legendary', baseDmg: 42, baseRange: 88, shape: 'blade-crystal', aimStyle: 'block', desc: '깨질까 봐 살살 휘두르게 됩니다.' },
+  { id: 'sw_bone2', name: '태고의 뼈검', cat: 'sword', rarity: 'mythic', baseDmg: 65, baseRange: 105, shape: 'blade-bone', aimStyle: 'trident', desc: '박물관에서 몰래 가져온 건 아닙니다.' },
+  { id: 'sw_thorn2', name: '심연의 가시검', cat: 'sword', rarity: 'mythic', baseDmg: 75, baseRange: 98, shape: 'blade-thorn', aimStyle: 'trident', desc: '만지지 마세요. 진심입니다.' },
+
+  { id: 'ar_scale1', name: '비늘 갑옷', cat: 'armor', rarity: 'common', def: 5, shape: 'armor-scale', desc: '물고기 냄새가 살짝 납니다.' },
+  { id: 'ar_wind1', name: '폭풍 망토', cat: 'armor', rarity: 'common', def: 7, shape: 'armor-wind', desc: '바람 불면 혼자 펄럭입니다. 폼은 확실합니다.' },
+  { id: 'ar_thorn1', name: '가시 갑주', cat: 'armor', rarity: 'rare', def: 11, shape: 'armor-thorn', desc: '포옹은 절대 금지입니다.' },
+  { id: 'ar_crystal1', name: '수정 갑주', cat: 'armor', rarity: 'rare', def: 13, shape: 'armor-crystal', desc: '빛을 받으면 반짝여서 몬스터 눈에도 잘 띕니다.' },
+  { id: 'ar_scale2', name: '비늘 판금', cat: 'armor', rarity: 'epic', def: 20, shape: 'armor-scale', desc: '용의 비늘이라 우기는 사람이 많습니다.' },
+  { id: 'ar_storm1', name: '폭풍기사 갑주', cat: 'armor', rarity: 'epic', def: 24, shape: 'armor-storm', desc: '천둥번개 칠 때 입으면 특히 위험합니다.' },
+  { id: 'ar_thorn2', name: '가시 여왕의 갑주', cat: 'armor', rarity: 'legendary', def: 36, shape: 'armor-thorn', desc: '여왕님도 이거 입고 소파에 못 앉습니다.' },
+  { id: 'ar_crystal2', name: '수정 결정 갑주', cat: 'armor', rarity: 'legendary', def: 40, shape: 'armor-crystal', desc: '가격표를 보면 갑옷이 더 비쌀 것 같습니다.' },
+  { id: 'ar_scale3', name: '태고의 비늘 갑주', cat: 'armor', rarity: 'mythic', def: 58, shape: 'armor-scale', desc: '이 비늘이 어디서 왔는지 아무도 묻지 않기로 했습니다.' },
+  { id: 'ar_storm2', name: '폭풍룡 갑주', cat: 'armor', rarity: 'mythic', def: 63, shape: 'armor-storm', desc: '입는 순간부터 머리카락이 자꾸 섭니다.' },
+
+  { id: 'wp_thorn1', name: '가시 발사기', cat: 'weapon', rarity: 'common', baseDmg: 9, baseRange: 210, shape: 'gun-thorn', aimStyle: 'dotted', desc: '장전할 때 손 조심하세요.' },
+  { id: 'wp_wind1', name: '질풍의 활', cat: 'weapon', rarity: 'common', baseDmg: 11, baseRange: 230, shape: 'gun-wind', aimStyle: 'dotted', desc: '시위 소리가 은근히 멋집니다.' },
+  { id: 'wp_crystal1', name: '수정 저격총', cat: 'weapon', rarity: 'rare', baseDmg: 17, baseRange: 270, shape: 'gun-crystal', aimStyle: 'dotted', desc: '겨냥할 때마다 반짝여서 위치가 들킵니다.' },
+  { id: 'wp_bone1', name: '뼈 투척기', cat: 'weapon', rarity: 'rare', baseDmg: 19, baseRange: 250, shape: 'gun-bone', aimStyle: 'block', desc: '탄약이 떨어지면 그냥 뼈를 주우면 됩니다.' },
+  { id: 'wp_storm1', name: '폭풍 캐논', cat: 'weapon', rarity: 'epic', baseDmg: 28, baseRange: 310, shape: 'gun-storm', aimStyle: 'block', desc: '쏠 때마다 정전기가 옵니다.' },
+  { id: 'wp_thorn2', name: '가시 폭탄발사기', cat: 'weapon', rarity: 'epic', baseDmg: 32, baseRange: 290, shape: 'gun-thorn', aimStyle: 'block', desc: '안전핀은 장식입니다.' },
+  { id: 'wp_crystal2', name: '수정 레일건', cat: 'weapon', rarity: 'legendary', baseDmg: 48, baseRange: 350, shape: 'gun-crystal', aimStyle: 'trident', desc: '충전 시간 동안 커피 한 잔 가능합니다.' },
+  { id: 'wp_storm2', name: '폭풍의 창포', cat: 'weapon', rarity: 'legendary', baseDmg: 52, baseRange: 330, shape: 'gun-storm', aimStyle: 'trident', desc: '쏘고 나면 근처에 비가 옵니다. 우연입니다.' },
+  { id: 'wp_bone2', name: '태고의 뼈대포', cat: 'weapon', rarity: 'mythic', baseDmg: 80, baseRange: 390, shape: 'gun-bone', aimStyle: 'trident', desc: '고고학자들이 보면 기절할 물건입니다.' },
+  { id: 'wp_wind2', name: '종말의 질풍포', cat: 'weapon', rarity: 'mythic', baseDmg: 90, baseRange: 370, shape: 'gun-wind', aimStyle: 'trident', desc: '쏘고 나면 근처 나뭇잎이 다 떨어집니다.' },
 ];
 
 const DUNGEON_THEMES = [
@@ -318,6 +352,21 @@ function itemThumbSVG(item) {
     'gun-dragon': `<path d="M10 30 Q10 18 26 16 L48 22 Q56 26 48 32 L26 30 Q16 34 10 30Z" fill="${col2}"/><circle cx="46" cy="25" r="3" fill="#fff"/><path d="M26 16 L22 8 M30 16 L30 8" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`,
     'gun-genesis': `<path d="M30 4 L36 22 L54 22 L40 32 L46 50 L30 40 L14 50 L20 32 L6 22 L24 22 Z" fill="${col2}"/><circle cx="30" cy="28" r="5" fill="#fff"/>`,
     'armor-genesis': `<path d="M12 18 L30 4 L48 18 L44 34 Q44 52 30 58 Q16 52 16 34 Z" fill="${col2}" stroke="#fff2c9" stroke-width="2"/><path d="M4 24 L16 30 L4 40 Z" fill="${col}"/><path d="M56 24 L44 30 L56 40 Z" fill="${col}"/>`,
+    'blade-wind': `<path d="M30 4 L34 40 L30 48 L26 40 Z" fill="${col2}"/><path d="M18 20 Q30 12 42 20" stroke="${col}" stroke-width="2" fill="none"/><path d="M20 28 Q30 22 40 28" stroke="${col}" stroke-width="2" fill="none"/>`,
+    'blade-thorn': `<path d="M30 4 L34 20 L40 22 L34 26 L36 40 L30 34 L24 40 L26 26 L20 22 L26 20 Z" fill="${col2}"/>`,
+    'blade-shadow': `<path d="M22 4 L38 4 L32 26 L40 48 L26 40 L20 48 L28 24 Z" fill="${col2}" opacity="0.92"/>`,
+    'blade-crystal': `<path d="M30 2 L40 18 L34 30 L30 50 L26 30 L20 18 Z" fill="${col2}"/><path d="M30 2 L34 30 L30 50" stroke="#fff" stroke-width="1" opacity="0.5"/>`,
+    'blade-bone': `<rect x="27" y="6" width="6" height="34" rx="3" fill="${col2}"/><circle cx="30" cy="6" r="5" fill="${col2}"/><rect x="20" y="40" width="20" height="6" rx="3" fill="#e8e2d0"/>`,
+    'armor-scale': `<path d="M16 14 L30 6 L44 14 L44 34 Q44 48 30 54 Q16 48 16 34 Z" fill="${col2}"/><path d="M20 20 a4 4 0 0 1 8 0 M28 20 a4 4 0 0 1 8 0 M36 20 a4 4 0 0 1 8 0 M24 28 a4 4 0 0 1 8 0 M32 28 a4 4 0 0 1 8 0" stroke="${col}" stroke-width="1.5" fill="none"/>`,
+    'armor-wind': `<path d="M20 10 Q30 4 40 10 L44 30 Q30 50 16 30 Z" fill="${col2}" opacity="0.88"/><path d="M18 22 Q30 16 42 22" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.6"/>`,
+    'armor-thorn': `<path d="M16 14 L30 6 L44 14 L42 44 Q30 54 18 44 Z" fill="${col2}"/><path d="M16 20 L10 16 M44 20 L50 16 M18 34 L11 32 M42 34 L49 32" stroke="${col2}" stroke-width="3"/>`,
+    'armor-crystal': `<path d="M30 4 L46 18 L40 50 L20 50 L14 18 Z" fill="${col2}"/><path d="M30 4 L30 50 M14 18 L46 18" stroke="#fff" stroke-width="1" opacity="0.4"/>`,
+    'armor-storm': `<path d="M16 14 L30 6 L44 14 L44 32 Q44 48 30 54 Q16 48 16 32 Z" fill="${col2}"/><path d="M32 14 L24 28 L30 28 L26 42 L38 24 L31 24 Z" fill="${col}"/>`,
+    'gun-thorn': `<rect x="12" y="24" width="34" height="8" rx="3" fill="${col2}"/><path d="M46 22 L52 28 L46 34 Z" fill="${col}"/><path d="M18 24 L16 18 M26 24 L24 18 M34 24 L32 18" stroke="${col2}" stroke-width="2"/>`,
+    'gun-wind': `<path d="M12 30 Q30 14 48 30" stroke="${col2}" stroke-width="5" fill="none"/><path d="M18 30 L14 40 M48 30 L52 40" stroke="${col}" stroke-width="3"/>`,
+    'gun-crystal': `<path d="M10 28 L30 20 L50 28 L30 36 Z" fill="${col2}"/><circle cx="30" cy="28" r="4" fill="#fff"/>`,
+    'gun-storm': `<rect x="14" y="24" width="30" height="9" rx="3" fill="${col2}"/><path d="M40 16 L32 30 L38 30 L30 44 L46 26 L39 26 Z" fill="${col}"/>`,
+    'gun-bone': `<rect x="14" y="26" width="34" height="6" rx="3" fill="${col2}"/><circle cx="14" cy="29" r="6" fill="#e8e2d0"/><circle cx="48" cy="29" r="6" fill="#e8e2d0"/>`,
   };
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="100%" height="100%">${shapes[item.shape] || ''}</svg>`;
 }
@@ -2547,11 +2596,12 @@ function activateCheatCode() {
     if (state.inventory[id].level < 1) state.inventory[id].level = 1;
   });
   state.gold += 1000000000;
+  state.gem += 1000000000;
   state.dungeonCleared = DUNGEONS.length - 1;
   save();
   refreshCurrencyDisplays();
   updateCheckinBadge();
-  flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드 10억 + 전 던전 해금 ✦');
+  flashMsg('✦ 개발자 코드 발동! 전 장비 획득 + 골드/마력석 10억 + 전 던전 해금 ✦');
 }
 
 let cheatBuffer = '';
