@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>던전 디펜스 - 기지를 지켜라!</title>
-<link rel="stylesheet" href="style.css?v=20260807c">
+<link rel="stylesheet" href="style.css?v=20260807d">
 </head>
 <body>
 
@@ -44,6 +44,10 @@
       </button>
       <button class="lobby-btn shop-btn" data-nav="shop">
         <span class="btn-label">상점</span>
+      </button>
+      <button class="lobby-btn achievement-btn" id="btn-achievements">
+        <span class="btn-label">업적</span>
+        <span class="achv-count" id="achv-count">0/0</span>
       </button>
     </div>
   </section>
@@ -274,8 +278,18 @@
     </div>
   </div>
 
+  <!-- ===================== 업적 ===================== -->
+  <div id="achv-modal" class="modal" style="display:none;">
+    <div class="modal-card quest-card">
+      <div class="modal-head">업적</div>
+      <p class="quest-sub">영구적으로 달성하는 목표입니다</p>
+      <div class="quest-list" id="achv-list"></div>
+      <button class="modal-close" id="achv-modal-close">닫기</button>
+    </div>
+  </div>
+
 </div>
 
-<script src="game.js?v=20260807c"></script>
+<script src="game.js?v=20260807d"></script>
 </body>
 </html>

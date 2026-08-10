@@ -220,6 +220,8 @@ function defaultState() {
     dailyQuestDate: null,
     dailyQuests: [],
     bestEndlessWave: 0,
+    totalGachaPulls: 0,
+    achievementsClaimed: {},
   };
 }
 
@@ -256,7 +258,7 @@ function itemPower(id) {
 function nav(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screenId).classList.add('active');
-  if (screenId === 'lobby') { refreshCurrencyDisplays(); updateCheckinBadge(); updateQuestBadge(); }
+  if (screenId === 'lobby') { refreshCurrencyDisplays(); updateCheckinBadge(); updateQuestBadge(); updateAchievementBadge(); }
   if (screenId === 'type-select') buildTypeList();
   if (screenId === 'dungeon-list') buildDungeonList();
   if (screenId === 'boss-list') buildBossList();
@@ -960,6 +962,7 @@ function doGachaPull(tier, count) {
   const results = [];
   for (let i = 0; i < count; i++) results.push(rollGachaOnce(tier));
   addQuestProgress('gachaPull', count);
+  state.totalGachaPulls = (state.totalGachaPulls || 0) + count;
   save(); refreshCurrencyDisplays(); buildGacha();
   showGachaResults(results);
 }
@@ -1156,6 +1159,65 @@ function buildQuestModal() {
 document.getElementById('btn-quest').addEventListener('click', () => { buildQuestModal(); document.getElementById('quest-modal').style.display = 'flex'; });
 document.getElementById('quest-modal-close').addEventListener('click', () => {
   document.getElementById('quest-modal').style.display = 'none';
+});
+
+/* ---------------- 업적 ---------------- */
+
+const ACHIEVEMENTS = [
+  { id: 'first_dungeon', desc: '첫 던전 클리어', reward: { gold: 100 }, check: (s) => s.dungeonCleared >= 1 },
+  { id: 'dungeon10', desc: '던전 10개 클리어', reward: { gold: 500 }, check: (s) => s.dungeonCleared >= 10 },
+  { id: 'dungeon_all', desc: `던전 전체(${DUNGEONS.length}개) 클리어`, reward: { gold: 2000, gem: 20 }, check: (s) => s.dungeonCleared >= DUNGEONS.length },
+  { id: 'first_boss', desc: '첫 보스 처치', reward: { gold: 150 }, check: (s) => s.bossCleared >= 1 },
+  { id: 'boss_all', desc: `보스 전체(${BOSSES.length}종) 처치`, reward: { gold: 1500, gem: 15 }, check: (s) => s.bossCleared >= BOSSES.length },
+  { id: 'gacha10', desc: '가챠 10회 뽑기', reward: { gold: 200 }, check: (s) => (s.totalGachaPulls || 0) >= 10 },
+  { id: 'gacha100', desc: '가챠 100회 뽑기', reward: { gold: 1000, gem: 10 }, check: (s) => (s.totalGachaPulls || 0) >= 100 },
+  { id: 'awaken1', desc: '장비 완전 각성 1회 달성', reward: { gold: 300 }, check: (s) => Object.values(s.inventory).some((i) => i.awakened.length >= HEX_TOTAL) },
+  { id: 'endless20', desc: '무한 모드 웨이브 20 도달', reward: { gold: 400 }, check: (s) => (s.bestEndlessWave || 0) >= 20 },
+  { id: 'endless50', desc: '무한 모드 웨이브 50 도달', reward: { gold: 1000, gem: 10 }, check: (s) => (s.bestEndlessWave || 0) >= 50 },
+  { id: 'artist', desc: '내 캐릭터 직접 그리기 완료', reward: { gold: 100 }, check: (s) => !!s.playerSkin },
+  { id: 'streak7', desc: '7일 연속 출석', reward: { gold: 300 }, check: (s) => (s.checkInStreak || 0) >= 7 },
+];
+
+function updateAchievementBadge() {
+  const claimedCount = Object.keys(state.achievementsClaimed).length;
+  document.getElementById('achv-count').textContent = `${claimedCount}/${ACHIEVEMENTS.length}`;
+}
+
+function buildAchievementModal() {
+  const list = document.getElementById('achv-list');
+  list.innerHTML = '';
+  ACHIEVEMENTS.forEach((a) => {
+    const claimed = !!state.achievementsClaimed[a.id];
+    const done = a.check(state);
+    const row = document.createElement('div');
+    row.className = 'quest-row' + (done ? ' done' : '');
+    const rewardLabel = [a.reward.gold ? `${a.reward.gold}G` : '', a.reward.gem ? `${a.reward.gem}마력석` : ''].filter(Boolean).join(' + ');
+    row.innerHTML = `
+      <div class="qr-top">
+        <span class="qr-desc">${a.desc}</span>
+        <span class="qr-reward">${rewardLabel}</span>
+      </div>
+      <div class="qr-bottom">
+        <span class="qr-progress-label">${done ? '달성 완료' : '진행 중'}</span>
+        <button class="quest-claim-btn ${claimed ? 'claimed' : (done ? '' : 'disabled')}">${claimed ? '완료' : '받기'}</button>
+      </div>
+    `;
+    if (done && !claimed) {
+      row.querySelector('.quest-claim-btn').addEventListener('click', () => {
+        state.achievementsClaimed[a.id] = true;
+        state.gold += a.reward.gold || 0;
+        state.gem += a.reward.gem || 0;
+        save(); refreshCurrencyDisplays(); updateAchievementBadge(); buildAchievementModal();
+        flashMsg(`업적 달성! ${rewardLabel} 획득`);
+      });
+    }
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('btn-achievements').addEventListener('click', () => { buildAchievementModal(); document.getElementById('achv-modal').style.display = 'flex'; });
+document.getElementById('achv-modal-close').addEventListener('click', () => {
+  document.getElementById('achv-modal').style.display = 'none';
 });
 
 /* ============================================================
@@ -2528,4 +2590,5 @@ resizeCanvas();
 refreshCurrencyDisplays();
 updateCheckinBadge();
 updateQuestBadge();
+updateAchievementBadge();
 loadPlayerSkin();
