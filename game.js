@@ -1836,27 +1836,44 @@ const FIRE_PATTERNS = {
   spread5: { count: 5, spreadDeg: 34, speed: 8, r: 5 },
   volley: { count: 3, spreadDeg: 6, speed: 10, r: 5, volley: true, volleyGap: 0.09 },
 };
+// 최근에 추가된 신규 무기 모양에만 적용 (기존 무기는 원래 발사 방식 그대로 유지 - 혼동 방지)
 const SHAPE_FIRE_MAP = {
-  'gun-sling': 'precise', 'gun-cross': 'precise', 'gun-crystal': 'precise', 'gun-glacier': 'precise',
-  'blade-straight': 'precise', 'blade-curve': 'precise', 'blade-crystal': 'precise',
-  'gun-cannon': 'heavy', 'gun-storm': 'heavy', 'gun-blaze': 'heavy', 'gun-spike': 'heavy',
-  'blade-flame': 'heavy', 'blade-bone': 'heavy',
-  'gun-fang': 'dual', 'gun-arc': 'dual', 'gun-orb': 'dual', 'blade-thorn': 'dual', 'blade-shadow': 'dual',
-  'gun-laser': 'spread3', 'gun-star': 'spread3', 'gun-wraith': 'spread3', 'gun-genesis': 'spread3',
-  'gun-nova': 'spread3', 'blade-holy': 'spread3', 'blade-void': 'spread3',
-  'gun-dragon': 'spread5', 'gun-vortex': 'spread5',
-  'gun-thorn': 'volley', 'gun-wind': 'volley', 'gun-comet': 'volley', 'gun-venom': 'volley', 'blade-wind': 'volley',
+  'gun-crystal': 'precise', 'gun-glacier': 'precise', 'blade-crystal': 'precise', 'gun-bone': 'precise',
+  'gun-storm': 'heavy', 'gun-blaze': 'heavy', 'gun-spike': 'heavy', 'blade-bone': 'heavy',
+  'gun-fang': 'dual', 'gun-arc': 'dual', 'gun-orb': 'dual', 'blade-thorn': 'dual',
+  'gun-nova': 'spread3', 'blade-shadow': 'spread3', 'gun-thorn': 'spread3',
+  'gun-vortex': 'spread5', 'gun-comet': 'spread5',
+  'gun-wind': 'volley', 'gun-venom': 'volley', 'blade-wind': 'volley',
 };
 const FIRE_DMG_MULT = { 1: 1, 2: 0.65, 3: 0.55, 5: 0.4 };
 
 function getFirePattern(item) {
-  return FIRE_PATTERNS[SHAPE_FIRE_MAP[item.shape]] || FIRE_PATTERNS.precise;
+  const fam = SHAPE_FIRE_MAP[item.shape];
+  return fam ? FIRE_PATTERNS[fam] : null;
 }
 
 function spawnPlayerShot(angle, dmg, special, item, holdSec) {
-  const fp = getFirePattern(item);
-  const style = item.aimStyle || 'dotted';
   const color = RARITIES[item.rarity].color;
+  const chargeT0 = Math.min(1, (holdSec || 0) / 0.9);
+  const chargeMult0 = 1 + chargeT0 * 0.7;
+  const fp = getFirePattern(item);
+  if (!fp) {
+    // 기존 무기: 원래대로 단발, aimStyle이 trident면 3방향 부채꼴
+    const style = item.aimStyle || 'dotted';
+    const speed = special ? 7 : 9;
+    const r = (special ? 12 : 6) * (1 + chargeT0 * 0.6);
+    if (chargeT0 >= 0.85) spawnBurstEffect(game.player.x, game.player.y, color);
+    if (style === 'trident') {
+      [-0.16, 0, 0.16].forEach((off) => {
+        const a = angle + off;
+        game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, dmg: Math.round(dmg * 0.6 * chargeMult0), special, r, style, color });
+      });
+    } else {
+      game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, dmg: Math.round(dmg * chargeMult0), special, r, style, color });
+    }
+    return;
+  }
+  const style = item.aimStyle || 'dotted';
   const chargeT = Math.min(1, (holdSec || 0) / 0.9); // 0.9초 이상 누르면 완전 충전
   const chargeMult = 1 + chargeT * 0.7; // 최대 1.7배 데미지
   const perDmg = Math.max(1, Math.round(dmg * (FIRE_DMG_MULT[fp.count] || 0.5) * chargeMult));
@@ -2464,10 +2481,51 @@ function drawAimIndicator() {
   if (!game.aim || !game.aim.active) return;
   const kind = game.aim.kind;
   const activeItem = kind === 'special' ? getItem(state.equipped.sword) : getItem(state.equipped.weapon);
-  const style = activeItem.aimStyle || 'dotted';
   const length = kind === 'special' ? game.specialRange : game.playerRange;
   const px = game.player.x, py = game.player.y, ang = game.aim.angle;
+  const famName = SHAPE_FIRE_MAP[activeItem.shape];
   ctxG.save();
+  if (famName) {
+    // 신규 무기: 실제 발사 패턴(개수/퍼짐)에 맞춰 조준선도 달라짐
+    if (famName === 'heavy') {
+      ctxG.translate(px, py); ctxG.rotate(ang);
+      ctxG.fillStyle = 'rgba(255,255,255,0.24)'; ctxG.strokeStyle = 'rgba(255,255,255,0.6)'; ctxG.lineWidth = 1.5;
+      ctxG.beginPath(); ctxG.roundRect(16, -13, length - 16, 26, 7); ctxG.fill(); ctxG.stroke();
+    } else if (famName === 'precise') {
+      ctxG.strokeStyle = 'rgba(255,255,255,0.8)';
+      ctxG.setLineDash([9, 6]); ctxG.lineWidth = 1.8;
+      ctxG.beginPath(); ctxG.moveTo(px, py); ctxG.lineTo(px + Math.cos(ang) * length, py + Math.sin(ang) * length); ctxG.stroke();
+    } else if (famName === 'dual') {
+      ctxG.strokeStyle = 'rgba(255,255,255,0.75)';
+      ctxG.setLineDash([6, 8]); ctxG.lineWidth = 2.2;
+      [-0.09, 0.09].forEach((off) => {
+        const a = ang + off;
+        ctxG.beginPath(); ctxG.moveTo(px, py); ctxG.lineTo(px + Math.cos(a) * length * 0.95, py + Math.sin(a) * length * 0.95); ctxG.stroke();
+      });
+    } else if (famName === 'spread3') {
+      ctxG.strokeStyle = 'rgba(255,255,255,0.75)';
+      ctxG.setLineDash([6, 8]); ctxG.lineWidth = 2;
+      [-0.16, 0, 0.16].forEach((off) => {
+        const a = ang + off;
+        ctxG.beginPath(); ctxG.moveTo(px, py); ctxG.lineTo(px + Math.cos(a) * length * 0.92, py + Math.sin(a) * length * 0.92); ctxG.stroke();
+      });
+    } else if (famName === 'spread5') {
+      ctxG.strokeStyle = 'rgba(255,255,255,0.7)';
+      ctxG.setLineDash([5, 7]); ctxG.lineWidth = 1.8;
+      [-0.3, -0.15, 0, 0.15, 0.3].forEach((off) => {
+        const a = ang + off;
+        ctxG.beginPath(); ctxG.moveTo(px, py); ctxG.lineTo(px + Math.cos(a) * length * 0.85, py + Math.sin(a) * length * 0.85); ctxG.stroke();
+      });
+    } else if (famName === 'volley') {
+      ctxG.strokeStyle = 'rgba(200,225,255,0.8)';
+      ctxG.setLineDash([3, 5]); ctxG.lineWidth = 2.6;
+      ctxG.beginPath(); ctxG.moveTo(px, py); ctxG.lineTo(px + Math.cos(ang) * length, py + Math.sin(ang) * length); ctxG.stroke();
+    }
+    ctxG.restore();
+    return;
+  }
+  // 기존 무기: 원래 조준선 그대로 유지
+  const style = activeItem.aimStyle || 'dotted';
   if (style === 'dotted') {
     ctxG.strokeStyle = 'rgba(255,255,255,0.75)';
     ctxG.setLineDash([7, 9]); ctxG.lineWidth = 2.4;
