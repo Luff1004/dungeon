@@ -278,6 +278,8 @@ const BOSSES = [
     big: { type: 'multiExpand', count: 5, dmg: 10, startR: 18, endR: 75, duration: 2.0, interval: 4.6, telegraphT: 0.4 },
     reward: { gold: 8500, gem: 130 }, rewardItem: 'wp_boss_hell3', rewardItem2: 'ar_boss_hell3' },
 ];
+// HELL DIFFICULTY 보스는 체력 66%/33%에서 각성(공격 주기 단축)하고 잡몹을 소환한다
+BOSSES.slice(10).forEach((b) => { b.hellTier = true; });
 
 const CHALLENGE_NAMES = ['수습 시험', '전사의 길', '베테랑의 시련', '악몽의 미로', '심판의 방', '지옥문', '진 지옥'];
 const CHALLENGES = CHALLENGE_NAMES.map((name, i) => ({
@@ -1504,11 +1506,33 @@ function spawnBoss(b) {
   game.boss = {
     def: b, x: CW / 2, y: 90, hp: b.hp, maxHp: b.hp, atkTimer: 1.5, telegraph: null, dashTarget: null,
     wanderPhase: Math.random() * Math.PI * 2,
-    chaseSpeed: 1.1 + Math.random() * 0.6,
+    chaseSpeed: (b.hellTier ? 1.6 : 1.1) + Math.random() * 0.6,
     bigTimer: b.big ? 4.0 : null, bigPending: null, bigActive: null,
+    phase: 1, speedMult: 1, minionTimer: b.hellTier ? 3.0 : null,
   };
   document.getElementById('boss-name').textContent = b.name;
   document.getElementById('wave-label').textContent = '보스전 · ' + b.patternLabel;
+}
+
+function spawnHellMinion() {
+  const zone = getZone();
+  const baseX = Math.max(30, Math.min(CW - 30, zone.cx + (Math.random() - 0.5) * zone.w * 1.7));
+  const hp = 40 + (game.boss ? game.boss.def.id : 11) * 4;
+  game.enemies.push({
+    type: 'normal', x: baseX, baseX, y: -30, age: 0,
+    hp, maxHp: hp, speed: 0.5 + Math.random() * 0.2, color: '#ff3b3b', resolved: false,
+    drift: (Math.random() - 0.5) * 40, wobbleAmp: 16, wobbleFreq: 1.2, wobblePhase: Math.random() * Math.PI * 2,
+  });
+}
+
+function triggerHellPhase(b) {
+  b.phase++;
+  b.speedMult = Math.max(0.45, b.speedMult - 0.25);
+  b.atkTimer = Math.min(b.atkTimer, 0.4);
+  if (b.bigTimer !== null) b.bigTimer = Math.min(b.bigTimer, 0.6);
+  game.hitFlash = Math.max(game.hitFlash, 0.6);
+  flashMsg(`${b.def.name}이(가) 각성했다!`);
+  for (let i = 0; i < 2; i++) spawnHellMinion();
 }
 
 /* ---- 보스 전용 대형 패턴 (각자 완전히 다른 방식) ---- */
@@ -2086,13 +2110,17 @@ function update(dt) {
     p.x += p.vx * dt * 60; p.y += p.vy * dt * 60;
     if (p.x < -20 || p.x > CW + 20 || p.y < -20 || p.y > CH + 20) { game.projectiles.splice(i, 1); continue; }
     let hit = false;
-    if (game.boss) {
-      if (Math.hypot(p.x - game.boss.x, p.y - game.boss.y) < 34) {
-        game.boss.hp -= p.dmg; hit = true;
-        updateBossHp();
-        if (game.boss.hp <= 0) { gameOver(true); return; }
+    if (game.boss && Math.hypot(p.x - game.boss.x, p.y - game.boss.y) < 34) {
+      game.boss.hp -= p.dmg; hit = true;
+      updateBossHp();
+      if (game.boss.hp <= 0) { gameOver(true); return; }
+      const b = game.boss;
+      if (b.def.hellTier) {
+        if (b.phase === 1 && b.hp <= b.maxHp * 0.66) triggerHellPhase(b);
+        else if (b.phase === 2 && b.hp <= b.maxHp * 0.33) triggerHellPhase(b);
       }
-    } else {
+    }
+    if (!hit) {
       for (let j = game.enemies.length - 1; j >= 0; j--) {
         const e = game.enemies[j];
         if (Math.hypot(p.x - e.x, p.y - e.y) < 22) {
@@ -2133,7 +2161,7 @@ function update(dt) {
         b.telegraph = null;
       }
     } else if (b.atkTimer <= 0) {
-      b.atkTimer = b.def.atkInterval || 1.7;
+      b.atkTimer = (b.def.atkInterval || 1.7) * b.speedMult;
       startBossTelegraph(b);
     }
     if (b.bigPending) {
@@ -2148,8 +2176,15 @@ function update(dt) {
     } else if (b.bigTimer !== null) {
       b.bigTimer -= dt;
       if (b.bigTimer <= 0) {
-        b.bigTimer = b.def.big.interval;
+        b.bigTimer = b.def.big.interval * b.speedMult;
         b.bigPending = { t: b.def.big.telegraphT || 0.5 };
+      }
+    }
+    if (b.minionTimer !== null) {
+      b.minionTimer -= dt;
+      if (b.minionTimer <= 0) {
+        b.minionTimer = 4.5 * b.speedMult;
+        spawnHellMinion();
       }
     }
   }
