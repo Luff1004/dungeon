@@ -83,6 +83,45 @@ const ITEMS = [
   { id: 'wp_storm2', name: '폭풍의 창포', cat: 'weapon', rarity: 'legendary', baseDmg: 52, baseRange: 330, shape: 'gun-storm', aimStyle: 'trident', desc: '쏘고 나면 근처에 비가 옵니다. 우연입니다.' },
   { id: 'wp_bone2', name: '태고의 뼈대포', cat: 'weapon', rarity: 'mythic', baseDmg: 80, baseRange: 390, shape: 'gun-bone', aimStyle: 'trident', desc: '고고학자들이 보면 기절할 물건입니다.' },
   { id: 'wp_wind2', name: '종말의 질풍포', cat: 'weapon', rarity: 'mythic', baseDmg: 90, baseRange: 370, shape: 'gun-wind', aimStyle: 'trident', desc: '쏘고 나면 근처 나뭇잎이 다 떨어집니다.' },
+
+  // 가챠 전용 무기 24종
+  { id: 'wp_spike1', name: '가시 곤봉포', cat: 'weapon', rarity: 'common', baseDmg: 9, baseRange: 205, shape: 'gun-spike', aimStyle: 'dotted', desc: '들고만 있어도 위협적으로 보입니다.' },
+  { id: 'wp_orb1', name: '빛나는 구슬총', cat: 'weapon', rarity: 'common', baseDmg: 8, baseRange: 195, shape: 'gun-orb', aimStyle: 'dotted', desc: '예쁘긴 한데 그게 다입니다.' },
+  { id: 'wp_fang1', name: '송곳니 발사기', cat: 'weapon', rarity: 'common', baseDmg: 10, baseRange: 210, shape: 'gun-fang', aimStyle: 'dotted', desc: '이빨 요정에게는 절대 팔지 마세요.' },
+  { id: 'wp_arc1', name: '굽은 활', cat: 'weapon', rarity: 'common', baseDmg: 9, baseRange: 220, shape: 'gun-arc', aimStyle: 'dotted', desc: '똑바로 안 날아가도 성능은 정상입니다.' },
+  { id: 'wp_comet1', name: '유성 투척기', cat: 'weapon', rarity: 'common', baseDmg: 11, baseRange: 200, shape: 'gun-comet', aimStyle: 'dotted', desc: '유성이라기엔 좀 작습니다.' },
+  { id: 'wp_vortex1', name: '소용돌이포', cat: 'weapon', rarity: 'rare', baseDmg: 16, baseRange: 250, shape: 'gun-vortex', aimStyle: 'block', desc: '어지러워서 3발 이상 연속 발사 비추천.' },
+  { id: 'wp_blaze1', name: '불꽃 발사기', cat: 'weapon', rarity: 'rare', baseDmg: 17, baseRange: 260, shape: 'gun-blaze', aimStyle: 'block', desc: '손잡이가 좀 뜨겁습니다. 참으세요.' },
+  { id: 'wp_glacier1', name: '빙하 파편총', cat: 'weapon', rarity: 'rare', baseDmg: 15, baseRange: 270, shape: 'gun-glacier', aimStyle: 'dotted', desc: '겨울에 쓰면 그냥 눈싸움 같습니다.' },
+  { id: 'wp_venom1', name: '독액 분사기', cat: 'weapon', rarity: 'rare', baseDmg: 18, baseRange: 240, shape: 'gun-venom', aimStyle: 'dotted', desc: '바람 부는 방향 꼭 확인하세요.' },
+  { id: 'wp_nova1', name: '소형 초신성포', cat: 'weapon', rarity: 'rare', baseDmg: 19, baseRange: 255, shape: 'gun-nova', aimStyle: 'block', desc: '소형이라고 우습게 보면 안 됩니다.' },
+  { id: 'wp_spike2', name: '대형 가시포', cat: 'weapon', rarity: 'epic', baseDmg: 28, baseRange: 300, shape: 'gun-spike', aimStyle: 'block', desc: '수납할 때가 제일 힘듭니다.' },
+  { id: 'wp_orb2', name: '구속의 구슬포', cat: 'weapon', rarity: 'epic', baseDmg: 27, baseRange: 290, shape: 'gun-orb', aimStyle: 'block', desc: '한번 맞으면 잊기 힘든 그런 느낌입니다.' },
+  { id: 'wp_fang2', name: '맹수의 송곳니포', cat: 'weapon', rarity: 'epic', baseDmg: 30, baseRange: 285, shape: 'gun-fang', aimStyle: 'block', desc: '으르렁 소리는 옵션입니다.' },
+  { id: 'wp_arc2', name: '전쟁궁', cat: 'weapon', rarity: 'epic', baseDmg: 29, baseRange: 310, shape: 'gun-arc', aimStyle: 'block', desc: '평화를 위해 만들어졌다는 건 거짓말입니다.' },
+  { id: 'wp_comet2', name: '낙성포', cat: 'weapon', rarity: 'epic', baseDmg: 32, baseRange: 295, shape: 'gun-comet', aimStyle: 'block', desc: '하늘에서 별이 떨어지는 게 아니라 이게 떨어집니다.' },
+  { id: 'wp_vortex2', name: '심연의 소용돌이포', cat: 'weapon', rarity: 'legendary', baseDmg: 48, baseRange: 345, shape: 'gun-vortex', aimStyle: 'trident', desc: '빨려 들어가지 않게 발판을 꽉 잡으세요.' },
+  { id: 'wp_blaze2', name: '화염지옥포', cat: 'weapon', rarity: 'legendary', baseDmg: 50, baseRange: 335, shape: 'gun-blaze', aimStyle: 'trident', desc: '보증서에 화상 책임은 없다고 적혀 있습니다.' },
+  { id: 'wp_glacier2', name: '절대영도포', cat: 'weapon', rarity: 'legendary', baseDmg: 46, baseRange: 355, shape: 'gun-glacier', aimStyle: 'trident', desc: '쏘고 나면 주변 온도가 살짝 이상해집니다.' },
+  { id: 'wp_venom2', name: '맹독지옥포', cat: 'weapon', rarity: 'legendary', baseDmg: 47, baseRange: 340, shape: 'gun-venom', aimStyle: 'trident', desc: '해독제는 따로 판매하지 않습니다.' },
+  { id: 'wp_nova2', name: '초신성포', cat: 'weapon', rarity: 'legendary', baseDmg: 52, baseRange: 350, shape: 'gun-nova', aimStyle: 'trident', desc: '발사 순간만큼은 온 세상이 조용해집니다.' },
+  { id: 'wp_spike3', name: '태초의 가시창포', cat: 'weapon', rarity: 'mythic', baseDmg: 85, baseRange: 380, shape: 'gun-spike', aimStyle: 'trident', desc: '태초부터 이렇게 뾰족했다고 전해집니다.' },
+  { id: 'wp_orb3', name: '창세의 구슬포', cat: 'weapon', rarity: 'mythic', baseDmg: 88, baseRange: 390, shape: 'gun-orb', aimStyle: 'trident', desc: '세상이 시작될 때 같이 만들어졌다고 합니다. 아마도요.' },
+  { id: 'wp_fang3', name: '종말의 송곳니포', cat: 'weapon', rarity: 'mythic', baseDmg: 92, baseRange: 375, shape: 'gun-fang', aimStyle: 'trident', desc: '이걸 쓰면 정말 끝을 보게 됩니다.' },
+  { id: 'wp_arc3', name: '신화의 대궁', cat: 'weapon', rarity: 'mythic', baseDmg: 90, baseRange: 400, shape: 'gun-arc', aimStyle: 'trident', desc: '신화 속 영웅도 이거 드는 건 힘들어했답니다.' },
+
+  // 보스 전용 무기 5종 (기존 보상에 추가)
+  { id: 'wp_boss_slime', name: '젤리핵 융합포', cat: 'weapon', rarity: 'mythic', baseDmg: 80, baseRange: 360, shape: 'gun-comet', aimStyle: 'trident', bossExclusive: true, desc: '슬라임 여왕의 핵을 압축해 만든 병기입니다.' },
+  { id: 'wp_boss_witch', name: '저주받은 독액포', cat: 'weapon', rarity: 'mythic', baseDmg: 95, baseRange: 350, shape: 'gun-venom', aimStyle: 'trident', bossExclusive: true, desc: '독전 마녀 로자린이 직접 조제한 맹독을 쏩니다.' },
+  { id: 'wp_boss_ice', name: '절대영도의 창', cat: 'weapon', rarity: 'mythic', baseDmg: 98, baseRange: 370, shape: 'gun-glacier', aimStyle: 'trident', bossExclusive: true, desc: '빙결 여제 시렌의 냉기가 그대로 담겨 있습니다.' },
+  { id: 'wp_boss_thunder', name: '천벌의 낙뢰포', cat: 'weapon', rarity: 'mythic', baseDmg: 100, baseRange: 365, shape: 'gun-vortex', aimStyle: 'trident', bossExclusive: true, desc: '뇌전 폭군 자칸의 분노가 응축되어 있습니다.' },
+  { id: 'wp_boss_hunter', name: '심연의 사냥포', cat: 'weapon', rarity: 'mythic', baseDmg: 102, baseRange: 355, shape: 'gun-blaze', aimStyle: 'trident', bossExclusive: true, desc: '심연의 사냥꾼 크로바가 사냥감을 놓친 적 없는 무기.' },
+
+  // 지옥 난이도 보스 전용 장비 3종
+  { id: 'wp_boss_hell1', name: '천개의 손이 쥔 창', cat: 'weapon', rarity: 'mythic', baseDmg: 110, baseRange: 400, shape: 'gun-nova', aimStyle: 'trident', bossExclusive: true, desc: '손이 너무 많아서 정작 본인도 헷갈려합니다.' },
+  { id: 'wp_boss_hell2', name: '심판의 나팔포', cat: 'weapon', rarity: 'mythic', baseDmg: 115, baseRange: 390, shape: 'gun-storm', aimStyle: 'trident', bossExclusive: true, desc: '불고 나면 온 던전이 잠시 조용해집니다.' },
+  { id: 'wp_boss_hell3', name: '태초 이전의 파편', cat: 'weapon', rarity: 'mythic', baseDmg: 125, baseRange: 410, shape: 'gun-crystal', aimStyle: 'trident', bossExclusive: true, desc: '세상이 생기기도 전부터 있었다고 전해집니다.' },
+  { id: 'ar_boss_hell3', name: '태초 이전의 갑주', cat: 'armor', rarity: 'mythic', def: 110, shape: 'armor-thorn', bossExclusive: true, desc: '가시 하나하나가 시간보다 오래됐습니다.' },
 ];
 
 const DUNGEON_THEMES = [
@@ -162,7 +201,7 @@ const BOSSES = [
   { id: 1, name: '슬라임 여왕', hp: 500, color1: '#7fe08a', color2: '#2f8a45', shape: 'slime',
     pattern: 'single', patternLabel: '단발 조준탄 + 튀는 젤리 폭탄', atkInterval: 1.7,
     big: { type: 'bounce', dmg: 24, interval: 6.0, telegraphT: 0.5 },
-    reward: { gold: 300, gem: 8 }, rewardItem: 'sw_curve' },
+    reward: { gold: 300, gem: 8 }, rewardItem: 'sw_curve', rewardItem2: 'wp_boss_slime' },
   { id: 2, name: '해골 군주', hp: 780, color1: '#d8d8d8', color2: '#5a5a5a', shape: 'skull',
     pattern: 'spread', patternLabel: '3방향 부채꼴 + 뼈 소나기', atkInterval: 2.0,
     big: { type: 'rain', count: 13, dmg: 9, interval: 5.0, telegraphT: 0.5 },
@@ -178,25 +217,66 @@ const BOSSES = [
   { id: 5, name: '독전 마녀 로자린', hp: 1550, color1: '#8aff9e', color2: '#1f5a2f', shape: 'witch',
     pattern: 'poison', patternLabel: '맹독 웅덩이 + 독안개 3연폭', atkInterval: 2.1,
     big: { type: 'multiExpand', count: 3, dmg: 7, startR: 14, endR: 62, duration: 1.9, interval: 6.0, telegraphT: 0.5 },
-    reward: { gold: 860, gem: 18 }, rewardItem: 'wp_cannon' },
+    reward: { gold: 860, gem: 18 }, rewardItem: 'wp_cannon', rewardItem2: 'wp_boss_witch' },
   { id: 6, name: '빙결 여제 시렌', hp: 1750, color1: '#bdeeff', color2: '#2a6a8a', shape: 'ice',
     pattern: 'slow', patternLabel: '냉기탄 + 굴러오는 얼음 바위', atkInterval: 2.0,
     big: { type: 'boulder', dmg: 22, speed: 2.6, radius: 32, duration: 3.4, interval: 6.0, telegraphT: 0.5 },
-    reward: { gold: 950, gem: 20 }, rewardItem: 'wp_frost' },
+    reward: { gold: 950, gem: 20 }, rewardItem: 'wp_frost', rewardItem2: 'wp_boss_ice' },
   { id: 7, name: '뇌전 폭군 자칸', hp: 1950, color1: '#fff26a', color2: '#8a7a10', shape: 'thunder',
     pattern: 'double', patternLabel: '연속 2연발 + 연쇄 낙뢰 3연타', atkInterval: 1.3,
     big: { type: 'rainwave', waves: 3, perWave: 5, dmg: 10, gap: 0.42, interval: 5.0, telegraphT: 0.3 },
-    reward: { gold: 1050, gem: 22 }, rewardItem: 'wp_laser' },
+    reward: { gold: 1050, gem: 22 }, rewardItem: 'wp_laser', rewardItem2: 'wp_boss_thunder' },
   { id: 8, name: '칠흑룡 벨카누스', hp: 2200, color1: '#7a5cff', color2: '#1a0a3a', shape: 'dragon',
     pattern: 'sweep', patternLabel: '전방위 브레스 (안전지대 찾기)', atkInterval: 2.6,
     reward: { gold: 1300, gem: 26 }, rewardItem: 'wp_boss_dragon' },
   { id: 9, name: '심연의 사냥꾼 크로바', hp: 2450, color1: '#ff6a8a', color2: '#4a0a1a', shape: 'hunter',
     pattern: 'dash', patternLabel: '고속 돌진 저격 + 3연속 급습', atkInterval: 1.5,
     big: { type: 'tripledash', dashes: 3, dmg: 18, gap: 0.35, interval: 5.0, telegraphT: 0.3 },
-    reward: { gold: 1500, gem: 30 }, rewardItem: 'sw_void' },
+    reward: { gold: 1500, gem: 30 }, rewardItem: 'sw_void', rewardItem2: 'wp_boss_hunter' },
   { id: 10, name: '태초의 화신', hp: 3200, color1: '#ffe9a8', color2: '#5a3a10', shape: 'genesis',
     pattern: 'combo', patternLabel: '모든 패턴 복합 사용', atkInterval: 1.6,
     reward: { gold: 2200, gem: 45 }, rewardItem: 'wp_boss_genesis', rewardItem2: 'ar_boss_genesis' },
+
+  // ===== HELL DIFFICULTY (지옥 난이도) 10종 =====
+  { id: 11, name: '지옥문지기 카론', hp: 3600, color1: '#ff8a5a', color2: '#3a0808', shape: 'hunter',
+    pattern: 'single', patternLabel: '단발 조준탄 + 즉사급 기습타', atkInterval: 1.4,
+    big: { type: 'pointblank', dmg: 32, interval: 4.4, telegraphT: 0.35 },
+    reward: { gold: 2600, gem: 50 }, rewardItem: 'sw_thorn2' },
+  { id: 12, name: '업화의 심판관', hp: 4000, color1: '#ff5a2a', color2: '#4a0a0a', shape: 'golem',
+    pattern: 'slam', patternLabel: '광역 강타 + 3연속 급습', atkInterval: 2.0,
+    big: { type: 'tripledash', dashes: 4, dmg: 20, gap: 0.3, interval: 4.6, telegraphT: 0.3 },
+    reward: { gold: 2900, gem: 55 }, rewardItem: 'wp_blaze2' },
+  { id: 13, name: '흑염 마신', hp: 4500, color1: '#c43aff', color2: '#1a0022', shape: 'ghost',
+    pattern: 'teleport', patternLabel: '순간이동 기습 + 뼈(재) 소나기', atkInterval: 1.3,
+    big: { type: 'rain', count: 16, dmg: 11, interval: 4.2, telegraphT: 0.45 },
+    reward: { gold: 3200, gem: 60 }, rewardItem: 'wp_vortex2' },
+  { id: 14, name: '아귀왕 글루토니', hp: 5000, color1: '#8aff5a', color2: '#0a2a08', shape: 'slime',
+    pattern: 'poison', patternLabel: '맹독 웅덩이 + 튀는 폭탄', atkInterval: 1.9,
+    big: { type: 'bounce', dmg: 28, interval: 5.0, telegraphT: 0.5 },
+    reward: { gold: 3600, gem: 65 }, rewardItem: 'ar_scale3' },
+  { id: 15, name: '얼어붙은 통곡자', hp: 5600, color1: '#c9c4e0', color2: '#2a1030', shape: 'skull',
+    pattern: 'slow', patternLabel: '냉기탄 + 독안개 3연폭', atkInterval: 1.8,
+    big: { type: 'multiExpand', count: 4, dmg: 9, startR: 16, endR: 68, duration: 1.9, interval: 5.2, telegraphT: 0.45 },
+    reward: { gold: 4000, gem: 70 }, rewardItem: 'wp_glacier2' },
+  { id: 16, name: '뇌옥의 간수장', hp: 6200, color1: '#5ac4ff', color2: '#0a1a3a', shape: 'ice',
+    pattern: 'double', patternLabel: '연속 2연발 + 확산 웅덩이', atkInterval: 1.1,
+    big: { type: 'expand', dmg: 11, startR: 22, endR: 160, duration: 2.4, interval: 5.6, telegraphT: 0.55 },
+    reward: { gold: 4500, gem: 75 }, rewardItem: 'ar_storm2' },
+  { id: 17, name: '천 개의 손을 가진 자', hp: 6900, color1: '#ffd94a', color2: '#3a2a00', shape: 'thunder',
+    pattern: 'spread', patternLabel: '3방향 부채꼴 + 굴러오는 바위', atkInterval: 1.3,
+    big: { type: 'boulder', dmg: 26, speed: 3.0, radius: 34, duration: 3.6, interval: 5.4, telegraphT: 0.45 },
+    reward: { gold: 5100, gem: 82 }, rewardItem: 'wp_boss_hell1' },
+  { id: 18, name: '심판의 나팔수', hp: 7600, color1: '#ff4a8a', color2: '#3a0020', shape: 'witch',
+    pattern: 'dash', patternLabel: '고속 돌진 저격 + 연쇄 낙뢰', atkInterval: 1.0,
+    big: { type: 'rainwave', waves: 4, perWave: 6, dmg: 12, gap: 0.38, interval: 4.8, telegraphT: 0.28 },
+    reward: { gold: 5800, gem: 90 }, rewardItem: 'wp_boss_hell2' },
+  { id: 19, name: '별을 삼킨 자', hp: 8400, color1: '#ff3a3a', color2: '#1a0000', shape: 'dragon',
+    pattern: 'starburst', patternLabel: '전방위 탄막 (본연의 패턴)', atkInterval: 2.2,
+    reward: { gold: 6600, gem: 100 }, rewardItem: 'sw_bone2' },
+  { id: 20, name: '태초 이전의 것', hp: 9500, color1: '#f0f0f0', color2: '#000000', shape: 'genesis',
+    pattern: 'combo', patternLabel: '모든 패턴 + 확산 웅덩이 (진 최종보스)', atkInterval: 1.2,
+    big: { type: 'multiExpand', count: 5, dmg: 10, startR: 18, endR: 75, duration: 2.0, interval: 4.6, telegraphT: 0.4 },
+    reward: { gold: 8500, gem: 130 }, rewardItem: 'wp_boss_hell3', rewardItem2: 'ar_boss_hell3' },
 ];
 
 const CHALLENGE_NAMES = ['수습 시험', '전사의 길', '베테랑의 시련', '악몽의 미로', '심판의 방', '지옥문', '진 지옥'];
@@ -367,6 +447,16 @@ function itemThumbSVG(item) {
     'gun-crystal': `<path d="M10 28 L30 20 L50 28 L30 36 Z" fill="${col2}"/><circle cx="30" cy="28" r="4" fill="#fff"/>`,
     'gun-storm': `<rect x="14" y="24" width="30" height="9" rx="3" fill="${col2}"/><path d="M40 16 L32 30 L38 30 L30 44 L46 26 L39 26 Z" fill="${col}"/>`,
     'gun-bone': `<rect x="14" y="26" width="34" height="6" rx="3" fill="${col2}"/><circle cx="14" cy="29" r="6" fill="#e8e2d0"/><circle cx="48" cy="29" r="6" fill="#e8e2d0"/>`,
+    'gun-spike': `<rect x="14" y="24" width="30" height="9" rx="3" fill="${col2}"/><path d="M44 20 L50 14 M44 24 L52 24 M44 28 L50 34" stroke="${col}" stroke-width="2.5" stroke-linecap="round"/>`,
+    'gun-orb': `<circle cx="30" cy="28" r="14" fill="${col2}"/><circle cx="30" cy="28" r="6" fill="${col}"/>`,
+    'gun-fang': `<path d="M10 34 L26 14 L30 28 L34 14 L50 34 L30 24 Z" fill="${col2}"/>`,
+    'gun-arc': `<path d="M14 40 Q30 8 46 40" stroke="${col2}" stroke-width="6" fill="none"/><path d="M14 40 L46 40" stroke="${col}" stroke-width="1.5"/>`,
+    'gun-comet': `<circle cx="42" cy="20" r="8" fill="${col2}"/><path d="M36 24 L14 42" stroke="${col}" stroke-width="4" stroke-linecap="round" opacity="0.6"/>`,
+    'gun-vortex': `<circle cx="30" cy="28" r="16" fill="none" stroke="${col2}" stroke-width="5"/><circle cx="30" cy="28" r="7" fill="${col}"/>`,
+    'gun-blaze': `<path d="M30 6 Q40 20 30 30 Q38 38 30 50 Q22 38 30 30 Q20 20 30 6Z" fill="${col2}"/><rect x="20" y="46" width="20" height="6" rx="2" fill="#3a2a1a"/>`,
+    'gun-glacier': `<path d="M14 30 L26 18 L30 30 L34 18 L46 30 L34 34 L30 46 L26 34 Z" fill="${col2}"/>`,
+    'gun-venom': `<rect x="14" y="22" width="32" height="10" rx="4" fill="${col2}"/><circle cx="46" cy="27" r="6" fill="${col}"/><path d="M20 32 L18 40 M28 32 L27 42" stroke="${col}" stroke-width="2"/>`,
+    'gun-nova': `<path d="M30 8 L34 24 L50 24 L37 33 L42 48 L30 39 L18 48 L23 33 L10 24 L26 24 Z" fill="${col2}" opacity="0.9"/>`,
   };
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="100%" height="100%">${shapes[item.shape] || ''}</svg>`;
 }
@@ -995,7 +1085,7 @@ function rollGachaOnce(tier) {
     const weighted = [];
     pool.forEach(it => { for (let i = 0; i < RARITIES[it.rarity].weight; i++) weighted.push(it); });
     result = weighted[Math.floor(Math.random() * weighted.length)];
-    if (result.rarity !== 'common') state.pity[tier.id] = 0;
+    if (RARITY_ORDER.indexOf(result.rarity) >= RARITY_ORDER.indexOf('legendary')) state.pity[tier.id] = 0;
   }
   const inv = state.inventory[result.id];
   const isNew = !inv.owned;
@@ -1348,14 +1438,18 @@ function startRun(cfg) {
     gimmickObjects: [],
     obscureTimer: 0,
     pushForce: { x: 0, y: 0 },
+    fireQueue: [],
+    burstEffects: [],
   };
 
   document.getElementById('overlay-message').style.display = 'none';
   document.getElementById('boss-hp-wrap').style.display = (cfg.mode === 'boss') ? 'block' : 'none';
   updateAmmoBar();
+  updateBaseHp();
 
   if (cfg.mode === 'boss') {
     spawnBoss(cfg.data);
+    updateBossHp();
   } else {
     prepareWave();
   }
@@ -1733,40 +1827,80 @@ setupMoveJoystick(document.getElementById('move-stick'), 34);
 
 /* ---------- 조준/발사: 모바일 조이스틱(조준 후 떼면 발사) + PC 마우스(클릭 발사) ---------- */
 
-function spawnPlayerShot(angle, dmg, special, item, speed, r) {
+// 무기 모양(shape)마다 탄환 개수/간격/크기/속도/발사 방식이 다르다
+const FIRE_PATTERNS = {
+  precise: { count: 1, spreadDeg: 0, speed: 12, r: 5 },
+  heavy: { count: 1, spreadDeg: 0, speed: 7, r: 15 },
+  dual: { count: 2, spreadDeg: 14, speed: 10, r: 6 },
+  spread3: { count: 3, spreadDeg: 20, speed: 9, r: 6 },
+  spread5: { count: 5, spreadDeg: 34, speed: 8, r: 5 },
+  volley: { count: 3, spreadDeg: 6, speed: 10, r: 5, volley: true, volleyGap: 0.09 },
+};
+const SHAPE_FIRE_MAP = {
+  'gun-sling': 'precise', 'gun-cross': 'precise', 'gun-crystal': 'precise', 'gun-glacier': 'precise',
+  'blade-straight': 'precise', 'blade-curve': 'precise', 'blade-crystal': 'precise',
+  'gun-cannon': 'heavy', 'gun-storm': 'heavy', 'gun-blaze': 'heavy', 'gun-spike': 'heavy',
+  'blade-flame': 'heavy', 'blade-bone': 'heavy',
+  'gun-fang': 'dual', 'gun-arc': 'dual', 'gun-orb': 'dual', 'blade-thorn': 'dual', 'blade-shadow': 'dual',
+  'gun-laser': 'spread3', 'gun-star': 'spread3', 'gun-wraith': 'spread3', 'gun-genesis': 'spread3',
+  'gun-nova': 'spread3', 'blade-holy': 'spread3', 'blade-void': 'spread3',
+  'gun-dragon': 'spread5', 'gun-vortex': 'spread5',
+  'gun-thorn': 'volley', 'gun-wind': 'volley', 'gun-comet': 'volley', 'gun-venom': 'volley', 'blade-wind': 'volley',
+};
+const FIRE_DMG_MULT = { 1: 1, 2: 0.65, 3: 0.55, 5: 0.4 };
+
+function getFirePattern(item) {
+  return FIRE_PATTERNS[SHAPE_FIRE_MAP[item.shape]] || FIRE_PATTERNS.precise;
+}
+
+function spawnPlayerShot(angle, dmg, special, item, holdSec) {
+  const fp = getFirePattern(item);
   const style = item.aimStyle || 'dotted';
   const color = RARITIES[item.rarity].color;
-  if (style === 'trident') {
-    [-0.16, 0, 0.16].forEach((off) => {
-      const a = angle + off;
-      game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, dmg: Math.round(dmg * 0.6), special, r, style, color });
-    });
-  } else {
-    game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, dmg, special, r, style, color });
+  const chargeT = Math.min(1, (holdSec || 0) / 0.9); // 0.9초 이상 누르면 완전 충전
+  const chargeMult = 1 + chargeT * 0.7; // 최대 1.7배 데미지
+  const perDmg = Math.max(1, Math.round(dmg * (FIRE_DMG_MULT[fp.count] || 0.5) * chargeMult));
+  const chargedR = fp.r * (1 + chargeT * 0.6);
+  if (chargeT >= 0.85) spawnBurstEffect(game.player.x, game.player.y, color);
+  for (let i = 0; i < fp.count; i++) {
+    const off = fp.count > 1 ? (i - (fp.count - 1) / 2) * (fp.spreadDeg * Math.PI / 180) : 0;
+    const shot = { angle: angle + off, dmg: perDmg, special, r: chargedR, speed: fp.speed, style, color };
+    if (fp.volley) {
+      game.fireQueue.push({ ...shot, delay: i * fp.volleyGap });
+    } else {
+      game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(shot.angle) * fp.speed, vy: Math.sin(shot.angle) * fp.speed, dmg: perDmg, special, r: chargedR, style, color });
+    }
   }
 }
 
-function fireMain(angle) {
+function spawnBurstEffect(x, y, color) {
+  game.gimmickObjects = game.gimmickObjects || [];
+  game.burstEffects = game.burstEffects || [];
+  game.burstEffects.push({ x, y, color, elapsed: 0, duration: 0.35 });
+}
+
+function fireMain(angle, holdSec) {
   if (!game || !game.running) return;
   if (game.ammo < 1) { flashMsg('탄약 부족!'); return; }
   game.ammo--; updateAmmoBar();
   const wp = getItem(state.equipped.weapon);
-  spawnPlayerShot(angle, game.playerDmg, false, wp, 9, 6);
+  spawnPlayerShot(angle, game.playerDmg, false, wp, holdSec || 0);
 }
-function fireSpecial(angle) {
+function fireSpecial(angle, holdSec) {
   if (!game || !game.running) return;
   if (game.special.cooldown > 0) { flashMsg('특수무기 재장전 중'); return; }
   game.special.cooldown = game.special.max;
   const sw = getItem(state.equipped.sword);
-  spawnPlayerShot(angle, game.specialDmg, true, sw, 7, 12);
+  spawnPlayerShot(angle, game.specialDmg, true, sw, holdSec || 0);
   addQuestProgress('specialUse');
 }
 
 function setupAimJoystick(el, kind, onFire, radius) {
   const knob = el.querySelector('.stick-knob');
-  let active = false, sx = 0, sy = 0, lastAng = 0, lastDist = 0;
+  let active = false, sx = 0, sy = 0, lastAng = 0, lastDist = 0, pressStart = 0;
   function start(e) {
     active = true;
+    pressStart = performance.now();
     const rect = el.getBoundingClientRect();
     sx = rect.left + rect.width / 2; sy = rect.top + rect.height / 2;
     e.preventDefault();
@@ -1778,22 +1912,23 @@ function setupAimJoystick(el, kind, onFire, radius) {
     lastDist = Math.min(radius, Math.hypot(dx, dy));
     lastAng = Math.atan2(dy, dx);
     knob.style.transform = `translate(${Math.cos(lastAng) * lastDist}px, ${Math.sin(lastAng) * lastDist}px)`;
-    if (game) game.aim = { active: true, angle: lastAng, kind };
+    if (game) game.aim = { active: true, angle: lastAng, kind, charge: Math.min(1, (performance.now() - pressStart) / 900) };
     e.preventDefault();
   }
   function end() {
     if (!active) return;
     active = false;
+    const holdSec = (performance.now() - pressStart) / 1000;
     knob.style.transform = 'translate(0,0)';
     if (game) game.aim.active = false;
-    if (lastDist > 8) onFire(lastAng);
+    if (lastDist > 8) onFire(lastAng, holdSec);
   }
   el.addEventListener('mousedown', start); el.addEventListener('touchstart', start, { passive: false });
   window.addEventListener('mousemove', move); window.addEventListener('touchmove', move, { passive: false });
   window.addEventListener('mouseup', end); window.addEventListener('touchend', end);
 }
-setupAimJoystick(document.getElementById('main-stick'), 'main', (ang) => fireMain(ang), 40);
-setupAimJoystick(document.getElementById('special-stick'), 'special', (ang) => fireSpecial(ang), 28);
+setupAimJoystick(document.getElementById('main-stick'), 'main', (ang, hold) => fireMain(ang, hold), 40);
+setupAimJoystick(document.getElementById('special-stick'), 'special', (ang, hold) => fireSpecial(ang, hold), 28);
 
 canvas.addEventListener('mousemove', (e) => {
   if (!game || !game.running) return;
@@ -1802,15 +1937,18 @@ canvas.addEventListener('mousemove', (e) => {
   game.aim = { active: true, angle: Math.atan2(my - game.player.y, mx - game.player.x), kind: 'main' };
 });
 canvas.addEventListener('mouseleave', () => { if (game) game.aim.active = false; });
-canvas.addEventListener('click', () => {
-  if (!game || !game.running || !game.aim.active) return;
-  fireMain(game.aim.angle);
+let pcPressStart = 0;
+canvas.addEventListener('mousedown', (e) => {
+  pcPressStart = performance.now();
+  if (game) game.aim.charge = 0;
 });
-canvas.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
+canvas.addEventListener('mouseup', (e) => {
   if (!game || !game.running || !game.aim.active) return;
-  fireSpecial(game.aim.angle);
+  const hold = (performance.now() - pcPressStart) / 1000;
+  if (e.button === 2) fireSpecial(game.aim.angle, hold);
+  else fireMain(game.aim.angle, hold);
 });
+canvas.addEventListener('contextmenu', (e) => { e.preventDefault(); });
 
 /* ---------- 게임 루프 ---------- */
 
@@ -1906,6 +2044,23 @@ function update(dt) {
       if (e.y > zoneBottom) e.resolved = true;
     }
     if (e.y > CH + 40) game.enemies.splice(i, 1);
+  }
+
+  // 지연 발사 큐 (연사/볼리형 무기)
+  for (let i = game.fireQueue.length - 1; i >= 0; i--) {
+    const q = game.fireQueue[i];
+    q.delay -= dt;
+    if (q.delay <= 0) {
+      game.projectiles.push({ x: game.player.x, y: game.player.y, vx: Math.cos(q.angle) * q.speed, vy: Math.sin(q.angle) * q.speed, dmg: q.dmg, special: q.special, r: q.r, style: q.style, color: q.color });
+      game.fireQueue.splice(i, 1);
+    }
+  }
+
+  // 차지샷 이펙트
+  for (let i = game.burstEffects.length - 1; i >= 0; i--) {
+    const b = game.burstEffects[i];
+    b.elapsed += dt;
+    if (b.elapsed >= b.duration) game.burstEffects.splice(i, 1);
   }
 
   // 플레이어 투사체
@@ -2243,6 +2398,16 @@ function render() {
 
   // 투사체 (무기 종류별로 다른 모양)
   game.projectiles.forEach(p => drawPlayerBullet(p));
+
+  // 차지샷 발사 이펙트 (팡!)
+  game.burstEffects.forEach((b) => {
+    const t = b.elapsed / b.duration;
+    ctxG.save();
+    ctxG.globalAlpha = Math.max(0, 1 - t);
+    ctxG.strokeStyle = b.color; ctxG.lineWidth = 3;
+    ctxG.beginPath(); ctxG.arc(b.x, b.y, 10 + t * 40, 0, Math.PI * 2); ctxG.stroke();
+    ctxG.restore();
+  });
 
   // 조준선 (무기별 다른 모양)
   drawAimIndicator();
